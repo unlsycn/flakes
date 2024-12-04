@@ -6,10 +6,6 @@
 }:
 with lib;
 {
-  imports = lib.filter (f: lib.strings.hasSuffix "default.nix" f) (
-    lib.filesystem.listFilesRecursive ./modules
-  );
-
   options.profile.cli = {
     enable = mkEnableOption "home-manager profile for CLI environment";
   };

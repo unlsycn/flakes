@@ -1,17 +1,23 @@
 {
+  lib,
   inputs,
   user,
   profiles,
   ...
 }:
 let
-  profileList = builtins.attrNames (builtins.readDir ../home);
+  profileList = builtins.attrNames (builtins.readDir ../home/profiles);
 in
 {
   users.${user} = {
-    imports = map (profile: ../home/${profile}) profileList ++ [
-      ../lib/home-impermanence.nix
-    ];
+    imports =
+      map (profile: ../home/profiles/${profile}) profileList
+      ++ lib.filter (f: lib.strings.hasSuffix "default.nix" f) (
+        lib.filesystem.listFilesRecursive ../home/modules
+      )
+      ++ [
+        ../lib/home-impermanence.nix
+      ];
 
     profile = builtins.listToAttrs (
       builtins.map (profile: {
