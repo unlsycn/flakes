@@ -10,7 +10,7 @@ in
 {
   users.${user} = {
     imports = map (profile: ../home/${profile}) profileList ++ [
-      inputs.impermanence.homeManagerModules.impermanence
+      ../lib/home-impermanence.nix
     ];
 
     profile = builtins.listToAttrs (
@@ -31,5 +31,5 @@ in
 
   useGlobalPkgs = true;
   useUserPackages = true;
-  extraSpecialArgs = inputs;
+  extraSpecialArgs = { inherit inputs user; };
 }

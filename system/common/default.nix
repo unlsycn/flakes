@@ -8,6 +8,7 @@
     ./network.nix
     ./security.nix
     ./services.nix
+    ./impermanence.nix
   ];
 
   networking.hostName = hostName;
