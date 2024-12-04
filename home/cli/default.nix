@@ -15,6 +15,8 @@ with lib;
   };
 
   config = mkIf config.profile.cli.enable {
+    xdg.enable = true;
+
     programs = {
       git.enable = true;
       gpg.enable = true;
