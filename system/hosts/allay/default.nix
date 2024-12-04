@@ -44,6 +44,8 @@
     hashedPasswordFile = "/persist/passwords/user";
   };
 
-  system.stateVersion = "25.05"; # Dont touch it
+  # workaround for https://github.com/NixOS/nix/issues/10202
+  environment.persistence."/persist".files = [ "/root/.gitconfig" ];
 
+  system.stateVersion = "25.05"; # Dont touch it
 }
