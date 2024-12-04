@@ -1,5 +1,7 @@
 { ... }:
 {
+  imports = [ ../modules/openvpn ];
+
   networking = {
     networkmanager = {
       enable = true;
