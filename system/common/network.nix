@@ -1,4 +1,4 @@
-{ ... }:
+{ user, ... }:
 {
   imports = [ ../modules/openvpn ];
 
@@ -13,6 +13,8 @@
 
     firewall.enable = false;
   };
+
+  users.users.${user}.extraGroups = [ "networkmanager" ];
 
   environment.persistence."/persist" = {
     directories = [ "/etc/NetworkManager/system-connections" ];
