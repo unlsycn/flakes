@@ -42,7 +42,9 @@
   users.users.${user} = {
     isNormalUser = true;
     hashedPasswordFile = "/persist/passwords/user";
+    shell = pkgs.zsh;
   };
+  programs.zsh.enable = true;
 
   # workaround for https://github.com/NixOS/nix/issues/10202
   environment.persistence."/persist".files = [ "/root/.gitconfig" ];
