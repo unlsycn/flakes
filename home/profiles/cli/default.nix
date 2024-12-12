@@ -18,7 +18,14 @@ with lib;
       git.enable = true;
       gpg.enable = true;
       neovim.enable = true;
+      jq.enable = true;
+      fastfetch.enable = true;
+      fzf.enable = true;
       direnv.enable = true;
+      zoxide.enable = true;
+      bat.enable = true;
+      fd.enable = true;
+      ripgrep.enable = true;
     };
 
     services = {
@@ -27,6 +34,13 @@ with lib;
 
     home.packages = with pkgs; [
       nixd
+      tree
+      tokei
+      dust
+      gotop
+      axel
+      rsync
+      tldr
     ];
   };
 }
