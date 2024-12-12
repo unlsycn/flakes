@@ -14,6 +14,7 @@ with lib;
     xdg.enable = true;
 
     programs = {
+      zsh.enable = true;
       git.enable = true;
       gpg.enable = true;
       neovim.enable = true;
