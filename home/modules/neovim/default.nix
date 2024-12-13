@@ -14,6 +14,7 @@ in
       defaultEditor = true;
       viAlias = true;
       vimAlias = true;
+      extraPackages = [ pkgs.gcc ];
     };
 
     xdg.configFile = {
