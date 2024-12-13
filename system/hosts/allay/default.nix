@@ -3,6 +3,7 @@
   pkgs,
   user,
   inputs,
+  system,
   ...
 }:
 {
@@ -11,10 +12,17 @@
     ./hardware-configuration.nix
     ../../common
 
+    ../../modules/hyprland
+
     inputs.home-manager.nixosModules.home-manager
     {
       home-manager = import ../../../outputs/home.nix {
-        inherit inputs user lib;
+        inherit
+          inputs
+          user
+          lib
+          system
+          ;
         profiles = [
           "cli"
           "desktop"
@@ -45,6 +53,8 @@
     shell = pkgs.zsh;
   };
   programs.zsh.enable = true;
+
+  programs.hyprland.enable = true;
 
   # workaround for https://github.com/NixOS/nix/issues/10202
   environment.persistence."/persist".files = [ "/root/.gitconfig" ];

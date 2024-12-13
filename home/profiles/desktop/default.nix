@@ -1,4 +1,8 @@
-{ config, lib, ... }:
+{
+  config,
+  lib,
+  ...
+}:
 with lib;
 {
   options.profile.desktop = {
@@ -6,6 +10,6 @@ with lib;
   };
 
   config = mkIf config.profile.desktop.enable {
-
+    wayland.windowManager.hyprland.enable = true;
   };
 }

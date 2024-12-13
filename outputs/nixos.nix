@@ -15,7 +15,7 @@ builtins.listToAttrs (
     value = nixosSystem {
       inherit pkgs system;
       specialArgs = {
-        inherit inputs user;
+        inherit inputs user system;
         hostName = host;
       };
       modules = [

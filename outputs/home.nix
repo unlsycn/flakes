@@ -3,6 +3,7 @@
   inputs,
   user,
   profiles,
+  system,
   ...
 }:
 let
@@ -37,5 +38,5 @@ in
 
   useGlobalPkgs = true;
   useUserPackages = true;
-  extraSpecialArgs = { inherit inputs user; };
+  extraSpecialArgs = { inherit inputs user system; };
 }

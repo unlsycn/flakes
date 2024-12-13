@@ -9,6 +9,7 @@
     };
     impermanence.url = "github:nix-community/impermanence";
     vscode-server.url = "github:nix-community/nixos-vscode-server";
+    hyprland.url = "github:hyprwm/Hyprland";
   };
 
   outputs =
@@ -22,14 +23,14 @@
       formatter.${system} = pkgs.nixfmt-rfc-style;
 
       nixosConfigurations = pkgs.callPackage ./outputs/nixos.nix {
-        inherit inputs user;
+        inherit inputs user system;
       };
 
       homeConfigurations = {
         ${user} = inputs.home-manager.lib.homeManagerConfiguration {
           pkgs = nixpkgs.legacyPackages.${system};
           extraSpecialArgs = {
-            inherit inputs;
+            inherit inputs system;
           };
           modules = [
             (pkgs.callPackage ./outputs/home.nix {
