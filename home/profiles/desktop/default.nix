@@ -10,6 +10,10 @@ with lib;
   };
 
   config = mkIf config.profile.desktop.enable {
+    programs = {
+      alacritty.enable = true;
+    };
+
     wayland.windowManager.hyprland.enable = true;
   };
 }
