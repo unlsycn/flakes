@@ -52,7 +52,7 @@ in
         size = 10000;
 
         extended = true;
-        share = true;
+        share = false;
         append = true;
       };
 
