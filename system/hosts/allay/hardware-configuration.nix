@@ -4,6 +4,7 @@
 {
   config,
   lib,
+  pkgs,
   modulesPath,
   ...
 }:
@@ -23,6 +24,7 @@
         "sd_mod"
       ];
       kernelModules = [ ];
+      postDeviceCommands = pkgs.lib.mkBefore (builtins.readFile ./restore-home.sh);
     };
     kernelModules = [ "kvm-intel" ];
     extraModulePackages = [ ];
