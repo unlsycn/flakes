@@ -12,6 +12,7 @@
     ./hardware-configuration.nix
     ../../common
 
+    ../../modules/desktop
     ../../modules/hyprland
 
     inputs.home-manager.nixosModules.home-manager
