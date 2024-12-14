@@ -30,6 +30,7 @@ with lib;
 
     services = {
       gpg-agent.enable = true;
+      vscode-server.enable = true;
     };
 
     home.packages = with pkgs; [

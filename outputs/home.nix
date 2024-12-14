@@ -18,6 +18,7 @@ in
       )
       ++ [
         ../lib/home-impermanence.nix
+        inputs.vscode-server.homeModules.default
       ];
 
     profile = builtins.listToAttrs (

@@ -2,7 +2,6 @@
 {
   imports = [
     ../modules/openssh
-    ../modules/vscode-server
   ];
 
   services.pipewire = {
@@ -11,6 +10,5 @@
   };
   services.printing.enable = true;
   services.libinput.enable = true;
-  services.vscode-server.enable = true;
   services.openssh.enable = true;
 }
