@@ -19,8 +19,12 @@ with bindingUtils;
   };
 
   config = mkIf cfg.enableHyprlandIntegration {
-    wayland.windowManager.hyprland.settings.bind = mainBind {
-      T = "exec, ${alacritty}";
+    wayland.windowManager.hyprland.settings = {
+      bind = mainBind {
+        T = "exec, ${alacritty}";
+      };
+      misc.swallow_regex = "(Alacritty)";
     };
+
   };
 }

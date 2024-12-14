@@ -141,7 +141,6 @@ with lib;
         animate_manual_resizes = false;
         animate_mouse_windowdragging = false;
         enable_swallow = true;
-        # TODO: add swallowRegex in terminal module
 
         disable_hyprland_logo = true;
         force_default_wallpaper = 0;
