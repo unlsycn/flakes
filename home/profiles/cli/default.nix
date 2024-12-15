@@ -15,6 +15,7 @@ with lib;
 
     programs = {
       zsh.enable = true;
+      ssh.enable = true;
       git.enable = true;
       gpg.enable = true;
       neovim.enable = true;
