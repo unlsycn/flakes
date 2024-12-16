@@ -2,6 +2,7 @@
   config,
   lib,
   pkgs,
+  user,
   ...
 }:
 with lib;
@@ -27,6 +28,7 @@ with lib;
       bat.enable = true;
       fd.enable = true;
       ripgrep.enable = true;
+      nnn.enable = true;
     };
 
     services = {
@@ -44,5 +46,12 @@ with lib;
       rsync
       tldr
     ];
+
+    persist."/persist".users.${user} = {
+      directories = [
+        ".local"
+        ".cache"
+      ];
+    };
   };
 }
