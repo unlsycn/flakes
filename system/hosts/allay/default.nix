@@ -14,6 +14,7 @@
 
     ../../modules/desktop
     ../../modules/hyprland
+    ../../modules/evremap
 
     inputs.home-manager.nixosModules.home-manager
     {
@@ -56,6 +57,9 @@
   programs.zsh.enable = true;
 
   programs.hyprland.enable = true;
+
+  services.evremap.enable = true;
+  services.evremap.settings.device_name = "AT Translated Set 2 keyboard";
 
   # workaround for https://github.com/NixOS/nix/issues/10202
   environment.persistence."/persist".files = [ "/root/.gitconfig" ];
