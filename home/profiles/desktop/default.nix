@@ -1,6 +1,7 @@
 {
   config,
   lib,
+  pkgs,
   ...
 }:
 with lib;
@@ -13,6 +14,9 @@ with lib;
     programs = {
       alacritty.enable = true;
     };
+
+
+    home.packages = with pkgs; [ desktop-scripts ];
 
     wayland.windowManager.hyprland.enable = true;
   };
