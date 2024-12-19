@@ -13,8 +13,12 @@ with lib;
   config = mkIf config.profile.desktop.enable {
     programs = {
       alacritty.enable = true;
+      waybar.enable = true;
     };
 
+    services = {
+      swaync.enable = true;
+    };
 
     home.packages = with pkgs; [ desktop-scripts ];
 
