@@ -30,7 +30,7 @@ with bindingUtils;
         }
         # Window: move in direction
         ++ flatten (
-          mapAttrsToList (name: value: bindWithDispatcher (bindKeys name) "movewindow" value) {
+          mapAttrsToList (modifier: keybinds: bindWithDispatcher (bindKeys modifier) "movewindow" keybinds) {
             ${mainModifier} = {
               Left = "l";
               Right = "r";
@@ -50,7 +50,7 @@ with bindingUtils;
         }
         # Move active window to a workspace with mainMod + SHIFT + [0-9]
         ++ flatten (
-          map (f: f (genAttrs (genList (x: toString x) 10) (name: if name == "0" then "10" else name))) [
+          map (f: f (genAttrs (genList (x: toString x) 10) (key: if key == "0" then "10" else key))) [
             (bindWithDispatcher mainBind "workspace")
             (bindWithDispatcher mainShiftBind "movetoworkspace")
           ]
@@ -59,9 +59,9 @@ with bindingUtils;
         ++ flatten (
           mapAttrsToList
             (
-              name: value:
-              mainBind { ${name} = "togglespecialworkspace, ${value}"; }
-              ++ mainShiftBind { ${name} = "movetoworkspace, special:${value}"; }
+              key: workspace:
+              mainBind { ${key} = "togglespecialworkspace, ${workspace}"; }
+              ++ mainShiftBind { ${key} = "movetoworkspace, special:${workspace}"; }
             )
             {
               F = "code";
