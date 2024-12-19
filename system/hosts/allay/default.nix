@@ -13,7 +13,6 @@
     ../../common
 
     ../../modules/desktop
-    ../../modules/hyprland
     ../../modules/evremap
 
     inputs.home-manager.nixosModules.home-manager
