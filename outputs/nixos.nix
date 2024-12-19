@@ -20,6 +20,7 @@ builtins.listToAttrs (
       };
       modules = [
         ../system/hosts/${host}
+        ../pkgs
       ];
     };
   }) hostList
