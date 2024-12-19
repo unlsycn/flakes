@@ -10,6 +10,7 @@ let
   bindingUtils = import ./lib/binding-utils.nix { inherit lib; };
 
   switch_workspace = "${pkgs.desktop-scripts}/bin/switch_workspace";
+  volume = "${pkgs.desktop-scripts}/bin/volume";
 in
 with bindingUtils;
 {
@@ -90,7 +91,6 @@ with bindingUtils;
           };
         };
       # TODO: screenshot
-      # TODO: volume
 
       binde =
         # Window: split ratio +/- 0.1
@@ -100,6 +100,12 @@ with bindingUtils;
           Semicolon = "-0.1";
           Apostrophe = "+0.1";
         };
+
+      bindel = bindWithDispatcher (bindKeys "") "exec" {
+        XF86AudioRaiseVolume = "${volume} --inc";
+        XF86AudioLowerVolume = "${volume} --dec";
+        XF86AudioMute = "${volume} --toggle";
+      };
 
       bindm =
         # Move/resize windows with mainMod + LMB/RMB and dragging
