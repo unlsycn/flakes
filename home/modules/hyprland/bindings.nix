@@ -1,12 +1,15 @@
 {
   config,
   lib,
+  pkgs,
   ...
 }:
 with lib;
 with builtins;
 let
   bindingUtils = import ./lib/binding-utils.nix { inherit lib; };
+
+  switch_workspace = "${pkgs.desktop-scripts}/bin/switch_workspace";
 in
 with bindingUtils;
 {
@@ -29,22 +32,20 @@ with bindingUtils;
           J = "d";
         }
         # Window: move in direction
-        ++ flatten (
-          mapAttrsToList (modifier: keybinds: bindWithDispatcher (bindKeys modifier) "movewindow" keybinds) {
-            ${mainModifier} = {
-              Left = "l";
-              Right = "r";
-              Up = "u";
-              Down = "d";
-            };
-            ${mainShiftModifier} = {
-              H = "l";
-              L = "r";
-              K = "u";
-              J = "d";
-            };
-          }
-        )
+        ++ bindWithDispatcher' "movewindow" {
+          ${mainModifier} = {
+            Left = "l";
+            Right = "r";
+            Up = "u";
+            Down = "d";
+          };
+          ${mainShiftModifier} = {
+            H = "l";
+            L = "r";
+            K = "u";
+            J = "d";
+          };
+        }
         ++ mainBind {
           A = "fullscreen, 1";
         }
@@ -68,8 +69,26 @@ with bindingUtils;
               C = "chat";
               R = "remote";
             }
-        );
-      # TODO: switch_workspace
+        )
+        # Scroll through existing workspaces with mainMod + scroll or Alt + Tab
+        ++ bindWithDispatcher' "exec" {
+          ${mainModifier} = {
+            mouse_down = "${switch_workspace} -p";
+            mouse_up = "${switch_workspace}";
+          };
+          ${mainShiftModifier} = {
+            mouse_down = "${switch_workspace} -pm";
+            mouse_up = "${switch_workspace} -m";
+          };
+        }
+        ++ bindWithDispatcher' "exec" {
+          ${usualModifier} = {
+            Tab = "${switch_workspace}";
+          };
+          "${usualModifier} Shift" = {
+            Tab = "${switch_workspace} -p";
+          };
+        };
       # TODO: screenshot
       # TODO: volume
 

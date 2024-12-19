@@ -14,4 +14,11 @@ rec {
   bindWithDispatcher =
     bindFunc: dispatcher: keybinds:
     bindFunc (mapAttrs (key: param: "${dispatcher}, " + param) keybinds);
+  bindWithDispatcher' =
+    dispatcher: bindAttrs:
+    flatten (
+      mapAttrsToList (
+        modifier: keybinds: bindWithDispatcher (bindKeys modifier) dispatcher keybinds
+      ) bindAttrs
+    );
 }
