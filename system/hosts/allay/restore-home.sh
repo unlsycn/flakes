@@ -4,7 +4,7 @@ mount /dev/nvme0n1p4 /mnt
 # Create backup for old @home and restore it
 if [[ -e /mnt/@home ]]; then
     mkdir -p /mnt/home_backups
-    timestamp=$(date --date="@$(stat -c %Y /mnt/@home)" "+%Y-%m-%-d_%H:%M:%S")
+    timestamp=$(date "+%Y-%m-%-d_%H:%M:%S")
     btrfs subvolume snapshot /mnt/@home /mnt/home_backups/@home-$timestamp
     btrfs subvolume delete /mnt/@home
 fi
@@ -16,4 +16,6 @@ done
 
 # Create a new clean @home
 btrfs subvolume create /mnt/@home
+mkdir -p /mnt/@home/unlsycn
+chown unlsycn:users /mnt/@home/unlsycn
 umount /mnt

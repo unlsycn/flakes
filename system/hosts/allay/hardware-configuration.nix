@@ -4,7 +4,6 @@
 {
   config,
   lib,
-  pkgs,
   modulesPath,
   ...
 }:
@@ -24,7 +23,7 @@
         "sd_mod"
       ];
       kernelModules = [ ];
-      postDeviceCommands = pkgs.lib.mkBefore (builtins.readFile ./restore-home.sh);
+      postDeviceCommands = lib.mkBefore (builtins.readFile ./restore-home.sh);
     };
     kernelModules = [ "kvm-intel" ];
     extraModulePackages = [ ];
@@ -42,6 +41,8 @@
 
   fileSystems."/home" = {
     device = "/dev/disk/by-uuid/82eec0cb-2c5e-4af1-8e6c-f0218b0d28f3";
+    # There was a race condition between mounting stateless /home and bind mounting the persistent directories
+    neededForBoot = true;
     fsType = "btrfs";
     options = [
       "subvol=@home"
