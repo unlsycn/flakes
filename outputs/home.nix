@@ -17,7 +17,6 @@ in
         lib.filesystem.listFilesRecursive ../home/modules
       )
       ++ [
-        ../pkgs
         ../lib/home-impermanence.nix
         inputs.vscode-server.homeModules.default
       ];

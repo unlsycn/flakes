@@ -17,7 +17,16 @@
     let
       system = "x86_64-linux";
       user = "unlsycn";
-      pkgs = import nixpkgs { inherit system; };
+      pkgs = import nixpkgs {
+        overlays = [
+          (import ./pkgs { lib = nixpkgs.lib; })
+          inputs.hyprland.overlays.default
+        ];
+        config = {
+          allowUnfree = true;
+        };
+        inherit system;
+      };
     in
     {
       formatter.${system} = pkgs.nixfmt-rfc-style;
