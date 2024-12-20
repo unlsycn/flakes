@@ -14,6 +14,7 @@ with lib;
     programs = {
       alacritty.enable = true;
       waybar.enable = true;
+      msedge.enable = true;
     };
 
     services = {
@@ -23,5 +24,9 @@ with lib;
     home.packages = with pkgs; [ desktop-scripts ];
 
     wayland.windowManager.hyprland.enable = true;
+
+    home.sessionVariables = {
+      NIXOS_OZONE_WL = "1";
+    };
   };
 }
