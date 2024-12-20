@@ -12,6 +12,7 @@ with lib;
 
   config = mkIf config.profile.desktop.enable {
     programs = {
+      vscode.enable = true;
       alacritty.enable = true;
       waybar.enable = true;
       msedge.enable = true;
