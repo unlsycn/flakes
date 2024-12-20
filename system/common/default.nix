@@ -53,6 +53,8 @@
   };
   environment.variables.NIX_REMOTE = "daemon";
 
+  programs.nix-ld.enable = true;
+
   environment.persistence."/persist".hideMounts = true;
   environment.persistence."/persist" = {
     files = [

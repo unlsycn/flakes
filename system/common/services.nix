@@ -4,11 +4,13 @@
     ../modules/openssh
   ];
 
-  services.pipewire = {
-    enable = true;
-    pulse.enable = true;
+  services = {
+    pipewire = {
+      enable = true;
+      pulse.enable = true;
+    };
+    printing.enable = true;
+    libinput.enable = true;
+    openssh.enable = true;
   };
-  services.printing.enable = true;
-  services.libinput.enable = true;
-  services.openssh.enable = true;
 }
