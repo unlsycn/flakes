@@ -9,6 +9,7 @@
     ./security.nix
     ./services.nix
     ./impermanence.nix
+    ./workarounds.nix
   ];
 
   networking.hostName = hostName;

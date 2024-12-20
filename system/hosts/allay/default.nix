@@ -60,8 +60,5 @@
   services.evremap.enable = true;
   services.evremap.settings.device_name = "AT Translated Set 2 keyboard";
 
-  # workaround for https://github.com/NixOS/nix/issues/10202
-  environment.persistence."/persist".files = [ "/root/.gitconfig" ];
-
   system.stateVersion = "25.05"; # Dont touch it
 }
