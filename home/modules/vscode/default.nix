@@ -10,6 +10,7 @@ with lib;
     persist."/persist".users.${user} = {
       directories = [
         ".config/Code"
+        ".vscode"
         ".wakatime"
       ];
 
