@@ -14,7 +14,12 @@ with lib;
     };
 
     persist."/persist".users.${user} = {
-      directories = [ ".ssh" ];
+      directories = [
+        {
+          directory = ".ssh";
+          mode = "0700";
+        }
+      ];
     };
   };
 }

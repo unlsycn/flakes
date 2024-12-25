@@ -17,7 +17,12 @@ with lib;
     ];
 
     persist."/persist".users.${user} = {
-      directories = [ ".gnupg" ];
+      directories = [
+        {
+          directory = ".gnupg";
+          mode = "0700";
+        }
+      ];
     };
   };
 }
