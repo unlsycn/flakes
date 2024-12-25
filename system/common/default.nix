@@ -1,6 +1,7 @@
 {
   pkgs,
   hostName,
+  user,
   ...
 }:
 {
@@ -58,9 +59,10 @@
 
   environment.persistence."/persist".hideMounts = true;
   environment.persistence."/persist" = {
-    files = [
-      "/etc/machine-id"
-    ];
+    files = [ "/etc/machine-id" ];
+  };
+  environment.persistence."/persist".users.${user} = {
+    directories = [ ".nix" ];
   };
 
 }
