@@ -8,7 +8,7 @@ with lib;
 {
   config = mkIf config.services.gpg-agent.enable {
     services.gpg-agent = {
-      pinentryPackage = pkgs.pinentry-curses;
+      pinentryPackage = if config.profile.desktop.enable then pkgs.pinentry-qt else pkgs.pinentry-tty;
     };
   };
 }
