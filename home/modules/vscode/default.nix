@@ -6,6 +6,8 @@
 }:
 with lib;
 {
+  imports = [ ./hyprland.nix ];
+
   config = mkIf config.programs.vscode.enable {
     persist."/persist".users.${user} = {
       directories = [

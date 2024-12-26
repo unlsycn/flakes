@@ -5,13 +5,22 @@
   user,
   ...
 }:
+let
+  cfg = config.programs.msedge;
+in
 with lib;
 {
-  options.programs.msedge.enable = mkEnableOption "Web browser from Microsoft";
+  imports = [ ./hyprland.nix ];
 
-  config = mkIf config.programs.msedge.enable {
-    home.packages = [ pkgs.microsoft-edge ];
+  options.programs.msedge = {
+    enable = mkEnableOption "Web browser from Microsoft";
+    package = mkPackageOption pkgs "Microsoft Edge" {
+      default = [ "microsoft-edge" ];
+    };
+  };
 
+  config = mkIf cfg.enable {
+    home.packages = [ cfg.package ];
     persist."/persist".users.${user} = {
       directories = [ ".config/microsoft-edge" ];
     };
