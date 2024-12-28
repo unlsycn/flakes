@@ -105,6 +105,7 @@ with bindingUtils;
         XF86AudioRaiseVolume = "${volume} --inc";
         XF86AudioLowerVolume = "${volume} --dec";
         XF86AudioMute = "${volume} --toggle";
+        XF86AudioMicMute = "${volume} --mic-toggle";
       };
 
       bindm =
