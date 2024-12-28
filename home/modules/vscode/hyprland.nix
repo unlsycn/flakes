@@ -19,12 +19,12 @@ with bindingUtils;
   };
 
   config = mkIf cfg.enableHyprlandIntegration {
-    wayland.windowManager.hyprland.settings = {
-      bind = mainBind {
+    wayland.windowManager.hyprland = {
+      settings.bind = mainBind {
         I = "exec, ${vscode}";
       };
 
-      windowrulev2 = [ "opacity 0.95, class:code" ];
+      windowRules.class.code = "opacity 0.95";
     };
   };
 }
