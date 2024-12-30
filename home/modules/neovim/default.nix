@@ -14,7 +14,10 @@ in
       defaultEditor = true;
       viAlias = true;
       vimAlias = true;
-      extraPackages = [ pkgs.gcc ];
+      extraPackages = with pkgs; [
+        gcc
+        lua-language-server
+      ];
     };
 
     xdg.configFile = {
