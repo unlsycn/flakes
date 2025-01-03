@@ -44,7 +44,10 @@
         efiSupport = true;
         device = "nodev";
       };
-      systemd-boot.enable = true;
+      systemd-boot = {
+        enable = true;
+        configurationLimit = 16;
+      };
       timeout = 1;
     };
   };
