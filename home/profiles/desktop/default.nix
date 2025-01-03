@@ -20,6 +20,7 @@ with lib;
 
     services = {
       swaync.enable = true;
+      hyprpaper.enable = true;
     };
 
     home.packages = with pkgs; [ desktop-scripts ];

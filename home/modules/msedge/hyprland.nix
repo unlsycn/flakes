@@ -19,10 +19,8 @@ with bindingUtils;
   };
 
   config = mkIf cfg.enableHyprlandIntegration {
-    wayland.windowManager.hyprland.settings = {
-      bind = mainBind {
-        W = "exec, ${msedge}";
-      };
+    wayland.windowManager.hyprland.settings.bind = mainBind {
+      W = "exec, ${msedge}";
     };
   };
 }
