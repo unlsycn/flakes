@@ -46,6 +46,7 @@ with lib;
       axel
       rsync
       tldr
+      rgfzf
     ];
 
     persist."/persist".users.${user} = {
