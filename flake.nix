@@ -10,6 +10,7 @@
     impermanence.url = "github:nix-community/impermanence";
     vscode-server.url = "github:nix-community/nixos-vscode-server";
     hyprland.url = "github:hyprwm/Hyprland";
+    rose-pine-hyprcursor.url = "github:ndom91/rose-pine-hyprcursor";
   };
 
   outputs =

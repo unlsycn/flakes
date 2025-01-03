@@ -31,10 +31,6 @@ with lib;
       GLFW_IM_MODULE = "ibus";
       INPUT_METHOD = "fcitx";
 
-      # Hyprcursor
-      HYPRCURSOR_SIZE = "48";
-      HYPRCURSOR_THEME = "rose-pine-hyprcursor";
-
       # Themes
       QT_QPA_PLATFORMTHEME = "qt6ct";
       QT_WAYLAND_DISABLE_WINDOWDECORATION = "1";
