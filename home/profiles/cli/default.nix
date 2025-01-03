@@ -29,6 +29,7 @@ with lib;
       fd.enable = true;
       ripgrep.enable = true;
       nnn.enable = true;
+      onedrive.enable = true;
     };
 
     services = {
@@ -48,10 +49,14 @@ with lib;
     ];
 
     persist."/persist".users.${user} = {
-      directories = [
-        ".local"
-        ".cache"
-      ];
+      directories =
+        [
+          ".local"
+          ".cache"
+        ]
+        ++ [
+          "Workspaces"
+        ];
     };
   };
 }
