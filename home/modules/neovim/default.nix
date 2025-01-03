@@ -21,14 +21,8 @@ in
     };
 
     xdg.configFile = {
-      nvim = {
-        source = configRepos.nvim.src;
-        target = "nvim";
-      };
-      nvim-vscode = {
-        source = configRepos.nvim-vscode.src;
-        target = "nvim-vscode";
-      };
+      "nvim".source = configRepos.nvim.src;
+      "nvim-vscode".source = configRepos.nvim-vscode.src;
     };
   };
 }
