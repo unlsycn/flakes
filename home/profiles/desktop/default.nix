@@ -16,6 +16,7 @@ with lib;
       alacritty.enable = true;
       waybar.enable = true;
       msedge.enable = true;
+      unlauncher.enable = true;
     };
 
     services = {
