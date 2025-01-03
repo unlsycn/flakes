@@ -37,7 +37,7 @@
 
       homeConfigurations = {
         ${user} = inputs.home-manager.lib.homeManagerConfiguration {
-          pkgs = nixpkgs.legacyPackages.${system};
+          inherit pkgs;
           extraSpecialArgs = {
             inherit inputs system;
           };
