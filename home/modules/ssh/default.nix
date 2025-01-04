@@ -21,5 +21,16 @@ with lib;
         }
       ];
     };
+
+    sops.secrets.ssh-key-public = {
+      sopsFile = ./ssh-key.yaml.admin;
+      key = "public";
+      path = "${config.home.homeDirectory}/.ssh/id_unlsycn.pub";
+    };
+    sops.secrets.ssh-key-secret = {
+      sopsFile = ./ssh-key.yaml.admin;
+      key = "secret";
+      path = "${config.home.homeDirectory}/.ssh/id_unlsycn";
+    };
   };
 }
