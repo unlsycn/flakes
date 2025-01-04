@@ -22,9 +22,13 @@ with lib;
     services = {
       swaync.enable = true;
       hyprpaper.enable = true;
+      cliphist.enable = true;
     };
 
-    home.packages = with pkgs; [ desktop-scripts ];
+    home.packages = with pkgs; [
+      desktop-scripts
+      wl-clipboard
+    ];
 
     wayland.windowManager.hyprland.enable = true;
 
