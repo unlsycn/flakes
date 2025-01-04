@@ -20,6 +20,8 @@ builtins.listToAttrs (
       };
       modules = [
         ../system/hosts/${host}
+        impermanence.nixosModules.impermanence
+        sops-nix.nixosModules.sops
       ];
     };
   }) hostList

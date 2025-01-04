@@ -38,7 +38,6 @@ with lib;
     };
 
     home.packages = with pkgs; [
-      nixd
       tree
       tokei
       dust

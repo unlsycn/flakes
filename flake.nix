@@ -11,6 +11,7 @@
     vscode-server.url = "github:nix-community/nixos-vscode-server";
     hyprland.url = "github:hyprwm/Hyprland";
     rose-pine-hyprcursor.url = "github:ndom91/rose-pine-hyprcursor";
+    sops-nix.url = "github:Mic92/sops-nix";
   };
 
   outputs =
@@ -30,8 +31,6 @@
       };
     in
     {
-      formatter.${system} = pkgs.nixfmt-rfc-style;
-
       nixosConfigurations = pkgs.callPackage ./outputs/nixos.nix {
         inherit inputs user system;
       };
@@ -53,5 +52,18 @@
           ];
         };
       };
+
+      formatter.${system} = pkgs.nixfmt-rfc-style;
+
+      devShells.${system}.default = pkgs.mkShell {
+        packages = with pkgs; [
+          nixd
+          nvfetcher
+          sops
+        ];
+
+        nativeBuildInputs = [ inputs.sops-nix.packages.${system}.sops-import-keys-hook ];
+      };
+
     };
 }

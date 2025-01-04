@@ -1,0 +1,21 @@
+keys:
+  - &admin_unlsycn 817ecf0aa56248a2b202f8610e50958c4ccbdd9c
+  - &host_common age1f9shnyrs54j566xe90hmv0hu6tj9f7xc6zsmt9rr6qhgnc9qcvlq9m6ras
+  - &host_allay age1qrnkhgdanm5e57mrfz52gwmq6jfqny67na4hmtyef920pt4r457qv6t9mg
+creation_rules:
+  - path_regex: .*.admin$
+    key_groups:
+      - pgp:
+          - *admin_unlsycn
+  - path_regex: system/hosts/allay/.*
+    key_groups:
+      - pgp:
+          - *admin_unlsycn
+        age:
+          - *host_allay
+  - key_groups:
+      - pgp:
+          - *admin_unlsycn
+        age:
+          - *host_common
+          - *host_allay

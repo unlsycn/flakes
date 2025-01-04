@@ -19,6 +19,7 @@ in
       ++ [
         ../lib/home-impermanence.nix
         inputs.vscode-server.homeModules.default
+        inputs.sops-nix.homeManagerModules.sops
       ];
 
     profile = builtins.listToAttrs (
