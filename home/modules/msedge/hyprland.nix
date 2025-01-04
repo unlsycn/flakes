@@ -13,7 +13,7 @@ in
 with bindingUtils;
 {
   options.programs.msedge.enableHyprlandIntegration = mkOption {
-    default = true;
+    default = config.wayland.windowManager.hyprland.enable;
     type = types.bool;
     description = "Whether to enable Hyprland integration";
   };
