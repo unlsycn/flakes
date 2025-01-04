@@ -32,6 +32,11 @@ in
       "onedrive/sync_list".source = ./sync_list;
     };
 
+    sops.secrets.onedrive-refresh_token = {
+      sopsFile = ./refresh_token.yaml.admin;
+      path = "${config.xdg.configHome}/onedrive/refresh_token";
+    };
+
     home.file = {
       "Documents".source =
         config.lib.file.mkOutOfStoreSymlink "${config.home.homeDirectory}/OneDrive/Documents";

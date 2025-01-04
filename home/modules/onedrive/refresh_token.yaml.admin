@@ -1,0 +1,24 @@
+onedrive-refresh_token: ENC[AES256_GCM,data:q+/PsLr0No0mTJKzcL3eKPqjw4pZJXD0z9nUKyKJ1mMcc/ER/f6+X2jaKFJGi4N87hdjtFuhaE0Pg1RLT4YGSX6Dmj1TZdvM2V8P2Zkufg+IpWRAaNcdaiEHcBbqScLyk+CcrBJkAhkK+zmvrtVt88ElXB360qPUy2Jj0D98qnI2aRgFyjJsOSH44hdra0F8QoezvTjREP85uGs9BivBXwZNin/3cB8dTUMF9xmcOONJQ7LUoas/WOedBepm8HUKOHWVuzgsel4APmrWJPUPgShnaV+iCACTjUFD+6xFxpmn66MlWtXZj9jg5jALsIvKBy3mvmHP6uyy3HjCvBcon0zOjQ27iUiFqQq9Vo7VowiF7X6xNAhFwjQhp91PYRKXIWc52gymL8NqjJaOGc2jJGFrOSEs6J8K+tqdS9vRMraWlY95lDaw97RXYIEvdMBnaeX07Rgou/vveNgYnDANkQBIta1EMSC9T8wSA5wa3b7Qyp94AFPiGWyEBEQxnkgFyXsuIvASCEhKJe39c2kBEnW00tBHphisoh5uaG6EgvEhUvbHp9JP5g==,iv:f1g0To9YVjKPyrtakti0BotUp+alZDQ+XWo8P5i71WA=,tag:MRDrOt7yhnkCPyyYo3aAbQ==,type:str]
+sops:
+    kms: []
+    gcp_kms: []
+    azure_kv: []
+    hc_vault: []
+    age: []
+    lastmodified: "2025-01-04T18:47:54Z"
+    mac: ENC[AES256_GCM,data:pXOFFqafg9UEK+viO67FYZ5YzUnG7Jvs0V/omVHnu7BdbvYLDgjf4bCjKTOPjXrNLqXqgpO3imiNoc80UkRlGMqWRMhkZg51tcBMS6g2VNbw4J1GnCDfUF1WTVkiYnHARJejRK0yLqVRoipYD1+zgJBRi8y7ryV+Y1OujfjCMxU=,iv:qcN0u36DKKapMjD88G+vHJCvHn2qx8PJuks3KhRLAb0=,tag:wchJYygLfGBLgTlHpt8ZVQ==,type:str]
+    pgp:
+        - created_at: "2025-01-04T18:47:26Z"
+          enc: |-
+            -----BEGIN PGP MESSAGE-----
+
+            hF4DpTKc/nNpEUcSAQdAwyjW96qKmsVT3PaD0qpzCS7NAGWopzbAni0FlGE/Bhcw
+            4hCGm+Cdg0DaIIy/qF2uC7WZPJGDOtZkEtoLjSfo3jdSLfKFKeYJx9Z8IzJqNYtZ
+            1GYBCQIQIk3HXYB58LWHYTLVDJFbyBYrC2dzLjn23AwOY7CMVy9zQXfVBTfyVQH/
+            UEY6fUeHduQ6LgkNE+bUfuGeGtInplKE2h+684GuqnOrxMXs+aLAxsBo6NoaHpTu
+            1gEn+YDMsIs=
+            =quT6
+            -----END PGP MESSAGE-----
+          fp: 817ecf0aa56248a2b202f8610e50958c4ccbdd9c
+    unencrypted_suffix: _unencrypted
+    version: 3.9.2
