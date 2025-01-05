@@ -33,7 +33,6 @@
 
   boot = {
     kernelPackages = pkgs.linuxPackages_latest;
-    kernelParams = [ "intel_idle.max_cstate=1" ];
     loader = {
       efi = {
         canTouchEfiVariables = true;
