@@ -9,15 +9,11 @@ with lib;
   imports = [ ./hyprland.nix ];
 
   config = mkIf config.programs.vscode.enable {
-    persist."/persist".users.${user} = {
-      directories = [
-        ".config/Code"
-        ".vscode"
-        ".wakatime"
-      ];
+    persist."/persist".users.${user}.directories = [
+      ".config/Code"
+      ".vscode"
+    ];
 
-      files = [ ".wakatime.cfg" ];
-    };
+    services.wakatime.enable = true;
   };
-
 }
