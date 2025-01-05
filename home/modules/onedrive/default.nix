@@ -43,9 +43,5 @@ in
       "Pictures".source =
         config.lib.file.mkOutOfStoreSymlink "${config.home.homeDirectory}/OneDrive/Pictures";
     };
-
-    xdg.configFile."systemd/user/default.target.wants/onedrive.service" = {
-      source = "${pkgs.darkman}/share/systemd/user/onedrive.service";
-    };
   };
 }
