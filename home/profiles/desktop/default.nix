@@ -17,6 +17,7 @@ with lib;
       waybar.enable = true;
       msedge.enable = true;
       unlauncher.enable = true;
+      telegram.enable = true;
     };
 
     services = {
