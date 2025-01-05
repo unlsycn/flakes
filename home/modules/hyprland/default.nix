@@ -1,8 +1,7 @@
 {
   config,
   lib,
-  inputs,
-  system,
+  inputs',
   ...
 }:
 with lib;
@@ -16,7 +15,7 @@ with lib;
 
   config = mkIf config.wayland.windowManager.hyprland.enable {
     wayland.windowManager.hyprland = {
-      package = inputs.hyprland.packages.${system}.hyprland;
+      package = inputs'.hyprland.packages.hyprland;
       systemd.variables = [ "--all" ];
     };
 

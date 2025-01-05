@@ -12,14 +12,20 @@
     hyprland.url = "github:hyprwm/Hyprland";
     rose-pine-hyprcursor.url = "github:ndom91/rose-pine-hyprcursor";
     sops-nix.url = "github:Mic92/sops-nix";
+    flake-parts.url = "github:hercules-ci/flake-parts";
   };
 
   outputs =
-    { self, nixpkgs, ... }@inputs:
+    {
+      self,
+      nixpkgs,
+      flake-parts,
+      ...
+    }@inputs:
     let
-      system = "x86_64-linux";
+      system1 = "x86_64-linux";
       user = "unlsycn";
-      pkgs = import nixpkgs {
+      myPkgs = import nixpkgs {
         overlays = [
           (import ./pkgs { lib = nixpkgs.lib; })
           inputs.hyprland.overlays.default
@@ -27,43 +33,39 @@
         config = {
           allowUnfree = true;
         };
-        inherit system;
+        system = system1;
       };
     in
-    {
-      nixosConfigurations = pkgs.callPackage ./outputs/nixos.nix {
-        inherit inputs user system;
-      };
+    flake-parts.lib.mkFlake { inherit inputs; } {
+      systems = [ "x86_64-linux" ];
 
-      homeConfigurations = {
-        ${user} = inputs.home-manager.lib.homeManagerConfiguration {
-          inherit pkgs;
-          extraSpecialArgs = {
-            inherit inputs system;
+      imports = [
+        ./outputs/nixos.nix
+        ./outputs/home.nix
+      ];
+      _module.args = { inherit user; };
+
+      perSystem =
+        {
+          inputs',
+          pkgs,
+          ...
+        }:
+        {
+          _module.args.pkgs = myPkgs;
+
+          formatter = pkgs.nixfmt-rfc-style;
+
+          devShells.default = pkgs.mkShell {
+            packages = with pkgs; [
+              nixd
+              home-manager
+              nvfetcher
+              sops
+            ];
+
+            nativeBuildInputs = [ inputs'.sops-nix.packages.sops-import-keys-hook ];
           };
-          modules = [
-            (pkgs.callPackage ./outputs/home.nix {
-              inherit user inputs;
-              profiles = [
-                "desktop"
-                "cli"
-              ];
-            }).users.${user}
-          ];
         };
-      };
-
-      formatter.${system} = pkgs.nixfmt-rfc-style;
-
-      devShells.${system}.default = pkgs.mkShell {
-        packages = with pkgs; [
-          nixd
-          nvfetcher
-          sops
-        ];
-
-        nativeBuildInputs = [ inputs.sops-nix.packages.${system}.sops-import-keys-hook ];
-      };
-
     };
 }

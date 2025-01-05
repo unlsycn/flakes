@@ -3,7 +3,7 @@
   pkgs,
   user,
   inputs,
-  system,
+  inputs',
   ...
 }:
 {
@@ -16,12 +16,13 @@
 
     inputs.home-manager.nixosModules.home-manager
     {
-      home-manager = import ../../../outputs/home.nix {
+      home-manager = import ../../../home {
         inherit
-          inputs
-          user
           lib
-          system
+          pkgs
+          user
+          inputs
+          inputs'
           ;
         profiles = [
           "cli"

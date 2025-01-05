@@ -1,8 +1,7 @@
 {
   config,
-  inputs,
+  inputs',
   lib,
-  system,
   ...
 }:
 with lib;
@@ -15,7 +14,7 @@ with lib;
         size = 32;
       };
       name = "rose-pine-hyprcursor";
-      package = inputs.rose-pine-hyprcursor.packages.${system}.default;
+      package = inputs'.rose-pine-hyprcursor.packages.default;
     };
   };
 }
