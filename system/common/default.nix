@@ -30,6 +30,7 @@
         "nix-command"
         "flakes"
         "impure-derivations"
+        "pipe-operators"
       ];
       substituters = [
         "https://mirror.sjtu.edu.cn/nix-channels/store"
