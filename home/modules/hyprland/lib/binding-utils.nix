@@ -5,7 +5,8 @@ rec {
   mainModifier = "Super";
   usualModifier = "Alt";
   bindKeys =
-    modifier: keybinds: mapAttrsToList (key: dispatcher: "${modifier}, ${key}, ${dispatcher}") keybinds;
+    modifier: keybinds:
+    keybinds |> mapAttrsToList (key: dispatcher: "${modifier}, ${key}, ${dispatcher}");
   mainBind = bindKeys mainModifier;
   mainShiftModifier = "${mainModifier} Shift";
   mainShiftBind = bindKeys mainShiftModifier;
@@ -13,12 +14,10 @@ rec {
 
   bindWithDispatcher =
     bindFunc: dispatcher: keybinds:
-    bindFunc (mapAttrs (key: param: "${dispatcher}, " + param) keybinds);
+    keybinds |> mapAttrs (key: param: "${dispatcher}, " + param) |> bindFunc;
   bindWithDispatcher' =
     dispatcher: bindAttrs:
-    flatten (
-      mapAttrsToList (
-        modifier: keybinds: bindWithDispatcher (bindKeys modifier) dispatcher keybinds
-      ) bindAttrs
-    );
+    bindAttrs
+    |> mapAttrsToList (modifier: keybinds: bindWithDispatcher (bindKeys modifier) dispatcher keybinds)
+    |> flatten;
 }

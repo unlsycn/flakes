@@ -18,11 +18,15 @@ let
     (( ''${+_comps} )) && _comps[zinit]="${pkgs.zinit}/share/zsh/site-functions/_zinit"
 
     ${optionalString (zinitConfig.plugins != { }) ''
-      ${concatMapStrings (x: x + "\n") (
-        mapAttrsToList (
-          modifier: plugins: "zinit ${modifier} for \\\n  ${concatStrings (intersperse " \\\n  " plugins)}"
-        ) zinitConfig.plugins
-      )}
+      ${
+        (
+          zinitConfig.plugins
+          |> mapAttrsToList (
+            modifier: plugins: "zinit ${modifier} for \\\n ${plugins |> intersperse " \\\n " |> concatStrings}"
+          )
+        )
+        |> concatMapStrings (x: x + "\n")
+      }
     ''}
   '';
 

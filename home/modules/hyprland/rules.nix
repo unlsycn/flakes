@@ -62,14 +62,17 @@ in
 
   config = mkIf cfg.enable {
     wayland.windowManager.hyprland.settings.windowrulev2 =
-      flatten (
-        mapAttrsToList (
+      (
+        (removeAttrs cfg.windowRules [ "custom" ])
+        |> mapAttrsToList (
           field: ruleLines:
-          mapAttrsToList (regex: rules: "${concatStringsSep ", " rules}, ${field}:${regex}") ruleLines
-        ) (removeAttrs cfg.windowRules [ "custom" ])
+          ruleLines |> mapAttrsToList (regex: rules: "${concatStringsSep ", " rules}, ${field}:${regex}")
+        )
+        |> flatten
       )
-      ++ mapAttrsToList (
-        fieldRegex: rules: "${concatStringsSep ", " rules}, ${fieldRegex}"
-      ) cfg.windowRules.custom;
+      ++ (
+        cfg.windowRules.custom
+        |> mapAttrsToList (fieldRegex: rules: "${concatStringsSep ", " rules}, ${fieldRegex}")
+      );
   };
 }

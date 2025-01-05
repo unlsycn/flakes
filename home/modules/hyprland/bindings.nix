@@ -51,25 +51,27 @@ with bindingUtils;
           A = "fullscreen, 1";
         }
         # Move active window to a workspace with mainMod + SHIFT + [0-9]
-        ++ flatten (
-          map (f: f (genAttrs (genList (x: toString x) 10) (key: if key == "0" then "10" else key))) [
+        ++ (
+          [
             (bindWithDispatcher mainBind "workspace")
             (bindWithDispatcher mainShiftBind "movetoworkspace")
           ]
+          |> map (f: (genAttrs (10 |> genList (x: toString x)) (key: if key == "0" then "10" else key)) |> f)
+          |> flatten
         )
         # Special workspaces
-        ++ flatten (
-          mapAttrsToList
-            (
-              key: workspace:
-              mainBind { ${key} = "togglespecialworkspace, ${workspace}"; }
-              ++ mainShiftBind { ${key} = "movetoworkspace, special:${workspace}"; }
-            )
-            {
-              F = "code";
-              C = "chat";
-              R = "remote";
-            }
+        ++ (
+          {
+            F = "code";
+            C = "chat";
+            R = "remote";
+          }
+          |> mapAttrsToList (
+            key: workspace:
+            mainBind { ${key} = "togglespecialworkspace, ${workspace}"; }
+            ++ mainShiftBind { ${key} = "movetoworkspace, special:${workspace}"; }
+          )
+          |> flatten
         )
         # Scroll through existing workspaces with mainMod + scroll or Alt + Tab
         ++ bindWithDispatcher' "exec" {

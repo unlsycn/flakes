@@ -5,24 +5,25 @@
   user,
 }:
 with inputs;
+with builtins;
 let
   inherit (nixpkgs.lib) nixosSystem;
-  hostList = builtins.attrNames (builtins.readDir ../system/hosts);
+  hostList = ../system/hosts |> readDir |> attrNames;
 in
-builtins.listToAttrs (
-  builtins.map (host: {
-    name = host;
-    value = nixosSystem {
-      inherit pkgs system;
-      specialArgs = {
-        inherit inputs user system;
-        hostName = host;
-      };
-      modules = [
-        ../system/hosts/${host}
-        impermanence.nixosModules.impermanence
-        sops-nix.nixosModules.sops
-      ];
+hostList
+|> map (host: {
+  name = host;
+  value = nixosSystem {
+    inherit pkgs system;
+    specialArgs = {
+      inherit inputs user system;
+      hostName = host;
     };
-  }) hostList
-)
+    modules = [
+      ../system/hosts/${host}
+      impermanence.nixosModules.impermanence
+      sops-nix.nixosModules.sops
+    ];
+  };
+})
+|> listToAttrs
