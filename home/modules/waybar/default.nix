@@ -7,6 +7,7 @@
 with lib;
 let
   volume = "${pkgs.desktop-scripts}/bin/volume";
+  brightnessctl = "${pkgs.brightnessctl}/bin/brightnessctl";
   swaync-client = "${pkgs.swaynotificationcenter}/bin/swaync-client";
   blueman-manager = "${pkgs.blueman}/bin/blueman-manager";
 in
@@ -29,21 +30,27 @@ in
           ];
           modules-right = [
             "tray"
-            "pulseaudio"
+            "group/device"
             "network"
             "group/sysinfo"
             "clock"
           ] ++ optional config.services.swaync.enable "custom/swaync";
           "group/sysinfo" = {
-            drawer = {
-              transition-left-to-right = false;
-            };
+            drawer.transition-left-to-right = false;
             orientation = "inherit";
             modules = [
               "battery"
               "cpu"
               "memory"
               "temperature"
+            ];
+          };
+          "group/device" = {
+            drawer.transition-left-to-right = false;
+            orientation = "inherit";
+            modules = [
+              "pulseaudio"
+              "backlight"
             ];
           };
           "hyprland/workspaces" = {
@@ -124,6 +131,18 @@ in
             format-linked = "󰊗 {ifname} (No IP)";
             format-disconnected = "";
             format-alt = "{ifname}: {ipaddr}/{cidr}";
+          };
+          "backlight" = {
+            device = "intel_backlight";
+            format = "{icon} {percent}%";
+            format-icons = [
+              ""
+              ""
+            ];
+            tooltip-format = "{icon} Brightness | {percent}%";
+            on-scroll-up = "${brightnessctl} s +5%";
+            on-scroll-down = "${brightnessctl} s 5%-";
+            smooth-scrolling-threshold = 1;
           };
           pulseaudio = {
             format = "{icon} {volume}%";

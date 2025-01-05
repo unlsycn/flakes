@@ -102,12 +102,17 @@ button:hover {
 #temperature,
 #custom-swaync,
 #network,
+#backlight,
 #pulseaudio {
     padding: 0 10px;
 }
 
 #pulseaudio {
     color: @teal;
+}
+
+#backlight {
+    color: @peach;
 }
 
 #network {
