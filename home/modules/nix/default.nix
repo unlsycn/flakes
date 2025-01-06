@@ -2,9 +2,12 @@
 {
   nix = {
     extraOptions = ''
-      !include ${config.sops.secrets.nix-access-tokens.path}
+      !include ${config.sops.templates.nix-extra-options.path}
     '';
   };
 
-  sops.secrets.nix-access-tokens.sopsFile = ./access-token.yaml;
+  sops = {
+    secrets.github-access-token.sopsFile = ./access-token.yaml;
+    templates.nix-extra-options.content = "extra-access-tokens = github.com=${config.sops.placeholder.github-access-token}";
+  };
 }
