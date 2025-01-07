@@ -46,6 +46,9 @@
     };
   };
 
+  services.logind.powerKey = "hibernate";
+  powerManagement.powertop.enable = true;
+
   systemd.services.nix-daemon = {
     environment = {
       TMPDIR = "/var/cache/nix";
