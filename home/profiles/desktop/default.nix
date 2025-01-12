@@ -24,6 +24,7 @@ with lib;
       swaync.enable = true;
       hyprpaper.enable = true;
       cliphist.enable = true;
+      hypridle.enable = true;
     };
 
     home.packages = with pkgs; [
