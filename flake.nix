@@ -23,18 +23,14 @@
       ...
     }@inputs:
     let
-      system1 = "x86_64-linux";
       user = "unlsycn";
-      myPkgs = import nixpkgs {
-        overlays = [
-          (import ./pkgs { lib = nixpkgs.lib; })
-          inputs.hyprland.overlays.default
-        ];
-        config = {
-          allowUnfree = true;
-        };
-        system = system1;
+      overlays = import ./overlays {
+        lib = nixpkgs.lib;
+        inherit inputs;
       };
+      overlaysList = builtins.attrValues overlays ++ [
+        inputs.hyprland.overlays.default
+      ];
     in
     flake-parts.lib.mkFlake { inherit inputs; } {
       systems = [ "x86_64-linux" ];
@@ -45,14 +41,25 @@
       ];
       _module.args = { inherit user; };
 
+      flake = {
+        inherit overlays;
+      };
+
       perSystem =
         {
           inputs',
           pkgs,
+          system,
           ...
         }:
         {
-          _module.args.pkgs = myPkgs;
+          _module.args.pkgs = import nixpkgs {
+            inherit system;
+            overlays = overlaysList;
+            config = {
+              allowUnfree = true;
+            };
+          };
 
           formatter = pkgs.nixfmt-rfc-style;
 
