@@ -23,15 +23,6 @@ with lib;
         QT_AUTO_SCREEN_SCALE_FACTOR = "1";
         QT_SCALE_FACTOR = "1.75";
 
-        # TODO: Move to Fcitx module
-        # ime
-        # See https://fcitx-im.org/wiki/Using_Fcitx_5_on_Wayland
-        QT_IM_MODULE = "fcitx";
-        XMODIFIERS = "@im=fcitx";
-        SDL_IM_MODULE = "fcitx";
-        GLFW_IM_MODULE = "ibus";
-        INPUT_METHOD = "fcitx";
-
         # Themes
         QT_QPA_PLATFORMTHEME = "qt6ct";
         QT_WAYLAND_DISABLE_WINDOWDECORATION = "1";

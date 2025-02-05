@@ -32,6 +32,8 @@ with lib;
       wl-clipboard
     ];
 
+    i18n.inputMethod.enabled = "fcitx5";
+
     wayland.windowManager.hyprland.enable = true;
 
     home.sessionVariables = {
