@@ -56,6 +56,7 @@ with lib;
         ]
         ++ [
           "Workspaces"
+          "Downloads"
         ];
     };
   };

@@ -18,6 +18,7 @@ with lib;
       msedge.enable = true;
       unlauncher.enable = true;
       telegram.enable = true;
+      hyprshot.enable = true;
     };
 
     services = {
