@@ -11,12 +11,18 @@ with lib;
     ./env.nix
     ./bindings.nix
     ./rules.nix
+    ./monitors.nix
   ];
 
   config = mkIf config.wayland.windowManager.hyprland.enable {
     wayland.windowManager.hyprland = {
       package = inputs'.hyprland.packages.hyprland;
       systemd.variables = [ "--all" ];
+
+      monitors = [
+        "allay"
+        "philips"
+      ];
     };
 
     programs.zsh.profileExtra = ''
