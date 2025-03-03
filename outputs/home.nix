@@ -37,11 +37,7 @@
     in
     {
       legacyPackages = {
-        homeConfigurations = genHomeConfiguration [ "cli" ];
-        homeConfigurationsWithDesktop = genHomeConfiguration [
-          "cli"
-          "desktop"
-        ];
+        homeConfigurations = genHomeConfiguration [ "server" ];
       };
     };
 }
