@@ -11,8 +11,9 @@
       ...
     }:
     let
-      genHomeConfiguration = profiles: {
-        ${user} = inputs.home-manager.lib.homeManagerConfiguration {
+      genHomeConfiguration =
+        profiles:
+        (inputs.home-manager.lib.homeManagerConfiguration {
           inherit pkgs;
           modules = [
             (pkgs.callPackage ../home {
@@ -31,17 +32,18 @@
               programs.home-manager.enable = true;
             }
           ];
-        };
-      };
-
+        });
     in
     {
       legacyPackages = {
-        homeConfigurations = genHomeConfiguration [ "cli" ];
-        homeConfigurationsWithDesktop = genHomeConfiguration [
-          "cli"
-          "desktop"
-        ];
+        homeConfigurations = {
+          "cli" = genHomeConfiguration [ "cli" ];
+          "desktop" = genHomeConfiguration [
+            "cli"
+            "desktop"
+          ];
+          "server" = genHomeConfiguration [ "server" ];
+        };
       };
     };
 }
