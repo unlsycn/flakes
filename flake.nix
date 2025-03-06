@@ -28,9 +28,7 @@
         lib = nixpkgs.lib;
         inherit inputs;
       };
-      overlaysList = builtins.attrValues overlays ++ [
-        inputs.hyprland.overlays.default
-      ];
+      overlaysList = builtins.attrValues overlays ++ [ ];
     in
     flake-parts.lib.mkFlake { inherit inputs; } {
       systems = [ "x86_64-linux" ];
