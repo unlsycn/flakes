@@ -26,6 +26,7 @@ with lib;
       hyprpaper.enable = true;
       cliphist.enable = true;
       hypridle.enable = true;
+      blueman-applet.enable = true;
     };
 
     home.packages = with pkgs; [

@@ -16,7 +16,10 @@
     firewall.enable = false;
   };
 
-  services.mihomo.enable = true;
+  services = {
+    mihomo.enable = true;
+    blueman.enable = true;
+  };
 
   users.users.${user}.extraGroups = [ "networkmanager" ];
 
