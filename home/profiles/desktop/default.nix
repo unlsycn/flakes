@@ -15,7 +15,14 @@ with lib;
       vscode.enable = true;
       alacritty.enable = true;
       waybar.enable = true;
-      msedge.enable = true;
+      msedge = {
+        enable = true;
+        package = pkgs.microsoft-edge.override {
+          commandLineArgs = ''
+            --enable-features=TouchpadOverscrollHistoryNavigation \
+            --enable-blink-features=MiddleClickAutoscroll'';
+        };
+      };
       unlauncher.enable = true;
       telegram.enable = true;
       hyprshot.enable = true;
