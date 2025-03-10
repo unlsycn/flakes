@@ -21,7 +21,10 @@ with lib;
         float_switch_override_focus = 0;
       };
 
-      binds.scroll_event_delay = 0;
+      binds = {
+        scroll_event_delay = 0;
+        movefocus_cycles_fullscreen = true;
+      };
 
       gestures = {
         workspace_swipe = true;
