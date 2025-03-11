@@ -26,6 +26,7 @@ with lib;
       unlauncher.enable = true;
       telegram.enable = true;
       hyprshot.enable = true;
+      zotero.enable = true;
     };
 
     services = {
