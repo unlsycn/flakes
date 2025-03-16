@@ -21,8 +21,8 @@ with bindingUtils;
   config = mkIf cfg.enable {
     home.packages = [ cfg.package ];
     wayland.windowManager.hyprland.settings.bind = bindKeys "Control Alt" {
-      "S" = "exec, hyprshot -m region --clipboard-only";
-      "A" = "exec, hyprshot -m window --clipboard-only";
+      "A" = "exec, hyprshot -m region --clipboard-only";
+      "S" = "exec, hyprshot -m window --clipboard-only";
     };
   };
 }
