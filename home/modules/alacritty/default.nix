@@ -20,7 +20,7 @@ in
       font = {
         size = 14;
         normal = {
-          family = "Jetbrains Mono";
+          family = "Maple Mono NF";
         };
       };
 
