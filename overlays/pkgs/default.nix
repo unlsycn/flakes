@@ -1,7 +1,7 @@
-{ lib, ... }:
-with lib;
+final: prev:
+with prev.lib;
 with builtins;
 let
   packageList = ./. |> readDir |> filterAttrs (name: type: type == "directory") |> attrNames;
 in
-self: super: genAttrs packageList (name: self.callPackage ./${name} { })
+genAttrs packageList (name: final.callPackage ./${name} { })
