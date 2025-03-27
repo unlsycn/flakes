@@ -3,6 +3,7 @@
 # to /etc/nixos/configuration.nix instead.
 {
   config,
+  pkgs,
   lib,
   modulesPath,
   ...
@@ -103,5 +104,6 @@
   hardware = {
     cpu.intel.updateMicrocode = lib.mkDefault config.hardware.enableRedistributableFirmware;
     bluetooth.enable = true;
+    firmware = with pkgs; [ lnl-bt-firmware ];
   };
 }
