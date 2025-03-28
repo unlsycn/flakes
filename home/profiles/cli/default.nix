@@ -27,6 +27,7 @@ with lib;
       zoxide.enable = true;
       bat.enable = true;
       fd.enable = true;
+      btop.enable = true;
       ripgrep.enable = true;
       nnn.enable = true;
       onedrive.enable = true;
@@ -41,7 +42,6 @@ with lib;
       tree
       tokei
       dust
-      gotop
       axel
       rsync
       tldr
