@@ -3,15 +3,15 @@
 {
   nvim = {
     pname = "nvim";
-    version = "0534c4742d356efb24a5133e34fdc5fc3a36c600";
+    version = "e86c218fa3c816875e07e66d409070e8298959cc";
     src = fetchFromGitHub {
       owner = "unlsycn";
       repo = ".vim";
-      rev = "0534c4742d356efb24a5133e34fdc5fc3a36c600";
+      rev = "e86c218fa3c816875e07e66d409070e8298959cc";
       fetchSubmodules = false;
-      sha256 = "sha256-Vt4wXpqRoh4qEl/x9xOJL0DImPfU0vQBoeIQfc6KLpM=";
+      sha256 = "sha256-EflMLlRl574CvG+mRBR5GoGFSyGEHc67uplz7cyZNgY=";
     };
-    date = "2024-09-21";
+    date = "2025-04-01";
   };
   nvim-vscode = {
     pname = "nvim-vscode";
