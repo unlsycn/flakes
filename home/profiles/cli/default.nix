@@ -31,6 +31,7 @@ with lib;
       ripgrep.enable = true;
       nnn.enable = true;
       onedrive.enable = true;
+      zellij.enable = true;
     };
 
     services = {
