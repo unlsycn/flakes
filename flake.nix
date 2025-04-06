@@ -34,6 +34,7 @@
       systems = [ "x86_64-linux" ];
 
       imports = [
+        ./home
         ./outputs/nixos.nix
         ./outputs/home.nix
       ];

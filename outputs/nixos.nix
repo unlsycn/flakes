@@ -1,4 +1,5 @@
 {
+  self,
   withSystem,
   inputs,
   user,
@@ -25,13 +26,29 @@ in
         nixosSystem {
           inherit pkgs system;
           specialArgs = {
-            inherit inputs inputs' user;
+            inherit
+              inputs
+              inputs'
+              user
+              ;
             hostName = host;
           };
           modules = [
             ../system/hosts/${host}
             impermanence.nixosModules.impermanence
             sops-nix.nixosModules.sops
+            inputs.home-manager.nixosModules.home-manager
+            (self.buildConfigurationPhases.genHomeModuleForHost {
+              inherit user;
+              extraSpecialArgs = {
+                inherit
+                  pkgs
+                  user
+                  inputs
+                  inputs'
+                  ;
+              };
+            })
           ];
         }
       );

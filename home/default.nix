@@ -1,51 +1,85 @@
 {
+  self,
   lib,
   inputs,
-  inputs',
-  user,
-  profiles,
   ...
 }:
-with builtins;
 with inputs;
-let
-  profileList = ./profiles |> readDir |> attrNames;
-in
+with builtins;
+with lib;
 {
-  users.${user} = {
-    imports =
-      (profileList |> map (profile: ./profiles/${profile}))
-      ++ (
-        ./modules
-        |> lib.filesystem.listFilesRecursive
-        |> lib.filter (file: lib.strings.hasSuffix "default.nix" file)
-      )
-      ++ [
-        ../lib/home-impermanence.nix
-        vscode-server.homeModules.default
-        sops-nix.homeManagerModules.sops
-      ];
+  flake = {
+    homeModules =
+      ./modules
+      |> readDir
+      |> filterAttrs (name: type: type == "directory")
+      |> mapAttrs (module: _: ./modules/${module});
 
-    profile =
-      profileList
-      |> map (profile: {
-        name = "${profile}";
-        value = {
-          enable = builtins.elem "${profile}" profiles;
+    buildConfigurationPhases = rec {
+      genSharedHomeConfiguration =
+        let
+          profileList = ./profiles |> readDir |> attrNames;
+        in
+        profiles: {
+          imports =
+            (profileList |> map (profile: ./profiles/${profile}))
+            ++ attrValues self.homeModules
+            ++ [
+              vscode-server.homeModules.default
+              sops-nix.homeManagerModules.sops
+            ];
+
+          profile =
+            profileList
+            |> map (profile: {
+              name = "${profile}";
+              value = {
+                enable = builtins.elem "${profile}" profiles;
+              };
+            })
+            |> listToAttrs;
+
+          home.stateVersion = "24.05"; # Dont touch it
         };
-      })
-      |> listToAttrs;
 
-    home.stateVersion = "24.05"; # Dont touch it
-  };
+      genHomeConfigurationForStandalone =
+        profiles:
+        { user, pkgs }:
+        (inputs.home-manager.lib.homeManagerConfiguration {
+          inherit pkgs;
+          modules = [
+            (genSharedHomeConfiguration profiles)
+            {
+              nix.package = pkgs.nix;
+              home.username = "${user}";
+              home.homeDirectory = "/home/${user}";
+              programs.home-manager.enable = true;
+            }
+          ];
+        });
 
-  useGlobalPkgs = true;
-  useUserPackages = true;
-  extraSpecialArgs = {
-    inherit
-      inputs
-      inputs'
-      user
-      ;
+      genHomeModuleForHost =
+        { user, extraSpecialArgs }:
+        (
+          { config, lib, ... }:
+          with lib;
+          {
+            options.homeManagerProfiles = mkOption {
+              type = with types; listOf str;
+              description = "Home Manager profiles to enable";
+            };
+
+            config = {
+              home-manager = {
+                users.${user} = genSharedHomeConfiguration config.homeManagerProfiles;
+                useGlobalPkgs = true;
+                useUserPackages = true;
+                inherit extraSpecialArgs;
+              };
+            };
+          }
+        );
+
+    };
   };
 }
