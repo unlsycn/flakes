@@ -30,6 +30,8 @@ in
         amend = "commit --amend";
         fixup = "!f(){ git reset --soft HEAD~\${1} && git commit --amend -C HEAD; };f";
         cm = "commit -m";
+        spu = "stash push";
+        spo = "stash pop";
       };
 
       extraConfig = {
