@@ -1,9 +1,6 @@
 {
-  lib,
   pkgs,
   user,
-  inputs,
-  inputs',
   ...
 }:
 {
@@ -13,23 +10,11 @@
 
     ../../modules/desktop
     ../../modules/evremap
+  ];
 
-    inputs.home-manager.nixosModules.home-manager
-    {
-      home-manager = import ../../../home {
-        inherit
-          lib
-          pkgs
-          user
-          inputs
-          inputs'
-          ;
-        profiles = [
-          "cli"
-          "desktop"
-        ];
-      };
-    }
+  homeManagerProfiles = [
+    "cli"
+    "desktop"
   ];
 
   boot = {
