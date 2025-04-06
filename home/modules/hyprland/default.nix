@@ -12,6 +12,8 @@ with lib;
     ./bindings.nix
     ./rules.nix
     ./monitors.nix
+
+    ./lib
   ];
 
   config = mkIf config.wayland.windowManager.hyprland.enable {

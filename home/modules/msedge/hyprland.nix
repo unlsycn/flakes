@@ -5,12 +5,9 @@
 }:
 with lib;
 let
-  bindingUtils = import ../hyprland/lib/binding-utils.nix { inherit lib; };
-
   cfg = config.programs.msedge;
   msedge = "${cfg.package}/bin/microsoft-edge";
 in
-with bindingUtils;
 {
   options.programs.msedge.enableHyprlandIntegration = mkOption {
     default = config.wayland.windowManager.hyprland.enable;
@@ -19,8 +16,10 @@ with bindingUtils;
   };
 
   config = mkIf cfg.enableHyprlandIntegration {
-    wayland.windowManager.hyprland.settings.bind = mainBind {
-      W = "exec, ${msedge}";
-    };
+    wayland.windowManager.hyprland.settings.bind =
+      with config.wayland.windowManager.hyprland.lib.bindingUtils;
+      mainBind {
+        W = "exec, ${msedge}";
+      };
   };
 }
