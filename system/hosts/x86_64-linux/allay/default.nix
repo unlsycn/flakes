@@ -6,10 +6,10 @@
 {
   imports = [
     ./hardware-configuration.nix
-    ../../common
+    ../../../common
 
-    ../../modules/desktop
-    ../../modules/evremap
+    ../../../modules/desktop
+    ../../../modules/evremap
   ];
 
   homeManagerProfiles = [
