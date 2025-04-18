@@ -75,7 +75,7 @@ in
 
       zinit = {
         enable = true;
-        homeDirectory = "${config.home.homeDirectory}/.local/share/zinit";
+        homeDirectory = "${config.xdg.dataHome}/zinit";
         plugins = {
           "depth=1 atload'source \"''\${HOME}/.p10k.zsh\"' light-mode" = [ "romkatv/powerlevel10k" ];
           "lucid blockf depth=1 light-mode" = [
