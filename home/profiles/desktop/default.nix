@@ -27,6 +27,7 @@ with lib;
       telegram.enable = true;
       hyprshot.enable = true;
       zotero.enable = true;
+      obsidian.enable = true;
     };
 
     services = {
