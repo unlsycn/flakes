@@ -14,7 +14,7 @@ in
     description = "Whether to enable Hyprland integration";
   };
 
-  config = mkIf cfg.enableHyprlandIntegration {
+  config = mkIf (cfg.enable && cfg.enableHyprlandIntegration) {
     windowRules.custom."class:(Zotero), title:^(Progress)$" = [
       "float"
       "size 20% 10%"

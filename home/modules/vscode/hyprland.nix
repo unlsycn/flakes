@@ -15,7 +15,7 @@ in
     description = "Whether to enable Hyprland integration";
   };
 
-  config = mkIf cfg.enableHyprlandIntegration {
+  config = mkIf (cfg.enable && cfg.enableHyprlandIntegration) {
     wayland.windowManager.hyprland = with config.wayland.windowManager.hyprland.lib.bindingUtils; {
       settings.bind = mainBind {
         I = "exec, ${vscode}";
