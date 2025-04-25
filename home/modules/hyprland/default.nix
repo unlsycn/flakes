@@ -1,7 +1,6 @@
 {
   config,
   lib,
-  inputs',
   ...
 }:
 with lib;
@@ -18,7 +17,6 @@ with lib;
 
   config = mkIf config.wayland.windowManager.hyprland.enable {
     wayland.windowManager.hyprland = {
-      package = inputs'.hyprland.packages.hyprland;
       systemd.variables = [ "--all" ];
 
       monitors = [
