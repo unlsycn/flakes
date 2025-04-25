@@ -93,44 +93,43 @@ in
         };
       };
 
-      initExtraFirst = ''
-        (( ''${+commands[direnv]} )) && emulate zsh -c "$(direnv export zsh)"
-        P10K_INSTANT_PROMPT="$XDG_CACHE_HOME/p10k-instant-prompt-''${(%):-%n}.zsh"
-        [[ ! -r "$P10K_INSTANT_PROMPT" ]] || source "$P10K_INSTANT_PROMPT"
-        (( ''${+commands[direnv]} )) && emulate zsh -c "$(direnv hook zsh)"
-      '';
+      initContent = mkMerge [
+        (mkBefore ''
+          (( ''${+commands[direnv]} )) && emulate zsh -c "$(direnv export zsh)"
+          P10K_INSTANT_PROMPT="$XDG_CACHE_HOME/p10k-instant-prompt-''${(%):-%n}.zsh"
+          [[ ! -r "$P10K_INSTANT_PROMPT" ]] || source "$P10K_INSTANT_PROMPT"
+          (( ''${+commands[direnv]} )) && emulate zsh -c "$(direnv hook zsh)"
+        '')
 
-      initExtraBeforeCompInit = ''
-        ${zinitInit}
-      '';
+        (lib.mkOrder 550 zinitInit)
 
-      initExtra = ''
-        autoload -Uz compinit
-        compinit -d ~/.cache/zcompdump
-        zstyle ':completion:*:*:*:*:*' menu select
-        zstyle ':completion:*' matcher-list 'm:{a-zA-Z}={A-Za-z}' # case insensitive tab completion
+        ''
+          autoload -Uz compinit
+          compinit -d ~/.cache/zcompdump zstyle ':completion:*:*:*:*:*' menu select
+          zstyle ':completion:*' matcher-list 'm:{a-zA-Z}={A-Za-z}' # case insensitive tab completion
 
-        ZVM_VI_INSERT_ESCAPE_BINDKEY="jk"
-        ZVM_LINE_INIT_MODE=$ZVM_MODE_INSERT
-        ZVM_INSERT_MODE_CURSOR=$ZVM_CURSOR_BLINKING_UNDERLINE
-        ZVM_NORMAL_MODE_CURSOR=$ZVM_CURSOR_BLINKING_BLOCK
+          ZVM_VI_INSERT_ESCAPE_BINDKEY="jk"
+          ZVM_LINE_INIT_MODE=$ZVM_MODE_INSERT
+          ZVM_INSERT_MODE_CURSOR=$ZVM_CURSOR_BLINKING_UNDERLINE
+          ZVM_NORMAL_MODE_CURSOR=$ZVM_CURSOR_BLINKING_BLOCK
 
-        setopt interactivecomments # allow comments in interactive mode
-        setopt magicequalsubst     # enable filename expansion for arguments of the form ‘anything=expression’
-        setopt nonomatch           # hide error message if there is no match for the pattern
-        setopt notify              # report the status of background jobs immediately
-        setopt numericglobsort     # sort filenames numerically when it makes sense
-        setopt promptsubst         # enable command substitution in prompt
+          setopt interactivecomments # allow comments in interactive mode
+          setopt magicequalsubst     # enable filename expansion for arguments of the form ‘anything=expression’
+          setopt nonomatch           # hide error message if there is no match for the pattern
+          setopt notify              # report the status of background jobs immediately
+          setopt numericglobsort     # sort filenames numerically when it makes sense
+          setopt promptsubst         # enable command substitution in prompt
 
-        # configure `time` format
-        TIMEFMT=$'real\t%E\nuser\t%U\nsys\t%S\ncpu\t%P'
+          # configure `time` format
+          TIMEFMT=$'real\t%E\nuser\t%U\nsys\t%S\ncpu\t%P'
 
-        # Take advantage of $LS_COLORS for completion as well
-        zstyle ':completion:*' list-colors "''${(s.:.)LS_COLORS}"
+          # Take advantage of $LS_COLORS for completion as well
+          zstyle ':completion:*' list-colors "''${(s.:.)LS_COLORS}"
 
-        # Remove path separator from WORDCHARS.
-        WORDCHARS=''${WORDCHARS//\/}
-      '';
+          # Remove path separator from WORDCHARS.
+          WORDCHARS=''${WORDCHARS//\/}
+        ''
+      ];
     };
 
     home.file.".p10k.zsh".source = ./.p10k.zsh;
