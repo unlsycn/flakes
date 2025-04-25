@@ -20,6 +20,11 @@ with lib;
   };
 
   config = mkIf cfg.enable {
+    programs.msedge.package = pkgs.microsoft-edge.override {
+      commandLineArgs = ''
+        --enable-features=TouchpadOverscrollHistoryNavigation \
+        --enable-blink-features=MiddleClickAutoscroll'';
+    };
     home.packages = [ cfg.package ];
     persist."/persist".users.${user} = {
       directories = [ ".config/microsoft-edge" ];

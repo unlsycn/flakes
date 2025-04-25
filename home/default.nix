@@ -27,6 +27,7 @@ with lib;
             ++ [
               vscode-server.homeModules.default
               sops-nix.homeManagerModules.sops
+              inputs.zen-browser.homeModules.beta
             ];
 
           profile =

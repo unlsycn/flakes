@@ -15,14 +15,7 @@ with lib;
       vscode.enable = true;
       alacritty.enable = true;
       waybar.enable = true;
-      msedge = {
-        enable = true;
-        package = pkgs.microsoft-edge.override {
-          commandLineArgs = ''
-            --enable-features=TouchpadOverscrollHistoryNavigation \
-            --enable-blink-features=MiddleClickAutoscroll'';
-        };
-      };
+      zen-browser.enable = true;
       unlauncher.enable = true;
       telegram.enable = true;
       hyprshot.enable = true;
@@ -42,6 +35,8 @@ with lib;
       desktop-scripts
       wl-clipboard
     ];
+
+    gtk.enable = true;
 
     i18n.inputMethod.enabled = "fcitx5";
 
