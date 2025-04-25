@@ -26,7 +26,6 @@ with lib;
         # Themes
         QT_QPA_PLATFORMTHEME = "qt6ct";
         QT_WAYLAND_DISABLE_WINDOWDECORATION = "1";
-        XCURSOR_SIZE = "36";
       }
       |> mapAttrsToList (name: value: "${name},${value}");
   };
