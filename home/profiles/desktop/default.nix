@@ -21,6 +21,7 @@ with lib;
       hyprshot.enable = true;
       zotero.enable = true;
       obsidian.enable = true;
+      thunderbird.enable = true;
     };
 
     services = {
