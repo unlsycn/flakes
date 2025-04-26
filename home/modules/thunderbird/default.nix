@@ -16,6 +16,9 @@ with lib;
       isDefault = true;
     };
 
+    # TODO: use nix to manager emails without putting cleartext
+    home.file.".thunderbird/${config.home.username}/user.js".text = mkForce "";
+
     persist."/persist".users.${user} = {
       directories = [ ".thunderbird" ];
     };
