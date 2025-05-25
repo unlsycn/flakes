@@ -5,11 +5,15 @@
   user,
   ...
 }:
+let
+  cfg = config.i18n.inputMethod;
+in
 with lib;
 {
-  config = mkIf (config.i18n.inputMethod.enabled == "fcitx5") {
+  config = mkIf (cfg.enable && cfg.type == "fcitx5") {
     i18n.inputMethod.fcitx5 = {
       addons = with pkgs; [ fcitx5-rime ];
+      waylandFrontend = true;
     };
 
     xdg.dataFile = {
