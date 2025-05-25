@@ -104,6 +104,9 @@
   hardware = {
     cpu.intel.updateMicrocode = lib.mkDefault config.hardware.enableRedistributableFirmware;
     bluetooth.enable = true;
-    firmware = with pkgs; [ lnl-bt-firmware ];
+    firmware = with pkgs; [
+      lnl-bt-firmware
+      sof-firmware
+    ];
   };
 }
