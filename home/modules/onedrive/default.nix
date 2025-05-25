@@ -10,15 +10,11 @@ let
   cfg = config.programs.onedrive;
 in
 {
-  options.programs.onedrive = {
-    enable = mkEnableOption "OneDrive Client for Linux";
-    package = mkPackageOption pkgs "OneDrive" {
-      default = [ "onedrive" ];
-    };
-  };
-
   config = mkIf cfg.enable {
-    home.packages = [ cfg.package ];
+    programs.onedrive.settings = {
+      sync_dir = "~/OneDrive";
+      skip_file = "~*|.~*|*.tmp|*.lock|*desktop.ini";
+    };
 
     persist."/persist".users.${user} = {
       directories = [
@@ -28,7 +24,6 @@ in
     };
 
     xdg.configFile = {
-      "onedrive/config".source = ./config;
       "onedrive/sync_list".source = ./sync_list;
     };
 
