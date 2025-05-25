@@ -39,7 +39,10 @@ with lib;
 
     gtk.enable = true;
 
-    i18n.inputMethod.enabled = "fcitx5";
+    i18n.inputMethod = {
+      enable = true;
+      type = "fcitx5";
+    };
 
     wayland.windowManager.hyprland.enable = true;
 
