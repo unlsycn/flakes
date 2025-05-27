@@ -15,5 +15,12 @@ with lib;
 
     services.gpg-agent.enable = mkForce false;
     sops.secrets = mkForce { };
+
+    nix.settings.experimental-features = [
+      "nix-command"
+      "flakes"
+      "impure-derivations"
+      "pipe-operators"
+    ];
   };
 }
