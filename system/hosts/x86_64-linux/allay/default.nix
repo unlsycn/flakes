@@ -5,6 +5,7 @@
 }:
 {
   imports = [
+    ./sound.nix
     ./hardware-configuration.nix
     ../../../common
 

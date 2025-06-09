@@ -16,4 +16,16 @@ final: prev: {
       cp intel/ibt-0190-0291-pci.ddc $out/lib/firmware/intel/
     '';
   };
+
+  lnl-alsa-ucm-conf = prev.alsa-ucm-conf.overrideAttrs (oldAttrs: {
+    src = fetchTarball {
+      url = "https://github.com/alsa-project/alsa-ucm-conf/archive/421e37b.tar.gz";
+      sha256 = "sha256:08rsv6wn32d9zrw1gl2jp7rqzj8m6bdkn0xc7drzf9gfbf6fvmpb";
+    };
+    installPhase = ''
+      mkdir -p $out/share/alsa
+      cp -r ucm2 $out/share/alsa/
+    '';
+    postInstall = "";
+  });
 }

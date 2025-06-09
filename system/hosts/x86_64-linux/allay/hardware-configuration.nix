@@ -106,7 +106,6 @@
     bluetooth.enable = true;
     firmware = with pkgs; [
       lnl-bt-firmware
-      sof-firmware
     ];
   };
 }
