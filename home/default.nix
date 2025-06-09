@@ -51,7 +51,21 @@ with lib;
           modules = [
             (genSharedHomeConfiguration profiles)
             {
-              nix.package = pkgs.nix;
+              nix = {
+                package = pkgs.nix-dram;
+                settings = {
+                  default-flake = "nixpkgs/nixos-unstable";
+                  experimental-features = [
+                    "nix-command"
+                    "flakes"
+                    "impure-derivations"
+                    "pipe-operators"
+                  ];
+                  substituters = [
+                    "https://cache.nixos.org"
+                  ];
+                };
+              };
               home.username = "${user}";
               home.homeDirectory = "/home/${user}";
               programs.home-manager.enable = true;

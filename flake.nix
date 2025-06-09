@@ -16,6 +16,10 @@
       url = "github:0xc000022070/zen-browser-flake";
       inputs.nixpkgs.follows = "nixpkgs";
     };
+    nix-dram = {
+      url = "github:dramforever/nix-dram";
+      inputs.nixpkgs.follows = "nixpkgs";
+    };
   };
 
   outputs =
@@ -31,7 +35,7 @@
         lib = nixpkgs.lib;
         inherit inputs;
       };
-      overlaysList = builtins.attrValues overlays ++ [ ];
+      overlaysList = builtins.attrValues overlays ++ [ inputs.nix-dram.overlay ];
     in
     flake-parts.lib.mkFlake { inherit inputs; } {
       systems = [ "x86_64-linux" ];

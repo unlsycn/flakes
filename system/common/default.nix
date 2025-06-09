@@ -1,4 +1,5 @@
 {
+  inputs,
   pkgs,
   hostName,
   user,
@@ -24,8 +25,9 @@
   };
 
   nix = {
-    package = pkgs.nix;
+    package = pkgs.nix-dram;
     settings = {
+      default-flake = "nixpkgs/nixos-unstable";
       experimental-features = [
         "nix-command"
         "flakes"
