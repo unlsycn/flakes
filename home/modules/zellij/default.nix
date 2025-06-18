@@ -6,6 +6,7 @@
 }:
 with lib;
 let
+  cfg = config.programs.zellij;
   ghost = pkgs.fetchurl {
     url = "https://github.com/vdbulcke/ghost/releases/download/v0.6.0/ghost.wasm";
     hash = "sha256-+/TfnIimyhNYzYerxD+FhXkPpIbldWPPJrjsTdPwO4c=";
@@ -17,7 +18,12 @@ let
 in
 with builtins;
 {
-  config = mkIf config.programs.zellij.enable {
+  options.programs.zellij.copyCommand = mkOption {
+    type = types.str;
+    default = "wl-copy";
+  };
+
+  config = mkIf cfg.enable {
     programs.zellij.settings =
       let
         multiKeys = concatStringsSep "\" \"";
@@ -646,8 +652,8 @@ with builtins;
         serialize_pane_viewport = true;
         show_startup_tips = false;
         scrollback_lines_to_serialize = 4096;
-        copy_command = "wl-copy";
         layout_dir = "~/.config/zellij/layouts";
-      };
+      }
+      // optionalAttrs (cfg.copyCommand != "") { copy_command = cfg.copyCommand; };
   };
 }

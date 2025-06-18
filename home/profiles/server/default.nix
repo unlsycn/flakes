@@ -16,6 +16,8 @@ with lib;
     services.gpg-agent.enable = mkForce false;
     sops.secrets = mkForce { };
 
+    programs.zellij.copyCommand = "";
+
     nix.settings.experimental-features = [
       "nix-command"
       "flakes"
