@@ -82,11 +82,14 @@ in
             "jeffreytse/zsh-vi-mode"
             "paulirish/git-open"
             "zsh-users/zsh-autosuggestions"
+            "joshskidmore/zsh-fzf-history-search"
           ];
           "lucid light-mode" = [ "OMZ::plugins/extract/extract.plugin.zsh" ];
           "lucid depth=1 light-mode has'doas'" = [ "Senderman/doas-zsh-plugin" ];
           "lucid has'sudo'" = [ "OMZ::plugins/sudo/sudo.plugin.zsh" ];
-          "lucid depth=1 light-mode" = [ "Aloxaf/fzf-tab" ];
+          "lucid depth=1 light-mode" = [
+            "Aloxaf/fzf-tab"
+          ];
           "wait'!1a' lucid blockf depth=1 atload'zicompinit' light-mode" = [
             "zdharma-continuum/fast-syntax-highlighting"
           ];
