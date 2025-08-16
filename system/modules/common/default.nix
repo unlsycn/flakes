@@ -1,23 +1,20 @@
 {
-  inputs,
+  lib,
   pkgs,
   hostName,
-  user,
   ...
 }:
+with lib;
 {
   imports = [
     ./network.nix
     ./security.nix
     ./services.nix
-    ./impermanence.nix
-    ./workarounds.nix
   ];
 
   networking.hostName = hostName;
 
-  boot.loader.timeout = 1;
-  time.timeZone = "Asia/Shanghai";
+  time.timeZone = mkDefault "Asia/Shanghai";
   i18n.defaultLocale = "en_US.UTF-8";
   console = {
     keyMap = "us";
@@ -59,13 +56,5 @@
   environment.variables.NIX_REMOTE = "daemon";
 
   programs.nix-ld.enable = true;
-
-  environment.persistence."/persist".hideMounts = true;
-  environment.persistence."/persist" = {
-    files = [ "/etc/machine-id" ];
-  };
-  environment.persistence."/persist".users.${user} = {
-    directories = [ ".nix" ];
-  };
-
+  programs.zsh.enable = true;
 }

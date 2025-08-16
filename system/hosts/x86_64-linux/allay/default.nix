@@ -7,16 +7,13 @@
   imports = [
     ./sound.nix
     ./hardware-configuration.nix
-    ../../../common
-
-    ../../../modules/desktop
-    ../../../modules/evremap
   ];
 
   homeManagerProfiles = [
     "cli"
     "desktop"
   ];
+  hasDesktopEnvironment = true;
 
   boot = {
     kernelPackages = pkgs.linuxPackages_latest;
@@ -37,14 +34,13 @@
     };
   };
 
+  environment.persistence."/persist".enable = true;
+
   users.users.${user} = {
     isNormalUser = true;
     hashedPasswordFile = "/persist/passwords/user";
     shell = pkgs.zsh;
   };
-  programs.zsh.enable = true;
-
-  programs.hyprland.enable = true;
 
   services.evremap.enable = true;
   services.evremap.settings.device_name = "AT Translated Set 2 keyboard";

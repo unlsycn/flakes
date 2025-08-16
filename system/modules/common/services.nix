@@ -1,9 +1,5 @@
 { ... }:
 {
-  imports = [
-    ../modules/openssh
-  ];
-
   services = {
     pipewire = {
       enable = true;

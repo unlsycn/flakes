@@ -1,4 +1,12 @@
-{ ... }:
+{ config, lib, ... }:
+with lib;
 {
-  imports = [ ./fonts.nix ];
+  options.hasDesktopEnvironment = mkOption {
+    type = types.bool;
+    default = false;
+  };
+
+  config = mkIf config.hasDesktopEnvironment {
+    programs.hyprland.enable = true;
+  };
 }

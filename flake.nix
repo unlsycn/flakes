@@ -41,15 +41,23 @@
       systems = [ "x86_64-linux" ];
 
       imports = [
+        ./system
         ./home
         ./outputs/nixos.nix
         ./outputs/home.nix
       ];
       _module.args = { inherit user; };
 
-      flake = {
-        inherit overlays;
-      };
+      flake =
+        { lib, ... }:
+        with lib;
+        {
+          options.buildConfigurationPhases = with types; mkOption { type = attrsOf raw; };
+
+          config = {
+            inherit overlays;
+          };
+        };
 
       perSystem =
         {
