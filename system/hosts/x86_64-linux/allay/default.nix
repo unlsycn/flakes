@@ -45,5 +45,7 @@
   services.evremap.enable = true;
   services.evremap.settings.device_name = "AT Translated Set 2 keyboard";
 
+  console.font = "Terminus 32";
+
   system.stateVersion = "25.05"; # Dont touch it
 }
