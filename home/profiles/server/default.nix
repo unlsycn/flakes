@@ -16,7 +16,10 @@ with lib;
     services.gpg-agent.enable = mkForce false;
     sops.secrets = mkForce { };
 
-    programs.zellij.copyCommand = "";
+    programs = {
+      ssh.matchBlocks."*".identityFile = mkForce [ ];
+      zellij.copyCommand = "";
+    };
 
     nix.settings.experimental-features = [
       "nix-command"
