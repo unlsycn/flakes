@@ -2,6 +2,7 @@ keys:
   - &admin_unlsycn 817ecf0aa56248a2b202f8610e50958c4ccbdd9c
   - &host_common age1f9shnyrs54j566xe90hmv0hu6tj9f7xc6zsmt9rr6qhgnc9qcvlq9m6ras
   - &host_allay age1qrnkhgdanm5e57mrfz52gwmq6jfqny67na4hmtyef920pt4r457qv6t9mg
+  - &host_sashimi age167rgg809xt9thny888nwzrh54d8jywpf7zjfp3kdq66gq73y8prs3q49q2
 creation_rules:
   - path_regex: .*.admin$
     key_groups:
@@ -19,3 +20,4 @@ creation_rules:
         age:
           - *host_common
           - *host_allay
+          - *host_sashimi

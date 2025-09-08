@@ -1,41 +1,45 @@
 github-access-token: ENC[AES256_GCM,data:Cgmma7Mv7VFsFqk60QZxrOzp0qiFFSbomvYXsvdAYZQiIny1mvM8Cw==,iv:Vmmnq85DJ3fxV7YNiFf3TzOSviJ70pvF2L8LrfaPC4g=,tag:eerq+Z+fGXL6mEkytrirFg==,type:str]
 sops:
-    kms: []
-    gcp_kms: []
-    azure_kv: []
-    hc_vault: []
     age:
         - recipient: age1f9shnyrs54j566xe90hmv0hu6tj9f7xc6zsmt9rr6qhgnc9qcvlq9m6ras
           enc: |
             -----BEGIN AGE ENCRYPTED FILE-----
-            YWdlLWVuY3J5cHRpb24ub3JnL3YxCi0+IFgyNTUxOSBCbHhZTGFmb1BKQlJ3S1Yv
-            NHVTczVWUDR0Sm56S29MUkFhTGN3ZjZJTVc4CldjWUFqKzc1bUpqU1pRTkdLc1hi
-            MmkzMjVldzZiOEg1dEV4YnJ1STltNFEKLS0tIHVZcHI3ZlErWXdramxZUGVqMG9S
-            Z3BGaTRzWDF3cS92QmRVaU1wMjhDa0EKRgltmo3ZvxuRgQj1roDn/o5L+vlaQjWt
-            dFXC/iETA1ovnEBIIv5GGbmb4gWFpdYspbsitk36U+8kHLR7BQSdwA==
+            YWdlLWVuY3J5cHRpb24ub3JnL3YxCi0+IFgyNTUxOSBpaG5hTTU4MTNPU2F5dU10
+            RXV2MHQwREg4ZGZPYU54Wmg3c1pQaVp0ZXgwCldEOS8ySkkza3hXejdta3ZmL3I1
+            c21ZWmlhek41bFEzL3FCNHRla1F6WEUKLS0tIHh0NzROdE1qNWJadUxaRGhsYnE2
+            Z1NKUGZEVitob004QTNLWmE5RysvQmMKbfH8nrTJiALXCMRc7dKWVC/AHXIr89/m
+            76TGp2qBiyWdx6o1VPzAvlE4EvodHh+itEoIbbtLUrUB7RAd1WbLYQ==
             -----END AGE ENCRYPTED FILE-----
         - recipient: age1qrnkhgdanm5e57mrfz52gwmq6jfqny67na4hmtyef920pt4r457qv6t9mg
           enc: |
             -----BEGIN AGE ENCRYPTED FILE-----
-            YWdlLWVuY3J5cHRpb24ub3JnL3YxCi0+IFgyNTUxOSBuY2NtUmcyTm9pNFozK2hx
-            Q0dlZ0pDUDUzNXl5VEZJMVVldzhtUlBwWFd3ClZtM3A2VFY4dFhIS09wZGcwTDNK
-            Y3EyVzBSTVU1SFppL081N0ROU1d5N1UKLS0tIGtuMDVQUEZmZS9QcG9qclhuY0VZ
-            TnQ3NTlOanF2NE5nbUVVankxZUIzTFEKNN11dPuSzo4tymuS9ldkYaJtohKtKXam
-            Wax6rFj0kOFsrKpyTc1S12t0SYXlplO89KHIghSYZvkEQ3b7lavwqQ==
+            YWdlLWVuY3J5cHRpb24ub3JnL3YxCi0+IFgyNTUxOSBJbFgyUjdyUG1iZjJyMTlT
+            TlZhMUZXSmJuRzd3OFV1V1NQL3hLMUZqMFNrCm5lN1dBL3VGa1pnamJCSVFueWtV
+            RlNIQ09ORjFNaExQMUdCcFd3U0FYQncKLS0tIEdRblVKbU9tbzJ5ZUh6Tzl5QWhv
+            cWJna2graUltVmZDcERBb0dpbGVoZjQKkNYfYOEERsjyaXc6+B7KLvTy9DsJUORM
+            +vF7/+6UbfaSeL78/c202hskbOpkDFTVHNkHCZyzBcSnCLhNblyzlw==
+            -----END AGE ENCRYPTED FILE-----
+        - recipient: age167rgg809xt9thny888nwzrh54d8jywpf7zjfp3kdq66gq73y8prs3q49q2
+          enc: |
+            -----BEGIN AGE ENCRYPTED FILE-----
+            YWdlLWVuY3J5cHRpb24ub3JnL3YxCi0+IFgyNTUxOSB5aVhMcDcvL1JVcXpJWjdN
+            ek9LWmlEZWFLTEtBQW9tODZGcnlSVUtuTEhJCm1OUmIzUzlobGJQV2ZSR1huODJv
+            clljM3M0ZXQzRSt4emEzRUY4Y3ozb1UKLS0tIHhzMGxNaThLbEZJWTBxLzduNWtp
+            TldOUmRwSVl0c2pvR2JrT0R0WVZEdmMKJ14w7cLG10KI7Ij/BiqxQA+Wcdj0fmh+
+            /GAy0utBwVJjxNJGPWcCEqFT9cBtTiGFyDQ2EIJwSVudZTHp+0IYjQ==
             -----END AGE ENCRYPTED FILE-----
     lastmodified: "2025-04-06T11:55:24Z"
     mac: ENC[AES256_GCM,data:cD+SUUN5gxBb+jzyGz9o+F//ORYSKLSjbGW4SBejnmjQ1aX4bUK8h9YDSwKoOoe9aimQNEErS1/CDNbaFZMGbvkDLaJPDdrNgW5VBW9scuI4eQ0PHRQOGdjR07El5AxtA76rEiZS0H78vWjiLnC4G20bf8C36QSYzeKT2XAvt5U=,iv:w1Svyi+FKfhAjimLhCaim9d4mxk69i9n3LjmhCbaMrU=,tag:yEy2LdPzb3ZRvvh3GG2L7Q==,type:str]
     pgp:
-        - created_at: "2025-01-06T03:06:15Z"
+        - created_at: "2025-09-08T19:18:39Z"
           enc: |-
             -----BEGIN PGP MESSAGE-----
 
-            hF4DpTKc/nNpEUcSAQdAHGBBoAkl/mPeiGWEO/zo5tAF/ysDMzyWCNQEVBvLjnIw
-            g/SHmlAghoggABhEBisRL1OghokeSFL6aVLGmTu33Ul/08TPkICqEUfIvIYdbTjb
-            1GgBCQIQejnn9y3GZN2WeYN5toRJmy7mkqXUQc1+48yLKtq2OxEr9M1rj8qpO4Yl
-            ZEUGtJMSGyCpNH+yFkRJCtLzJCD8uuf9oQ4IbC/jx4AmofJCzM1qQfo9Kw/rlyiW
-            D8KejkFWMfXEqw==
-            =F1Ru
+            hF4DpTKc/nNpEUcSAQdAK3RXa/AlejPyCANrYwOATMsFvPIfBBiTa3M9zzzMjTcw
+            y7I0/e/9gyIWmHjbMoXlmMeq3vwl8+SQIOGELz9v8ds/VUBeXBPGlbaENGLDzHXv
+            0l4B8+6QSf+ZkVW3f6iFvyRowld90P/gM26GpYt+8KjipP4RWKezdO/hyy4ErbHZ
+            D8WZ9A+DHdytjJxBHBmJZ1zlcXR1tO4j19oKrWxkq1bOJ6FwcBlegieahSOqM0XC
+            =RaF9
             -----END PGP MESSAGE-----
           fp: 817ecf0aa56248a2b202f8610e50958c4ccbdd9c
     unencrypted_suffix: _unencrypted
