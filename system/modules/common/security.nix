@@ -1,11 +1,12 @@
-{ user, ... }:
+{ ... }:
 {
   security.sudo.enable = false;
   security.doas = {
     enable = true;
+    wheelNeedsPassword = true;
     extraRules = [
       {
-        users = [ user ];
+        groups = [ "wheel" ];
         keepEnv = true;
         persist = true;
       }

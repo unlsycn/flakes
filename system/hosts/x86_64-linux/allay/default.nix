@@ -38,6 +38,9 @@
 
   users.users.${user} = {
     isNormalUser = true;
+    extraGroups = [
+      "wheel"
+    ];
     hashedPasswordFile = "/persist/passwords/user";
     shell = pkgs.zsh;
   };

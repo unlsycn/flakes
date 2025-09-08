@@ -38,6 +38,8 @@ with lib;
     };
   };
 
+  users.mutableUsers = mkDefault false;
+
   services.logind.powerKey = "hibernate";
   powerManagement.powertop.enable = true;
 
