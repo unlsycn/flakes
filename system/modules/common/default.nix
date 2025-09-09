@@ -20,7 +20,7 @@ with lib;
   nix = {
     package = pkgs.nix-dram;
     settings = {
-      default-flake = "nixpkgs/nixos-unstable";
+      default-flake = "nixpkgs";
       experimental-features = [
         "nix-command"
         "flakes"
