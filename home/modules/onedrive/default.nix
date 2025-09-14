@@ -13,7 +13,7 @@ in
   config = mkIf cfg.enable {
     programs.onedrive.settings = {
       sync_dir = "~/OneDrive";
-      skip_file = "~*|.~*|*.tmp|*.lock|*desktop.ini";
+      skip_file = "~*|.~*|*.tmp|*.lock|*.swp|*.partial|*desktop.ini";
     };
 
     persist."/persist".users.${user} = {
@@ -24,7 +24,14 @@ in
     };
 
     xdg.configFile = {
-      "onedrive/sync_list".source = ./sync_list;
+      "onedrive/sync_list".source =
+        [
+          "/Documents"
+          "/Pictures"
+          "/Music"
+        ]
+        |> lib.concatStringsSep "\n"
+        |> pkgs.writeText "onedrive_sync_list";
     };
 
     sops.secrets.onedrive-refresh_token = {
