@@ -41,7 +41,7 @@
     extraGroups = [
       "wheel"
     ];
-    hashedPasswordFile = "/persist/passwords/user";
+    hashedPassword = "$6$zJg0P1UadaogMxN5$SifgGzUNYaK9kACNluny0j17LnFFfW4s.pjaCCPHJnQ.F55KFoEwoXJelhI7wughlksF0zNR.xwRQgpjR7X/0.";
     shell = pkgs.zsh;
   };
 
