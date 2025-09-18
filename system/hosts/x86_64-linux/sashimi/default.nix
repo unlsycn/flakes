@@ -1,8 +1,10 @@
 {
   pkgs,
+  lib,
   user,
   ...
 }:
+with lib;
 {
   imports = [
     ./hardware.nix
@@ -36,6 +38,12 @@
         };
       };
   };
+
+  services = {
+    mihomo.tunMode = false;
+    openvpn.servers = mkForce { };
+  };
+  networking.proxy.default = "http://127.0.0.1:1970";
 
   system.stateVersion = "23.11";
 }
