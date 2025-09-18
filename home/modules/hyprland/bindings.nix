@@ -114,6 +114,12 @@ in
             "mouse:272" = "movewindow";
             "mouse:273" = "resizewindow";
           };
+        
+        gesture = [
+          "3, vertical, fullscreen, maximize"
+          "4, horizontal, workspace"
+          "4, vertical, scale: 0.6, special, code"
+        ];
 
       };
   };
