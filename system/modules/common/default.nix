@@ -40,7 +40,7 @@ with lib;
 
   users.mutableUsers = mkDefault false;
 
-  services.logind.powerKey = "hibernate";
+  services.logind.settings.Login.HandlePowerKey = "hibernate";
   powerManagement.powertop.enable = true;
 
   systemd.services.nix-daemon = {

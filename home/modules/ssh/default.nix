@@ -8,13 +8,24 @@ with lib;
 {
   config = mkIf config.programs.ssh.enable {
     programs.ssh = {
-      forwardAgent = true;
-      addKeysToAgent = "yes";
+      enableDefaultConfig = false;
       includes = [ "hosts_config" ];
-      matchBlocks."*".identityFile = [
-        config.sops.secrets.ssh-ed25519-secret.path
-        config.sops.secrets.ssh-rsa-secret.path
-      ];
+      matchBlocks."*" = {
+        forwardAgent = true;
+        addKeysToAgent = "yes";
+        compression = false;
+        serverAliveInterval = 0;
+        serverAliveCountMax = 3;
+        hashKnownHosts = false;
+        userKnownHostsFile = "~/.ssh/known_hosts";
+        controlMaster = "no";
+        controlPath = "~/.ssh/master-%r@%n:%p";
+        controlPersist = "no";
+        identityFile = [
+          config.sops.secrets.ssh-ed25519-secret.path
+          config.sops.secrets.ssh-rsa-secret.path
+        ];
+      };
     };
 
     persist."/persist".users.${user} = {
