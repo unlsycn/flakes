@@ -22,7 +22,6 @@ with lib;
   zramSwap.enable = true;
 
   users = {
-    mutableUsers = true;
     users =
       let
         publicKeys = [
@@ -33,6 +32,8 @@ with lib;
         root.openssh.authorizedKeys.keys = publicKeys;
         ${user} = {
           isNormalUser = true;
+          extraGroups = [ "wheel" ];
+          hashedPassword = "$y$j9T$vuizYbpJtFD5LDsQwiqp20$JzCV3wHnoEJ7fXDGPZDQBImGnMoEDmTYF5mSLfbfT45";
           shell = pkgs.zsh;
           openssh.authorizedKeys.keys = publicKeys;
         };
