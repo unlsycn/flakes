@@ -6,7 +6,7 @@
 {
   imports = [
     ./sound.nix
-    ./hardware-configuration.nix
+    ./hardware.nix
   ];
 
   homeManagerProfiles = [
