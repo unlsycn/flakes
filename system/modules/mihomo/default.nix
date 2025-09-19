@@ -232,6 +232,7 @@ in
           {
             type = "GEOSITE";
             rule = "steam";
+            priority = 50;
           }
         ];
         "OneDrive" = [
@@ -252,7 +253,9 @@ in
           {
             type = "GEOSITE";
             rule = "steam@cn";
+            priority = 75;
           }
+
         ];
         "其他" = [
           {
