@@ -45,8 +45,16 @@
     shell = pkgs.zsh;
   };
 
-  services.evremap.enable = true;
-  services.evremap.settings.device_name = "AT Translated Set 2 keyboard";
+  services = {
+    asusd = {
+      enable = true;
+      enableUserService = true;
+    };
+    evremap = {
+      enable = true;
+      settings.device_name = "AT Translated Set 2 keyboard";
+    };
+  };
 
   system.stateVersion = "25.05"; # Dont touch it
 }
