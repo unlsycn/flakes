@@ -12,6 +12,7 @@
     rose-pine-hyprcursor.url = "github:ndom91/rose-pine-hyprcursor";
     sops-nix.url = "github:Mic92/sops-nix";
     flake-parts.url = "github:hercules-ci/flake-parts";
+    jovian-nixos.url = "github:unlsycn/Jovian-NixOS";
     zen-browser = {
       url = "github:0xc000022070/zen-browser-flake";
       inputs.nixpkgs.follows = "nixpkgs";

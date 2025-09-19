@@ -1,9 +1,9 @@
-{ ... }:
+{ lib, ... }:
 let
   configDir = "/etc/openvpn";
 in
 {
-  services.openvpn.servers = {
+  services.openvpn.servers = lib.mkDefault {
     caat2.config = "config ${configDir}/caat2.ovpn";
   };
 
