@@ -34,7 +34,7 @@ in
         |> pkgs.writeText "onedrive_sync_list";
     };
 
-    sops.secrets.onedrive-refresh_token = {
+    sops.secrets.onedrive-refresh_token = mkIf config.sops.control.deployPrivateFiles {
       sopsFile = ./refresh_token.yaml.admin;
       path = "${config.xdg.configHome}/onedrive/refresh_token";
     };

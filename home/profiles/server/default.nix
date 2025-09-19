@@ -17,7 +17,6 @@ with lib;
     sops.secrets = mkForce { };
 
     programs = {
-      onedrive.enable = mkForce false;
       ssh.matchBlocks."*".identityFile = mkForce [ ];
       zellij.copyCommand = "";
     };

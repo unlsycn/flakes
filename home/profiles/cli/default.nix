@@ -30,12 +30,10 @@ with lib;
       btop.enable = true;
       ripgrep.enable = true;
       nnn.enable = true;
-      onedrive.enable = true;
       zellij.enable = true;
     };
 
     services = {
-      gpg-agent.enable = true;
       vscode-server.enable = true;
     };
 
@@ -50,15 +48,14 @@ with lib;
     ];
 
     persist."/persist".users.${user} = {
-      directories =
-        [
-          ".local"
-          ".cache"
-        ]
-        ++ [
-          "Workspaces"
-          "Downloads"
-        ];
+      directories = [
+        ".local"
+        ".cache"
+      ]
+      ++ [
+        "Workspaces"
+        "Downloads"
+      ];
     };
   };
 }

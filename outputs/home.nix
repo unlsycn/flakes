@@ -1,6 +1,7 @@
 {
   self,
   user,
+  lib,
   ...
 }:
 {
@@ -11,14 +12,27 @@
     }:
     {
       legacyPackages = {
-        homeConfigurations = with self.buildConfigurationPhases; {
-          "cli" = genHomeConfigurationForStandalone [ "cli" ] { inherit user pkgs; };
-          "desktop" = genHomeConfigurationForStandalone [
-            "cli"
-            "desktop"
-          ] { inherit user pkgs; };
-          "server" = genHomeConfigurationForStandalone [ "server" ] { inherit user pkgs; };
-        };
+        homeConfigurations =
+          {
+            "cli" = [ "cli" ];
+            "desktop" = [
+              "cli"
+              "desktop"
+            ];
+            "handheld" = [
+              "cli"
+              "handheld"
+            ];
+            "intimate" = [
+              "cli"
+              "intimate"
+            ];
+            "server" = [ "server" ];
+          }
+          |> lib.mapAttrs (
+            _: profiles:
+            self.buildConfigurationPhases.genHomeConfigurationForStandalone profiles { inherit user pkgs; }
+          );
       };
     };
 }

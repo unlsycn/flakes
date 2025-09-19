@@ -1,16 +1,31 @@
 {
   config,
   user,
+  lib,
   ...
 }:
+with lib;
 {
-  sops.age.keyFile = "${config.xdg.configHome}/age/key";
-
-  # sops require gnupg passphrase
-  systemd.user.services.sops-nix.Service = {
-    Restart = "on-failure";
-    RestartSec = "5s";
+  options.sops.control = {
+    deploySshSecrets = mkOption {
+      type = types.bool;
+      default = false;
+    };
+    deployPrivateFiles = mkOption {
+      type = types.bool;
+      default = false;
+    };
   };
 
-  persist."/persist".users.${user}.files = [ ".config/age/key" ];
+  config = {
+    sops.age.keyFile = "${config.xdg.configHome}/age/key";
+
+    # sops require gnupg passphrase
+    systemd.user.services.sops-nix.Service = {
+      Restart = "on-failure";
+      RestartSec = "5s";
+    };
+
+    persist."/persist".users.${user}.files = [ ".config/age/key" ];
+  };
 }
