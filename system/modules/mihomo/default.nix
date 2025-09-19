@@ -30,7 +30,7 @@ in
           geoip = "https://hub.gitmirror.com/https://github.com/MetaCubeX/meta-rules-dat/releases/download/latest/geoip.dat";
           geosite = "https://hub.gitmirror.com/https://github.com/MetaCubeX/meta-rules-dat/releases/download/latest/geosite.dat";
           mmdb = "https://hub.gitmirror.com/https://github.com/MetaCubeX/meta-rules-dat/releases/download/latest/country.mmdb";
-          asn = "https://github.com/xishang0128/geoip/releases/download/latest/GeoLite2-ASN.mmdb";
+          asn = "https://hub.gitmirror.com/https://github.com/xishang0128/geoip/releases/download/latest/GeoLite2-ASN.mmdb";
         };
         find-process-mode = "strict";
         keep-alive-interval = 1800;
@@ -98,12 +98,17 @@ in
             "tls://1.0.0.1#DNS"
           ];
           proxy-server-nameserver = [ "https://doh.pub/dns-query" ];
-          nameserver-policy = {
-            "geosite:cn,private" = [
-              "https://doh.pub/dns-query"
-              "https://dns.alidns.com/dns-query"
-            ];
-          };
+          nameserver-policy =
+            let
+              cn-dns = [
+                "https://doh.pub/dns-query"
+                "https://dns.alidns.com/dns-query"
+              ];
+            in
+            {
+              "*.gitmirror.com" = cn-dns;
+              "geosite:cn,private" = cn-dns;
+            };
         };
       };
 
