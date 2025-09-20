@@ -6,7 +6,7 @@
 with lib;
 let
   cfg = config.programs.thunderbird;
-  thunderbird = "${cfg.package}/bin/thunderbird";
+  thunderbird = getExe cfg.package;
 in
 {
   options.programs.thunderbird.enableHyprlandIntegration = mkOption {

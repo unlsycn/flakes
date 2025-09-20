@@ -5,7 +5,7 @@
   ...
 }:
 let
-  nvim = "${pkgs.neovim}/bin/nvim";
+  nvim = lib.getExe pkgs.neovim;
 in
 {
   config = lib.mkIf config.programs.git.enable {

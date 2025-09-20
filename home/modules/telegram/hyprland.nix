@@ -7,7 +7,7 @@
 with lib;
 let
   cfg = config.programs.telegram;
-  telegram = "${cfg.package}/bin/telegram-desktop";
+  telegram = getExe cfg.package;
   hyprctl = "${pkgs.hyprland}/bin/hyprctl";
 in
 {

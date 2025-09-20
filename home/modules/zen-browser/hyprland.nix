@@ -6,7 +6,7 @@
 with lib;
 let
   cfg = config.programs.zen-browser;
-  zen = "${cfg.package}/bin/zen";
+  zen = getExe cfg.package;
 in
 {
   options.programs.zen-browser.enableHyprlandIntegration = mkOption {

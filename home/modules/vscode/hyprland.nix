@@ -6,7 +6,7 @@
 with lib;
 let
   cfg = config.programs.vscode;
-  vscode = "${cfg.package}/bin/code";
+  vscode = getExe cfg.package;
 in
 {
   options.programs.vscode.enableHyprlandIntegration = mkOption {

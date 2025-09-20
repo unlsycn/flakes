@@ -7,7 +7,7 @@
 with lib;
 let
   volume = "${pkgs.desktop-scripts}/bin/volume";
-  brightnessctl = "${pkgs.brightnessctl}/bin/brightnessctl";
+  brightnessctl = lib.getExe pkgs.brightnessctl;
   swaync-client = "${pkgs.swaynotificationcenter}/bin/swaync-client";
   blueman-manager = "${pkgs.blueman}/bin/blueman-manager";
 in
@@ -34,7 +34,8 @@ in
             "network"
             "group/sysinfo"
             "clock"
-          ] ++ optional config.services.swaync.enable "custom/swaync";
+          ]
+          ++ optional config.services.swaync.enable "custom/swaync";
           "group/sysinfo" = {
             drawer.transition-left-to-right = false;
             orientation = "inherit";

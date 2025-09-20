@@ -6,7 +6,7 @@
 }:
 with lib;
 let
-  zsh = "${pkgs.zsh}/bin/zsh";
+  zsh = getExe pkgs.zsh;
 in
 {
   imports = [ ./hyprland.nix ];

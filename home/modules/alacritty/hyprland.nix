@@ -6,7 +6,7 @@
 with lib;
 let
   cfg = config.programs.alacritty;
-  alacritty = "${cfg.package}/bin/alacritty";
+  alacritty = getExe cfg.package;
 in
 {
   options.programs.alacritty.enableHyprlandIntegration = mkOption {

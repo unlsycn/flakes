@@ -30,9 +30,9 @@ let
     ''}
   '';
 
-  icdiff = "${pkgs.icdiff}/bin/icdiff";
-  zellij = "${pkgs.zellij}/bin/zellij";
-  nnn = "${pkgs.nnn}/bin/nnn";
+  icdiff = getExe pkgs.icdiff;
+  zellij = getExe pkgs.zellij;
+  nnn = getExe pkgs.nnn;
 in
 {
   imports = [ ./zinit.nix ];
