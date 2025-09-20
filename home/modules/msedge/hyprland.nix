@@ -6,7 +6,7 @@
 with lib;
 let
   cfg = config.programs.msedge;
-  msedge = "${cfg.package}/bin/microsoft-edge";
+  msedge = getExe cfg.package;
 in
 {
   options.programs.msedge.enableHyprlandIntegration = mkOption {
