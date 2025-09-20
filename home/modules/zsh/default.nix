@@ -30,7 +30,7 @@ let
     ''}
   '';
 
-  icdiff = getExe pkgs.icdiff;
+  icdiff = "${pkgs.icdiff}/bin/icdiff";
   zellij = getExe pkgs.zellij;
   nnn = getExe pkgs.nnn;
 in

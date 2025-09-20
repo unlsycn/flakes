@@ -6,6 +6,11 @@
       autoStart = true;
       user = user;
       desktopSession = "gnome";
+      inputMethod = {
+        # FIXME
+        enable = false;
+        methods = [ "pinyin" ];
+      };
     };
     steamos.useSteamOSConfig = true;
     hardware.has.amd.gpu = true;
@@ -19,4 +24,7 @@
     devices.ally-z1e.enable = true;
   };
 
+  # disable GNOME IBUS seervice to prevent DBUS collision
+  systemd.user.services."org.freedesktop.IBus.session.GNOME".enable = false;
+  systemd.user.services."org.freedesktop.IBus.session.generic".enable = false;
 }
