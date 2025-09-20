@@ -20,6 +20,8 @@ with lib;
 
     environment.systemPackages = with pkgs.gnomeExtensions; [
       gjs-osk
+      appindicator
+      kimpanel
       screen-rotate
       (touch-x.overrideAttrs (
         old:
