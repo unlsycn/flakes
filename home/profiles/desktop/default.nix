@@ -38,6 +38,7 @@ with lib;
     ];
 
     gtk.enable = true;
+    dconf.enable = false;
 
     i18n.inputMethod = {
       enable = true;
