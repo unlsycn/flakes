@@ -15,6 +15,7 @@ in
   config = mkIf cfg.enable {
     services.mihomo = {
       tunMode = mkDefault true;
+      webui = pkgs.metacubexd;
 
       settings = {
         mode = "rule";
