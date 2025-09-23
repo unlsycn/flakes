@@ -139,11 +139,11 @@
         "nixpkgs": "nixpkgs"
       },
       "locked": {
-        "lastModified": 1758351857,
-        "narHash": "sha256-NP3nU4opH1rePE+LG9BiSXcTWrR7y9Jlt/FaCWjZMhk=",
+        "lastModified": 1758691406,
+        "narHash": "sha256-Q0oiTZZrviZ1HKDJocQovlUNoDr8Dld78Kz8dUyZbPk=",
         "owner": "unlsycn",
         "repo": "Jovian-NixOS",
-        "rev": "0c9a4112994e45500ccc9814ca7efc82a5bc9c02",
+        "rev": "7620f95411b7b811698b7bd5394e137ff645fd40",
         "type": "github"
       },
       "original": {
