@@ -12,6 +12,7 @@ with lib;
   config = mkIf config.profile.intimate.enable {
     programs = {
       onedrive.enable = true;
+      beets.enable = true;
     };
 
     services = {
