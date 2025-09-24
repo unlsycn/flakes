@@ -1,4 +1,9 @@
-{ pkgs, user, ... }:
+{
+  config,
+  pkgs,
+  user,
+  ...
+}:
 {
   jovian = {
     steam = {
@@ -27,4 +32,13 @@
   # disable GNOME IBUS seervice to prevent DBUS collision
   systemd.user.services."org.freedesktop.IBus.session.GNOME".enable = false;
   systemd.user.services."org.freedesktop.IBus.session.generic".enable = false;
+
+  # enable Steam CEF remote debugging for decky-loader
+  systemd.tmpfiles.settings."steam-cef-remote-debugging"."${
+    config.users.users.${user}.home
+  }/.local/share/Steam/.cef-enable-remote-debugging".f =
+    {
+      user = user;
+      group = "users";
+    };
 }
