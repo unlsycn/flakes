@@ -33,12 +33,14 @@ in
         cl = "git commit -c ORIG_HEAD";
         spu = "stash push";
         spo = "stash pop";
+        lg = "log --oneline --graph --all";
       };
 
       extraConfig = {
         init.defaultBranch = "main";
         core.editor = "${nvim}";
         merge.conflictStyle = "diff3";
+        log.decorate = "auto";
       };
     };
   };
