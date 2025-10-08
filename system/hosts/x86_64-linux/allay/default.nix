@@ -16,25 +16,6 @@
   ];
   hasDesktopEnvironment = true;
 
-  boot = {
-    kernelPackages = pkgs.linuxPackages_latest;
-    loader = {
-      efi = {
-        canTouchEfiVariables = true;
-        efiSysMountPoint = "/boot/efi";
-      };
-      grub = {
-        efiSupport = true;
-        device = "nodev";
-      };
-      systemd-boot = {
-        enable = true;
-        configurationLimit = 16;
-      };
-      timeout = 1;
-    };
-  };
-
   environment.persistence."/persist".enable = true;
 
   users.users.${user} = {
@@ -56,6 +37,8 @@
       settings.device_name = "AT Translated Set 2 keyboard";
     };
   };
+
+  networking.hostId = "7715be29";
 
   system.stateVersion = "25.05"; # Dont touch it
 }

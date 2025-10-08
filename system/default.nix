@@ -43,6 +43,7 @@ in
             modules = attrValues self.nixosModules ++ [
               ../system/hosts/${system}/${host}
               impermanence.nixosModules.impermanence
+              disko.nixosModules.disko
               sops-nix.nixosModules.sops
               home-manager.nixosModules.home-manager
               (self.buildConfigurationPhases.genHomeModuleForHost {
