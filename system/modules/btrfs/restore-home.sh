@@ -16,6 +16,4 @@ done
 
 # Create a new clean @home
 btrfs subvolume create /mnt/@home
-mkdir -p /mnt/@home/unlsycn
-chown unlsycn:users /mnt/@home/unlsycn
 umount /mnt
