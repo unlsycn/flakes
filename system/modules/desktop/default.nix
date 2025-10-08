@@ -15,11 +15,11 @@ with lib;
     default = false;
   };
 
-  config =
-    mkIf (config.hasDesktopEnvironment && !config.isHandheld) {
+  config = mkMerge [
+    (mkIf (config.hasDesktopEnvironment && !config.isHandheld) {
       programs.hyprland.enable = mkDefault true;
-    }
-    // mkIf config.isHandheld {
+    })
+    (mkIf config.isHandheld {
       services.desktopManager.gnome.enable = true;
       services.handheld-daemon = {
         # does not work with inputplumber and causes RGB not to be turned off
@@ -27,5 +27,6 @@ with lib;
         user = user;
         ui.enable = true;
       };
-    };
+    })
+  ];
 }
