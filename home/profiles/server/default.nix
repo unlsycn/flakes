@@ -13,7 +13,6 @@ with lib;
     profile.cli.enable = mkForce true;
     targets.genericLinux.enable = true;
 
-    services.gpg-agent.enable = mkForce false;
     sops.secrets = mkForce { };
 
     programs = {

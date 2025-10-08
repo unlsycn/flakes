@@ -44,7 +44,7 @@ in
               ../system/hosts/${system}/${host}
               impermanence.nixosModules.impermanence
               sops-nix.nixosModules.sops
-              inputs.home-manager.nixosModules.home-manager
+              home-manager.nixosModules.home-manager
               (self.buildConfigurationPhases.genHomeModuleForHost {
                 inherit user;
                 extraSpecialArgs = {
