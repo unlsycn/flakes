@@ -18,6 +18,9 @@
 
   environment.persistence."/persist".enable = true;
 
+  # mount onedrive as a separate dataset
+  home-manager.users.${user}.programs.onedrive.persist = false;
+
   users.users.${user} = {
     isNormalUser = true;
     extraGroups = [

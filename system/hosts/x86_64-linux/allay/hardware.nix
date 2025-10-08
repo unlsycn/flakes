@@ -1,6 +1,7 @@
 {
   config,
   pkgs,
+  user,
   lib,
   modulesPath,
   ...
@@ -122,6 +123,13 @@
             mountpoint = "/nix";
             options = {
               mountpoint = "legacy";
+            };
+          };
+          "local/onedrive" = {
+            type = "zfs_fs";
+            options = {
+              mountpoint = "/home/${user}/OneDrive";
+              "com.sun:auto-snapshot" = "false";
             };
           };
           "safe/persist" = {

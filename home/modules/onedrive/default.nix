@@ -8,30 +8,35 @@
 with lib;
 let
   cfg = config.programs.onedrive;
+  syncDir = "OneDrive";
 in
 {
+  options.programs.onedrive.persist = mkOption {
+    type = types.bool;
+    default = true;
+  };
+
   config = mkIf cfg.enable {
     programs.onedrive.settings = {
-      sync_dir = "~/OneDrive";
+      sync_dir = "~/${syncDir}";
       skip_file = "~*|.~*|*.tmp|*.lock|*.swp|*.partial|*desktop.ini";
     };
 
     persist."/persist".users.${user} = {
       directories = [
         ".config/onedrive"
-        "OneDrive"
-      ];
+      ]
+      ++ optional cfg.persist syncDir;
     };
 
     xdg.configFile = {
-      "onedrive/sync_list".source =
+      "onedrive/sync_list".text =
         [
           "/Documents"
           "/Pictures"
           "/Music"
         ]
-        |> lib.concatStringsSep "\n"
-        |> pkgs.writeText "onedrive_sync_list";
+        |> lib.concatStringsSep "\n";
     };
 
     home.file = {
