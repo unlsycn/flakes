@@ -1,4 +1,5 @@
 {
+  config,
   pkgs,
   user,
   inputs,
@@ -30,24 +31,16 @@
 
   console.font = "latarcyrheb-sun32";
 
-  users.users =
-    let
-      publicKeys = [
-        ''ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIH0YRjw/yQfCv7zYkOPqJersjDqpEInpdjjdwRTSAG4X unlsycn@unlsycn.com''
+  users.users = {
+    ${user} = {
+      isNormalUser = true;
+      extraGroups = [
+        "wheel"
       ];
-    in
-    {
-      root.openssh.authorizedKeys.keys = publicKeys;
-      ${user} = {
-        isNormalUser = true;
-        extraGroups = [
-          "wheel"
-        ];
-        hashedPassword = "$y$j9T$MgGlwRSeVYRBQIsdBL7Ht0$wH43pu82EUzbJAd.M1KxoTSXiRmNJ3xQyHn9za3QcRC";
-        openssh.authorizedKeys.keys = publicKeys;
-        shell = pkgs.zsh;
-      };
+      hashedPassword = "$y$j9T$MgGlwRSeVYRBQIsdBL7Ht0$wH43pu82EUzbJAd.M1KxoTSXiRmNJ3xQyHn9za3QcRC";
+      shell = pkgs.zsh;
     };
+  };
 
   services.openvpn.servers = { };
 

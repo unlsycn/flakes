@@ -1,4 +1,9 @@
-{ config, lib, ... }:
+{
+  config,
+  lib,
+  user,
+  ...
+}:
 {
   config = lib.mkIf config.services.openssh.enable {
     environment.persistence."/persist" = {
@@ -9,6 +14,12 @@
         "/etc/ssh/ssh_host_rsa_key"
       ];
     };
+
+    services.openssh.settings.PasswordAuthentication = false;
+    users.users.${user}.openssh.authorizedKeys.keyFiles = [
+      ./id_ed25519.pub
+      ./id_rsa.pub
+    ];
 
     programs.ssh.startAgent = true;
   };
