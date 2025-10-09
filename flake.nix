@@ -3,16 +3,28 @@
 
   inputs = {
     nixpkgs.url = "nixpkgs/nixos-unstable";
+    flake-parts.url = "github:hercules-ci/flake-parts";
+    impermanence.url = "github:nix-community/impermanence";
     home-manager = {
       url = "github:nix-community/home-manager/master";
       inputs.nixpkgs.follows = "nixpkgs";
     };
-    impermanence.url = "github:nix-community/impermanence";
-    vscode-server.url = "github:nix-community/nixos-vscode-server";
-    rose-pine-hyprcursor.url = "github:ndom91/rose-pine-hyprcursor";
-    sops-nix.url = "github:Mic92/sops-nix";
-    flake-parts.url = "github:hercules-ci/flake-parts";
-    jovian-nixos.url = "github:unlsycn/Jovian-NixOS";
+    vscode-server = {
+      url = "github:nix-community/nixos-vscode-server";
+      inputs.nixpkgs.follows = "nixpkgs";
+    };
+    rose-pine-hyprcursor = {
+      url = "github:ndom91/rose-pine-hyprcursor";
+      inputs.nixpkgs.follows = "nixpkgs";
+    };
+    sops-nix = {
+      url = "github:Mic92/sops-nix";
+      inputs.nixpkgs.follows = "nixpkgs";
+    };
+    jovian-nixos = {
+      url = "github:unlsycn/Jovian-NixOS";
+      inputs.nixpkgs.follows = "nixpkgs";
+    };
     zen-browser = {
       url = "github:0xc000022070/zen-browser-flake";
       inputs.nixpkgs.follows = "nixpkgs";
