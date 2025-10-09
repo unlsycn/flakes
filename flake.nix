@@ -88,6 +88,7 @@
               home-manager
               nvfetcher
               sops
+              disko
             ];
 
             nativeBuildInputs = [ inputs'.sops-nix.packages.sops-import-keys-hook ];
