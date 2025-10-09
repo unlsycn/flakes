@@ -16,14 +16,26 @@ with lib;
       waylandFrontend = true;
     };
 
-    xdg.dataFile = {
-      "fcitx5/rime/default.custom.yaml".source = ./custom.yaml;
+    xdg = {
+      dataFile = {
+        "fcitx5/rime/default.custom.yaml".text =
+          { patch.schema_list = [ { schema = "flypy"; } ]; } |> generators.toYAML { };
 
-      "fcitx5/themes".source = pkgs.fetchFromGitHub {
-        owner = "thep0y";
-        repo = "fcitx5-themes-candlelight";
-        rev = "d4146d3d3f7a276a8daa2847c3e5c08de20485da";
-        sha256 = "sha256-/IdN69izB30rl1gswsXivYtpAeCUdahP7oy06XJXo0I=";
+        "fcitx5/themes".source = pkgs.fetchFromGitHub {
+          owner = "thep0y";
+          repo = "fcitx5-themes-candlelight";
+          rev = "d4146d3d3f7a276a8daa2847c3e5c08de20485da";
+          sha256 = "sha256-/IdN69izB30rl1gswsXivYtpAeCUdahP7oy06XJXo0I=";
+        };
+      };
+      configFile = {
+        "fcitx5/conf/classicui.conf".text =
+          {
+            "Vertical Candidate List" = "True";
+            PerScreenDPI = "True";
+            Theme = "summer";
+          }
+          |> generators.toKeyValue { };
       };
     };
 
