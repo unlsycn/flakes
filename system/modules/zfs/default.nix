@@ -26,22 +26,27 @@ with lib;
     fileSystems."/etc/zfs/zfs-list.cache".neededForBoot = true;
     systemd.services.zfs-mount.enable = false;
 
-    services.zfs.zed.settings.PATH = mkForce (
-      makeBinPath (
-        with pkgs;
-        [
-          diffutils
-          config.boot.zfs.package
-          coreutils
-          curl
-          gawk
-          gnugrep
-          gnused
-          nettools
-          util-linux
-        ]
-      )
-    );
+    services.zfs = {
+      zed.settings.PATH = mkForce (
+        makeBinPath (
+          with pkgs;
+          [
+            diffutils
+            config.boot.zfs.package
+            coreutils
+            curl
+            gawk
+            gnugrep
+            gnused
+            nettools
+            util-linux
+          ]
+        )
+      );
+
+      autoSnapshot.enable = true;
+      autoScrub.enable = true;
+    };
   };
 
 }
