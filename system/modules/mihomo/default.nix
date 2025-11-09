@@ -256,14 +256,22 @@ in
             rule = "steam@cn";
             priority = 75;
           }
-
         ];
-        "其他" = [
+        "国外" = [
           {
             type = "GEOSITE";
             rule = "geolocation-!cn";
             priority = 10;
           }
+        ];
+        "非 Web 协议" = [
+          {
+            type = "NOT";
+            rule = "((DST-PORT,80/443))";
+            priority = 20;
+          }
+        ];
+        "其他" = [
           {
             type = "MATCH";
             priority = 0;
