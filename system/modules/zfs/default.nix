@@ -6,12 +6,12 @@
 }:
 with lib;
 {
-  options.services.zfs.mountGenerator = mkOption {
+  options.services.zfs.enable = mkOption {
     type = types.bool;
-    default = true;
+    default = false;
   };
 
-  config = mkIf config.services.zfs.mountGenerator {
+  config = mkIf config.services.zfs.enable {
     # generate mount units from zfs-list.cache
     systemd.generators."zfs-mount-generator" =
       "${config.boot.zfs.package}/lib/systemd/system-generator/zfs-mount-generator";

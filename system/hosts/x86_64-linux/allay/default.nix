@@ -39,6 +39,7 @@
       enable = true;
       settings.device_name = "AT Translated Set 2 keyboard";
     };
+    zfs.enable = true;
   };
 
   networking.hostId = "7715be29";
