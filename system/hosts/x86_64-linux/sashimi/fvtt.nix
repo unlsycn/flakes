@@ -7,5 +7,6 @@
     port = 1501;
     minifyStaticFiles = true;
     upnp = false;
+    language = "cn.foundry_chn";
   };
 }
