@@ -1,5 +1,6 @@
 Haita: ENC[AES256_GCM,data:Z1tQ06kT6q0s79TpQ8v5JRZhL6NxpRKgHVoU9b1zboMybh+fkXJzCvFpeOM9IL1lFTpbo30FJCRqGtswXCXA4I2SYplgCIyqBwx1bNZGkCPmvaIvocuUoQE=,iv:D8Lp6IL6cffsLi2Q1WNYaabthfyHh3sL7f1XxcyysIE=,tag:n5CM2HZXe2UB2MyXtnwptA==,type:str]
 Longmao: ENC[AES256_GCM,data:iPaj1Jp/mTWSG58hlImwvuyhyXOUovq0FcUesB+qD3KVpV9yl+wjwjVsHaWTydbHRX1TpNBVE0WzM2BvwD14Q37Ttip02Tzt5MKojCcGo+okS75rSz/GmdZ3ez8=,iv:RsGUXTCvvXSMH5A0bO4RNY76j+OQHeRrZrdYTr/tjvU=,tag:KRBgsjd4glRBl+UqyWeWOQ==,type:str]
+Sakana: ENC[AES256_GCM,data:tD6qG3UFWwmDq5lZSEk94tPUh/OqzAVIm03qLb0p6wJXC7EoGxdl7vvvF58FkTMg6oPyBBlSWRRhf/vi9LGhSqvkg9sUzCq2f48TJgEJEtAxrzIk18B7KwpC3MVWD5E=,iv:bvbVHz3HiE3TYoAzIOvPpyRBj8IEv78Glw7654Ai4J0=,tag:RWKS9UH81/X94oS7gtWvJg==,type:str]
 sops:
     age:
         - recipient: age1f9shnyrs54j566xe90hmv0hu6tj9f7xc6zsmt9rr6qhgnc9qcvlq9m6ras
@@ -38,8 +39,8 @@ sops:
             OHh3dVNYaSs5dVh4V2kyRkNUTmxQblEK9gC5SvSKEjNhCkKBVoRzHuZJTN7q2BmG
             KtXgNRNSxb4QqENMfd3U9FGwktdU4ndA8uT2fxoKwBzPzX/DaUvmrQ==
             -----END AGE ENCRYPTED FILE-----
-    lastmodified: "2025-09-18T15:05:41Z"
-    mac: ENC[AES256_GCM,data:4xZMiwDWZedKRHj070Y23Ud14aDNvN3q6y5t4B/xtxhrJtIJ0okvTWFWoxBlOgDOTfCNu2yMglqMmc46WQraWFxFNzjzNvIcpYeYHdjcDvVdijzWUZ5HypuEsQ5mBII3u2VmqUnEHcHYKciejeEOk91c8UzUHLMbfY4eRdAsZgw=,iv:lrVI2JMQ2W3j/5nAKf7AbcRHINdAQM93WjrHiUtscXA=,tag:AYlyQtSvCcOeU+qqfoyd3Q==,type:str]
+    lastmodified: "2025-12-07T07:34:54Z"
+    mac: ENC[AES256_GCM,data:/8Gk6rIV8XD5fiZqdAcCoAPeARhyi7kYxAiYNShdrTU1qEc/Zr7YERlTh9cB4LZF3dZ7MXNudNdWfBMFNmHWlr/ljJKFnlHXIbazt7N0VtezcKusNyKU/oZuFvOz9uo5XCZFuh2p5NoKSp6TeQGgwDuZzalOyWShiwKfEekEPY4=,iv:F4h029kjf2kgVbX0+2LXIQwEF1GuSJwUIR0LClhL+z0=,tag:St97Ao8oD7r8azVNYYdWJw==,type:str]
     pgp:
         - created_at: "2025-10-07T19:15:10Z"
           enc: |-
@@ -53,4 +54,4 @@ sops:
             -----END PGP MESSAGE-----
           fp: 817ecf0aa56248a2b202f8610e50958c4ccbdd9c
     unencrypted_suffix: _unencrypted
-    version: 3.10.2
+    version: 3.11.0

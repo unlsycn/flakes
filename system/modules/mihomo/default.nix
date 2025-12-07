@@ -116,6 +116,7 @@ in
       proxyProviders = {
         "Haita".type = "http";
         "Longmao".type = "http";
+        "Sakana".type = "http";
       };
       ruleProviders = {
         "anti-AD" = {
