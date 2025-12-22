@@ -4,6 +4,7 @@ keys:
   - &host_allay age1azuuur33nmpr6pwmts97vyth4q0aqy785945ktz27cwp3n8jaa6qlu6uuu
   - &host_sashimi age167rgg809xt9thny888nwzrh54d8jywpf7zjfp3kdq66gq73y8prs3q49q2
   - &host_rouge age14petwhzdexe7jyzq483svu35qe4a666m6tu6wr8cs7929s7krgyq72sagz
+  - &host_lonicera age1q7nwx94wx4vkwwqkp0r7qhpr4nr727u0tld69vlfq5k5zd8ejehscvfdzv
 creation_rules:
   - path_regex: .*.admin$
     key_groups:
@@ -23,3 +24,4 @@ creation_rules:
           - *host_allay
           - *host_sashimi
           - *host_rouge
+          - *host_lonicera
