@@ -10,6 +10,7 @@
     ./hardware.nix
     ./networking.nix
     ./wireguard.nix
+    ./samba.nix
     ./fvtt.nix
   ];
 
