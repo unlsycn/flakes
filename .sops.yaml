@@ -10,12 +10,18 @@ creation_rules:
     key_groups:
       - pgp:
           - *admin_unlsycn
-  - path_regex: system/hosts/allay/.*
+  - path_regex: system/hosts/x86_64-linux/allay/.*
     key_groups:
       - pgp:
           - *admin_unlsycn
         age:
           - *host_allay
+  - path_regex: system/hosts/x86_64-linux/lonicera/.*
+    key_groups:
+      - pgp:
+          - *admin_unlsycn
+        age:
+          - *host_lonicera
   - key_groups:
       - pgp:
           - *admin_unlsycn

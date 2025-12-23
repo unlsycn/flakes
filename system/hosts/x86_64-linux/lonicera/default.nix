@@ -9,6 +9,7 @@
     inputs.foundryvtt.nixosModules.foundryvtt
     ./hardware.nix
     ./networking.nix
+    ./wireguard.nix
     ./fvtt.nix
   ];
 

@@ -7,6 +7,7 @@
   imports = [
     ./sound.nix
     ./hardware.nix
+    ./wireguard.nix
   ];
 
   homeManagerProfiles = [
