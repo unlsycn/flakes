@@ -1,6 +1,7 @@
 { lib, ... }:
 {
   networking = {
+    hostId = "7f82dd29";
     nameservers = [
       "223.5.5.5"
       "223.6.6.6"

@@ -23,7 +23,9 @@ with lib;
       directories = [ "/etc/zfs/zfs-list.cache" ];
       files = [ "/etc/zfs/zpool.cache" ];
     };
-    fileSystems."/etc/zfs/zfs-list.cache".neededForBoot = true;
+    fileSystems."/etc/zfs/zfs-list.cache" = mkIf config.environment.persistence."/persist".enable {
+      neededForBoot = true;
+    };
     systemd.services.zfs-mount.enable = false;
 
     services.zfs = {

@@ -15,10 +15,7 @@
     "server"
   ];
 
-  boot = {
-    kernelPackages = pkgs.linuxPackages_latest;
-    tmp.cleanOnBoot = true;
-  };
+  boot.tmp.cleanOnBoot = true;
 
   zramSwap.enable = true;
 
@@ -45,6 +42,7 @@
   };
 
   services = {
+    zfs.enable = true;
     foundryvtt.enable = true;
   };
 
