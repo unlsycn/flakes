@@ -35,6 +35,8 @@ in
           "/Documents"
           "/Pictures"
           "/Music"
+          "/文档"
+          "/应用"
         ]
         |> lib.concatStringsSep "\n";
     };
