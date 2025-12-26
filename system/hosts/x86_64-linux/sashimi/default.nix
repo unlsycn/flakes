@@ -1,14 +1,11 @@
 {
-  inputs,
   pkgs,
   user,
   ...
 }:
 {
   imports = [
-    inputs.foundryvtt.nixosModules.foundryvtt
     ./hardware.nix
-    ./fvtt.nix
   ];
 
   homeManagerProfiles = [

@@ -1,17 +1,14 @@
 {
-  inputs,
   pkgs,
   user,
   ...
 }:
 {
   imports = [
-    inputs.foundryvtt.nixosModules.foundryvtt
     ./hardware.nix
     ./networking.nix
     ./wireguard.nix
     ./samba.nix
-    ./fvtt.nix
   ];
 
   homeManagerProfiles = [
@@ -45,6 +42,10 @@
           openssh.authorizedKeys.keys = publicKeys;
         };
       };
+  };
+
+  services = {
+    foundryvtt.enable = true;
   };
 
   system.stateVersion = "23.11";

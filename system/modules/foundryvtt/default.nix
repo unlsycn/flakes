@@ -1,4 +1,5 @@
 {
+  config,
   inputs',
   lib,
   ...
@@ -12,9 +13,8 @@ with lib;
     };
   };
 
-  config = {
+  config = mkIf config.services.foundryvtt.enable {
     services.foundryvtt = {
-      enable = true;
       package = inputs'.foundryvtt.packages.foundryvtt_13;
       hostName = "fvtt.unlsycn.com";
       port = 1501;

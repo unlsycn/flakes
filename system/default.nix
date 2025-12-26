@@ -45,6 +45,7 @@ in
               impermanence.nixosModules.impermanence
               disko.nixosModules.disko
               sops-nix.nixosModules.sops
+              foundryvtt.nixosModules.foundryvtt
               home-manager.nixosModules.home-manager
               (self.buildConfigurationPhases.genHomeModuleForHost {
                 inherit user;
