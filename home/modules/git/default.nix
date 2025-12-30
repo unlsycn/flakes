@@ -34,6 +34,7 @@ in
           signByDefault = true;
           key = null;
         };
+        lfs.enable = true;
       };
       delta = {
         enable = true;
