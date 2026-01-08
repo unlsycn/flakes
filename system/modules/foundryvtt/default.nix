@@ -23,5 +23,7 @@ with lib;
       language = "cn.foundry_chn";
       telemetry = false;
     };
+
+    networking.firewall.allowedTCPPorts = [ config.services.foundryvtt.port ];
   };
 }

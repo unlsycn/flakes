@@ -28,4 +28,8 @@
       };
     };
   };
+  networking.firewall.allowedTCPPorts = [
+    445
+    139
+  ];
 }

@@ -53,6 +53,20 @@
         ];
       };
     };
+    firewall = {
+      allowedTCPPortRanges = [
+        {
+          from = 24000;
+          to = 25000;
+        }
+      ];
+      allowedUDPPortRanges = [
+        {
+          from = 24000;
+          to = 25000;
+        }
+      ];
+    };
   };
   services.udev.extraRules = ''
     ATTR{address}=="bc:24:11:72:7a:ac", NAME="ens18"

@@ -391,5 +391,7 @@ in
       }
       // (cfg.settings |> filterAttrsRecursive (n: v: v != null))
       |> pkgs.lib.generators.toYAML { };
+
+    networking.firewall.trustedInterfaces = [ "Meta" ];
   };
 }
