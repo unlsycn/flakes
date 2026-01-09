@@ -54,5 +54,8 @@ with lib;
   environment.variables.NIX_REMOTE = "daemon";
 
   programs.nix-ld.enable = true;
-  programs.zsh.enable = true;
+  programs.zsh = {
+    enable = true;
+    enableGlobalCompInit = false;
+  };
 }

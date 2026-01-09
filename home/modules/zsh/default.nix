@@ -79,16 +79,19 @@ in
         plugins = {
           "depth=1 atload'source \"''\${HOME}/.p10k.zsh\"' light-mode" = [ "romkatv/powerlevel10k" ];
           "lucid blockf depth=1 light-mode" = [
-            "jeffreytse/zsh-vi-mode"
+            # wait for https://github.com/jeffreytse/zsh-vi-mode/issues/334
+            "unlsycn/zsh-vi-mode"
             "paulirish/git-open"
             "zsh-users/zsh-autosuggestions"
-            "joshskidmore/zsh-fzf-history-search"
           ];
           "lucid light-mode" = [ "OMZ::plugins/extract/extract.plugin.zsh" ];
           "lucid depth=1 light-mode has'doas'" = [ "Senderman/doas-zsh-plugin" ];
           "lucid has'sudo'" = [ "OMZ::plugins/sudo/sudo.plugin.zsh" ];
           "lucid depth=1 light-mode" = [
             "Aloxaf/fzf-tab"
+          ];
+          "wait'0' lucid depth=1 light-mode" = [
+            "joshskidmore/zsh-fzf-history-search"
           ];
           "wait'!1a' lucid blockf depth=1 atload'zicompinit' light-mode" = [
             "zdharma-continuum/fast-syntax-highlighting"
