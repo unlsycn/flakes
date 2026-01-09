@@ -1,22 +1,22 @@
 {
-  config,
   pkgs,
   user,
-  inputs,
   ...
 }:
 {
   imports = [
     ./hardware.nix
-    inputs.jovian-nixos.nixosModules.default
-    ./jovian.nix
   ];
 
   homeManagerProfiles = [
     "cli"
     "handheld"
   ];
-  isHandheld = true;
+
+  handheld = {
+    enable = true;
+    hhd.enable = true;
+  };
 
   boot = {
     loader = {
@@ -42,7 +42,20 @@
     };
   };
 
-  services.openvpn.servers = { };
+  services = {
+    asusd = {
+      enable = true;
+      enableUserService = true;
+    };
+    openvpn.servers = { };
+  };
+
+  jovian = {
+    hardware.has.amd.gpu = true;
+    devices.ally-z1e.enable = true;
+  };
+
+  networking.firewall.enable = false;
 
   system.stateVersion = "25.05"; # Dont touch it
 }

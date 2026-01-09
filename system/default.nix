@@ -46,6 +46,7 @@ in
               disko.nixosModules.disko
               sops-nix.nixosModules.sops
               foundryvtt.nixosModules.foundryvtt
+              jovian-nixos.nixosModules.default
               home-manager.nixosModules.home-manager
               (self.buildConfigurationPhases.genHomeModuleForHost {
                 inherit user;

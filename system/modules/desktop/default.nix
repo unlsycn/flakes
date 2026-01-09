@@ -1,32 +1,23 @@
 {
   config,
   lib,
-  user,
   ...
 }:
 with lib;
 {
-  options.hasDesktopEnvironment = mkOption {
-    type = types.bool;
-    default = config.isHandheld;
-  };
-  options.isHandheld = mkOption {
-    type = types.bool;
-    default = false;
+  options = {
+    hasDesktopEnvironment = mkOption {
+      type = types.bool;
+      default = config.handheld.enable;
+    };
   };
 
   config = mkMerge [
-    (mkIf (config.hasDesktopEnvironment && !config.isHandheld) {
+    (mkIf (config.hasDesktopEnvironment && !config.handheld.enable) {
       programs.hyprland.enable = mkDefault true;
     })
-    (mkIf config.isHandheld {
+    (mkIf config.handheld.enable {
       services.desktopManager.gnome.enable = true;
-      services.handheld-daemon = {
-        # does not work with inputplumber and causes RGB not to be turned off
-        enable = false;
-        user = user;
-        ui.enable = true;
-      };
     })
   ];
 }
