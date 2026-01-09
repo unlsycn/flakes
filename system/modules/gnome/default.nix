@@ -23,19 +23,7 @@ with lib;
       appindicator
       kimpanel
       screen-rotate
-      (touch-x.overrideAttrs (
-        old:
-        let
-          version = "48";
-        in
-        {
-          postFixup = (old.postFixup or "") + ''
-            FILE=$out/share/gnome-shell/extensions/*/metadata.json
-            METADATA=$(cat $FILE)
-            echo $METADATA | ${pkgs.jq}/bin/jq '."shell-version" += ["${version}"]' > $FILE
-          '';
-        }
-      ))
+      touchup
     ];
   };
 }

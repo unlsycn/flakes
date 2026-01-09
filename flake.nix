@@ -23,7 +23,7 @@
     };
     jovian-nixos = {
       url = "github:unlsycn/Jovian-NixOS";
-      inputs.nixpkgs.follows = "nixpkgs";
+      # TODO: follow nixpkgs
     };
     foundryvtt = {
       url = "github:reckenrode/nix-foundryvtt";
