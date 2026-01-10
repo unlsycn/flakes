@@ -343,6 +343,7 @@ in
             fake-ip-filter = mkOption { type = listOf str; };
             default-nameserver = mkOption { type = listOf str; };
             nameserver = mkOption { type = listOf str; };
+            fallback = mkOption { type = listOf str; };
             proxy-server-nameserver = mkOption { type = listOf str; };
             nameserver-policy = mkOption { type = attrs; };
           };

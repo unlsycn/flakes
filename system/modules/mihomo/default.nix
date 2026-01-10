@@ -28,10 +28,10 @@ in
         external-controller = ":9090";
         geodata-mode = true;
         geox-url = {
-          geoip = "https://hub.gitmirror.com/https://github.com/MetaCubeX/meta-rules-dat/releases/download/latest/geoip.dat";
-          geosite = "https://hub.gitmirror.com/https://github.com/MetaCubeX/meta-rules-dat/releases/download/latest/geosite.dat";
-          mmdb = "https://hub.gitmirror.com/https://github.com/MetaCubeX/meta-rules-dat/releases/download/latest/country.mmdb";
-          asn = "https://hub.gitmirror.com/https://github.com/xishang0128/geoip/releases/download/latest/GeoLite2-ASN.mmdb";
+          geoip = "https://github.com/MetaCubeX/meta-rules-dat/releases/download/latest/geoip.dat";
+          geosite = "https://github.com/MetaCubeX/meta-rules-dat/releases/download/latest/geosite.dat";
+          mmdb = "https://github.com/MetaCubeX/meta-rules-dat/releases/download/latest/country.mmdb";
+          asn = "https://github.com/xishang0128/geoip/releases/download/latest/GeoLite2-ASN.mmdb";
         };
         find-process-mode = "strict";
         keep-alive-interval = 1800;
@@ -79,38 +79,41 @@ in
           auto-route = true;
           auto-detect-interface = true;
         };
-        dns = {
-          listen = ":1053";
-          ipv6 = false;
-          enhanced-mode = "fake-ip";
-          fake-ip-range = "28.0.0.1/8";
-          fake-ip-filter = [
-            "*"
-            "+.lan"
-            "+.local"
-          ];
-          default-nameserver = [
-            "223.5.5.5"
-            "119.29.29.29"
-            "114.114.114.114"
-          ];
-          nameserver = [
-            "tls://8.8.4.4#DNS"
-            "tls://1.0.0.1#DNS"
-          ];
-          proxy-server-nameserver = [ "https://doh.pub/dns-query" ];
-          nameserver-policy =
-            let
-              cn-dns = [
-                "https://doh.pub/dns-query"
-                "https://dns.alidns.com/dns-query"
-              ];
-            in
-            {
-              "*.gitmirror.com" = cn-dns;
-              "geosite:cn,private" = cn-dns;
+        dns =
+          let
+            bootstrap-ip = [
+              "223.5.5.5"
+              "119.29.29.29"
+            ];
+            cn-doh = [
+              "https://doh.pub/dns-query"
+              "https://dns.alidns.com/dns-query"
+            ];
+          in
+          {
+            enable = true;
+            listen = ":1053";
+            ipv6 = false;
+            enhanced-mode = "fake-ip";
+            fake-ip-range = "28.0.0.1/8";
+            fake-ip-filter = [
+              "+.lan"
+              "+.local"
+            ];
+
+            nameserver = cn-doh;
+            default-nameserver = bootstrap-ip;
+            proxy-server-nameserver = bootstrap-ip ++ cn-doh;
+
+            fallback = [
+              "tls://8.8.4.4#DNS"
+              "tls://1.0.0.1#DNS"
+            ];
+
+            nameserver-policy = {
+              "geosite:cn,private" = cn-doh;
             };
-        };
+          };
       };
 
       proxyProviders = {
@@ -392,6 +395,9 @@ in
       // (cfg.settings |> filterAttrsRecursive (n: v: v != null))
       |> pkgs.lib.generators.toYAML { };
 
-    networking.firewall.trustedInterfaces = [ "Meta" ];
+    networking.firewall = {
+      trustedInterfaces = [ "Meta" ];
+      checkReversePath = "loose";
+    };
   };
 }
