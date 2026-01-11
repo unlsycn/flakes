@@ -419,9 +419,34 @@ in
       // (cfg.settings |> filterAttrsRecursive (n: v: v != null))
       |> pkgs.lib.generators.toYAML { };
 
-    networking.firewall = {
-      trustedInterfaces = [ "Meta" ];
-      checkReversePath = "loose";
+    networking = {
+      firewall = {
+        trustedInterfaces = [ "Meta" ];
+        checkReversePath = "loose";
+      };
+      networkmanager.dispatcherScripts = [
+        {
+          source =
+            let
+              ssid = "Senesdanto";
+              systemctl = "${pkgs.systemd}/bin/systemctl";
+            in
+            pkgs.writeShellScript "toggle-mihomo" ''
+              INTERFACE=$1
+              ACTION=$2
+              if [ "$CONNECTION_ID" = "${ssid}" ]; then
+                  case "$ACTION" in
+                      up)
+                          ${systemctl} stop mihomo.service
+                          ;;
+                      down)
+                          ${systemctl} start mihomo.service
+                          ;;
+                  esac
+              fi
+            '';
+        }
+      ];
     };
   };
 }
