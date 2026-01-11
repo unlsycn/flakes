@@ -134,13 +134,13 @@ in
         };
       };
       regions = {
-        "香港".filter = "(?i)港|hk|hong kong";
-        "台湾".filter = "(?i)台|tw|taiwan";
-        "日本".filter = "(?i)日|jp|japan";
-        "美国".filter = "(?i)美|us|united states";
-        "新加坡".filter = "(?i)(新|sg|singapore)";
+        "香港".filter = ''(?i)🇭🇰|港|hk|hong kong'';
+        "台湾".filter = ''(?i)🇹🇼|台|tw|taiwan'';
+        "日本".filter = ''(?i)🇯🇵|日|jp|japan'';
+        "美国".filter = ''(?i)🇺🇸|美|us|united states'';
+        "新加坡".filter = ''(?i)🇸🇬|新|sg|singapore'';
         "其他地区".filter =
-          "(?i)^(?!.*(?:\U0001F1ED\U0001F1F0|\U0001F1EF\U0001F1F5|\U0001F1FA\U0001F1F8|\U0001F1F8\U0001F1EC|\U0001F1E8\U0001F1F3|港|hk|hongkong|台|tw|taiwan|日|jp|japan|新|sg|singapore|美|us|unitedstates)).*";
+          ''(?i)^(?!.*(?:🇭🇰|🇹🇼|🇯🇵|🇺🇸|🇸🇬|港|hk|hongkong|台|tw|taiwan|日|jp|japan|新|sg|singapore|美|us|united states)).*'';
       };
       routes = {
         "Apple" = [
@@ -237,13 +237,27 @@ in
           {
             type = "GEOSITE";
             rule = "steam";
-            priority = 50;
           }
         ];
         "OneDrive" = [
           {
             type = "GEOSITE";
             rule = "onedrive";
+          }
+        ];
+        "LLM Providers" = [
+          {
+            type = "GEOSITE";
+            rule = "openai";
+          }
+          {
+            type = "GEOSITE";
+            rule = "google-gemini";
+            priority = 75;
+          }
+          {
+            type = "GEOSITE";
+            rule = "anthropic";
           }
         ];
         "国内" = [
@@ -329,49 +343,59 @@ in
               path = "./rule_provider/${name}.yaml";
             }
           );
-        proxyGroups = [
-          {
-            name = "节点选择";
-            type = "select";
+        proxyGroups =
+          let
             proxies = [
-              "自动选择"
               "DIRECT"
               "REJECT"
             ]
             ++ (attrNames cfg.regions);
-          }
-          {
-            name = "自动选择";
-            type = "url-test";
-            use = attrNames cfg.proxyProviders;
-            tolerance = 2;
-          }
-        ]
-        ++ (
-          cfg.regions
-          |> mapAttrsToList (
-            name: value: {
+          in
+          [
+            {
+              name = "节点选择";
+              type = "select";
+              proxies = [
+                "自动选择"
+              ]
+              ++ proxies;
+            }
+            {
+              name = "自动选择";
+              type = "url-test";
+              use = attrNames cfg.proxyProviders;
+              exclude-filter = ''\b(?:[2-9](?:\.\d+)?|[1-9]\d+(?:\.\d+)?|1\.(?:0*[1-9]\d*|0+[1-9]))x\b'';
+              tolerance = 2;
+            }
+          ]
+          ++ (
+            cfg.regions
+            |> mapAttrsToList (
+              name: value: {
+                name = name;
+                type = "select";
+                use = attrNames cfg.proxyProviders;
+                filter = value.filter;
+              }
+            )
+          )
+          ++ (
+            [ "DNS" ] ++ (attrNames cfg.routes)
+            |> map (name: {
               name = name;
               type = "select";
-              use = attrNames cfg.proxyProviders;
-              filter = value.filter;
-            }
-          )
-        )
-        ++ (
-          [ "DNS" ] ++ (attrNames cfg.routes)
-          |> map (name: {
-            name = name;
-            type = "select";
-            proxies = [
-              "节点选择"
-              "自动选择"
-              "DIRECT"
-              "REJECT"
-            ]
-            ++ (attrNames cfg.regions);
-          })
-        );
+              proxies =
+                if name == "国内" then
+                  # default to DIRECT
+                  proxies
+                else
+                  [
+                    "节点选择"
+                    "自动选择"
+                  ]
+                  ++ proxies;
+            })
+          );
         rules =
           cfg.routes
           |> mapAttrsToList (
