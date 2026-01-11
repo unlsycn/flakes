@@ -294,6 +294,7 @@
         "nixpkgs": "nixpkgs_2",
         "rose-pine-hyprcursor": "rose-pine-hyprcursor",
         "sops-nix": "sops-nix",
+        "ssh-keys": "ssh-keys",
         "vscode-server": "vscode-server",
         "zen-browser": "zen-browser"
       }
@@ -338,6 +339,18 @@
         "owner": "Mic92",
         "repo": "sops-nix",
         "type": "github"
+      }
+    },
+    "ssh-keys": {
+      "flake": false,
+      "locked": {
+        "narHash": "sha256-mGo9cSAMGlPPrdbCcRZyIqiLkTQ3U3gDgydPoZlGpbY=",
+        "type": "file",
+        "url": "https://github.com/unlsycn.keys"
+      },
+      "original": {
+        "type": "file",
+        "url": "https://github.com/unlsycn.keys"
       }
     },
     "systems": {

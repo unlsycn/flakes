@@ -39,6 +39,7 @@ in
                 user
                 ;
               hostName = host;
+              sshKeys = ssh-keys |> readFile |> splitString "\n";
             };
             modules = attrValues self.nixosModules ++ [
               ../system/hosts/${system}/${host}

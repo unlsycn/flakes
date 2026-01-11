@@ -41,6 +41,11 @@
       url = "github:dramforever/nix-dram";
       inputs.nixpkgs.follows = "nixpkgs";
     };
+
+    ssh-keys = {
+      url = "https://github.com/unlsycn.keys";
+      flake = false;
+    };
   };
 
   outputs =

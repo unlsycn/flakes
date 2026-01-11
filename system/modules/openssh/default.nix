@@ -2,6 +2,7 @@
   config,
   lib,
   user,
+  sshKeys,
   ...
 }:
 {
@@ -16,10 +17,7 @@
     };
 
     services.openssh.settings.PasswordAuthentication = false;
-    users.users.${user}.openssh.authorizedKeys.keyFiles = [
-      ./id_ed25519.pub
-      ./id_rsa.pub
-    ];
+    users.users.${user}.openssh.authorizedKeys.keys = sshKeys;
 
     programs.ssh.startAgent = true;
   };
