@@ -19,14 +19,24 @@ with lib;
       ];
 
       programs.beets = {
-        package = pkgs.beets.override {
-          pluginOverrides = with pkgs.beetsPackages; {
-            filetote = {
-              enable = true;
-              propagatedBuildInputs = [ filetote ];
+        package =
+          # https://github.com/beetbox/beets/commit/3eb68ef830447d91b10a928823edb3c50cf73f48
+          (pkgs.python3.pkgs.beets.overrideAttrs {
+            src = pkgs.fetchFromGitHub {
+              owner = "beetbox";
+              repo = "beets";
+              rev = "3eb68ef830447d91b10a928823edb3c50cf73f48";
+              hash = "sha256-/l7/kFaCoGsUdnU2HR7KzqUt3x/d+PUYwy9iEMIg/7o=";
             };
-          };
-        };
+          }).override
+            {
+              pluginOverrides = with pkgs.beetsPackages; {
+                filetote = {
+                  enable = true;
+                  propagatedBuildInputs = [ filetote ];
+                };
+              };
+            };
 
         settings = config.sops.templates."beetsConfig".path;
       };
