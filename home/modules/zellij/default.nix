@@ -652,7 +652,7 @@ with builtins;
         serialize_pane_viewport = true;
         show_startup_tips = false;
         scrollback_lines_to_serialize = 4096;
-        layout_dir = "~/.config/zellij/layouts";
+        layout_dir = "~/${config.xdg.configHome}/zellij/layouts";
       }
       // optionalAttrs (cfg.copyCommand != "") { copy_command = cfg.copyCommand; };
   };
