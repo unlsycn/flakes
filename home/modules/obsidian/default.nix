@@ -1,5 +1,6 @@
 {
   config,
+  user,
   lib,
   pkgs,
   ...
@@ -14,5 +15,9 @@ in
 {
   config = mkIf cfg.enable {
     xdg.dataFile."Zotero/better_sqlite3.node".source = better-sqlite3;
+
+    persist."/persist".users.${user} = {
+      directories = [ ".config/obsidian" ];
+    };
   };
 }
