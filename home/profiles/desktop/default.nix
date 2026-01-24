@@ -12,7 +12,10 @@ with lib;
 
   config = mkIf config.profile.desktop.enable {
     programs = {
-      vscode.enable = true;
+      vscode = {
+        enable = true;
+        useAntigravity = false;
+      };
       alacritty.enable = true;
       waybar.enable = true;
       zen-browser.enable = true;

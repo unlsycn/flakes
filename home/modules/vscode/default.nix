@@ -6,34 +6,43 @@
   ...
 }:
 with lib;
+let
+  cfg = config.programs.vscode;
+in
 {
   imports = [ ./hyprland.nix ];
 
-  options.programs.vscode.continue = {
-    enable = mkEnableOption "Continue extension for VSCode";
+  options.programs.vscode = {
+    continue.enable = mkEnableOption "Continue extension for VSCode";
+    useAntigravity = mkOption {
+      type = types.bool;
+      default = false;
+      description = "Use Antigravity instead of VSCode";
+    };
   };
 
-  config = mkIf config.programs.vscode.enable {
+  config = mkIf cfg.enable {
     persist."/persist".users.${user}.directories = [
-      ".config/Code"
-      ".vscode"
+      cfg.dataFolderName
+      ".config/${cfg.nameShort}"
     ]
-    ++ optional config.programs.vscode.continue.enable ".continue";
+    ++ optional cfg.continue.enable ".continue";
 
     programs.vscode.package =
-      if config.programs.vscode.continue.enable then
-        # https://github.com/continuedev/continue/issues/821#issuecomment-3227673526
-        (pkgs.vscode.overrideAttrs (
-          final: prev: {
-            preFixup =
-              prev.preFixup
-              + "gappsWrapperArgs+=( --prefix LD_LIBRARY_PATH : ${makeLibraryPath [ pkgs.gcc.cc.lib ]} )";
-          }
-        ))
-      else
-        pkgs.vscode;
+      let
+        basePackage = if cfg.useAntigravity then pkgs.antigravity else pkgs.vscode;
+        overrideForContinue =
+          pkg:
+          pkg.overrideAttrs (
+            final: prev: {
+              preFixup =
+                prev.preFixup
+                + "gappsWrapperArgs+=( --prefix LD_LIBRARY_PATH : ${makeLibraryPath [ pkgs.gcc.cc.lib ]} )";
+            }
+          );
+      in
+      if cfg.continue.enable then basePackage |> overrideForContinue else basePackage;
 
     services.wakatime.enable = true;
-    programs.vscode.continue.enable = true;
   };
 }
