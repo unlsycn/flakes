@@ -6,7 +6,8 @@
     flake-parts.url = "github:hercules-ci/flake-parts";
     impermanence.url = "github:nix-community/impermanence";
     home-manager = {
-      url = "github:nix-community/home-manager/master";
+      # TODO: switch back to upstream when https://github.com/nix-community/home-manager/pull/8633 is merged
+      url = "github:unlsycn/home-manager/master";
       inputs.nixpkgs.follows = "nixpkgs";
     };
     vscode-server = {
@@ -32,6 +33,7 @@
     zen-browser = {
       url = "github:0xc000022070/zen-browser-flake";
       inputs.nixpkgs.follows = "nixpkgs";
+      inputs.home-manager.follows = "home-manager";
     };
     disko = {
       url = "github:nix-community/disko/latest";
