@@ -20,8 +20,9 @@ with lib;
 
       programs.beets = {
         package =
+          with pkgs.python3.pkgs;
           # https://github.com/beetbox/beets/commit/3eb68ef830447d91b10a928823edb3c50cf73f48
-          (pkgs.python3.pkgs.beets.overrideAttrs {
+          (beets.overrideAttrs {
             src = pkgs.fetchFromGitHub {
               owner = "beetbox";
               repo = "beets";
@@ -30,10 +31,10 @@ with lib;
             };
           }).override
             {
-              pluginOverrides = with pkgs.beetsPackages; {
+              pluginOverrides = {
                 filetote = {
                   enable = true;
-                  propagatedBuildInputs = [ filetote ];
+                  propagatedBuildInputs = [ beets-filetote ];
                 };
               };
             };
