@@ -141,6 +141,7 @@ with lib;
         enable_swallow = true;
 
         disable_hyprland_logo = true;
+        disable_splash_rendering = true;
         force_default_wallpaper = 0;
         new_window_takes_over_fullscreen = 2;
         allow_session_lock_restore = true;
