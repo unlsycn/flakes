@@ -1,3 +1,4 @@
+/* Color Palette - Catppuccin Macchiato */
 @define-color rosewater #f4dbd6;
 @define-color flamingo #f0c6c6;
 @define-color pink #f5bde6;
@@ -28,7 +29,7 @@
 @define-color base-translucent rgba(26, 27, 38, 0.85);
 
 * {
-    font-family: "JetBrainsMono Nerd Font", Roboto, Helvetica, Arial, sans-serif;
+    font-family: "Maple Mono NF", Roboto, sans-serif;
     font-size: 18px;
 }
 
@@ -36,27 +37,25 @@ window#waybar {
     background-color: @base-translucent;
     border: 1px solid @base;
     border-radius: 10px;
-    transition-property: background-color, border-color;
-    transition-duration: 0.5s;
+    transition:
+        background-color 0.5s,
+        border-color 0.5s;
 }
 
 button {
-    /* Use box-shadow instead of border so the text isn't offset */
     box-shadow: inset 0 -3px transparent;
-    /* Avoid rounded borders under each button name */
     border: none;
     border-radius: 0;
 }
 
-/* https://github.com/Alexays/Waybar/wiki/FAQ#the-workspace-buttons-have-a-strange-hover-effect */
 button:hover {
     background: inherit;
-    box-shadow: inset 0 -3px #ffffff;
+    box-shadow: inset 0 -3px #fff;
 }
 
-.modules-right,
 .modules-left,
-.modules-center {
+.modules-center,
+.modules-right {
     border-radius: 15px;
 }
 
@@ -64,123 +63,108 @@ button:hover {
 .modules-right {
     padding: 0 20px;
 }
-
 .modules-center {
     padding: 0 10px;
 }
 
-#workspaces button {
-    padding: 0 5px;
-    background-color: transparent;
-    color: #ffffff;
-}
-
-#workspaces button:hover {
-    background: rgba(0, 0, 0, 0.2);
-}
-
-#workspaces button.focused {
-    background-color: @lavender;
-    box-shadow: inset 0 -3px #ffffff;
-}
-
-#workspaces button.urgent {
-    background-color: #eb4d4b;
-}
-
-#mode {
-    background-color: #64727d;
-    box-shadow: inset 0 -3px #ffffff;
-}
-
-#bluetooth,
 #tray,
-#clock,
-#battery,
-#cpu,
-#memory,
-#temperature,
-#custom-swaync,
+#pulseaudio,
+.group-device .module,
 #network,
-#backlight,
-#pulseaudio {
+#battery,
+.group-sysinfo .module,
+#clock,
+#custom-swaync {
     padding: 0 10px;
 }
 
-#pulseaudio {
-    color: @teal;
+#workspaces {
+    padding: 0;
+    margin: 0;
 }
 
-#backlight {
-    color: @peach;
+#workspaces button {
+    padding: 0 10px;
+    color: rgba(255, 255, 255, 0.85);
+    border-radius: 0;
+    transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
 }
 
-#network {
-    color: @yellow;
+#workspaces button:hover {
+    background: transparent;
+    text-shadow: 0 0 5px rgba(255, 255, 255, 0.9);
 }
 
-#cpu {
-    color: @peach;
+#workspaces button.active,
+#workspaces button.focused {
+    background: transparent;
+    color: rgba(255, 255, 255, 0.9);
+    text-shadow: 0 0 6px rgba(255, 255, 255, 0.9);
 }
 
-#memory {
-    color: @mauve;
+#workspaces button.urgent {
+    color: @red;
+    text-shadow: 0 0 8px @red;
 }
 
-#temperature {
-    color: @maroon;
-}
-
-#battery {
-    color: @green;
-}
-
-#clock {
-    color: @flamingo;
+#workspaces button {
+    box-shadow: none;
 }
 
 #window {
     color: @text;
 }
 
+#pulseaudio {
+    color: @yellow;
+}
+#pulseaudio.muted {
+    color: @text;
+}
+#backlight {
+    color: @peach;
+}
+#network {
+    color: @teal;
+}
+#battery {
+    color: @green;
+}
+#memory {
+    color: @mauve;
+}
+#temperature {
+    color: @maroon;
+}
+#cpu {
+    color: @peach;
+}
+#custom-asusctl {
+    color: @sapphire;
+}
+#battery.charging,
+#battery.plugged {
+    color: @sky;
+}
+#clock {
+    color: @flamingo;
+}
 #custom-swaync {
     color: @rosewater;
 }
 
-#bluetooth {
-    color: @rosewater;
-}
-
-#battery.charging,
-#battery.plugged {
-    color: @sapphire;
+#battery.critical:not(.charging) {
+    background-color: @red;
+    color: @lavender;
+    animation: blink 0.5s steps(12) infinite alternate;
 }
 
 @keyframes blink {
     to {
-        color: #000000;
+        color: #000;
     }
 }
 
-/* Using steps() instead of linear as a timing function to limit cpu usage */
-#battery.critical:not(.charging) {
-    background-color: #f53c3c;
-    color: #ffffff;
-    animation-name: blink;
-    animation-duration: 0.5s;
-    animation-timing-function: steps(12);
-    animation-iteration-count: infinite;
-    animation-direction: alternate;
-}
-
 label:focus {
-    background-color: #000000;
-}
-
-#pulseaudio.muted {
-    color: @text;
-}
-
-#tray {
-    padding: 0 10px;
+    background-color: #000;
 }

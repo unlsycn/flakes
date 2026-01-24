@@ -10,6 +10,7 @@ let
   brightnessctl = lib.getExe pkgs.brightnessctl;
   swaync-client = "${pkgs.swaynotificationcenter}/bin/swaync-client";
   blueman-manager = "${pkgs.blueman}/bin/blueman-manager";
+  asusctl = "${pkgs.asusctl}/bin/asusctl";
 in
 {
   config = mkIf config.programs.waybar.enable {
@@ -37,17 +38,24 @@ in
           ]
           ++ optional config.services.swaync.enable "custom/swaync";
           "group/sysinfo" = {
-            drawer.transition-left-to-right = false;
+            drawer = {
+              children-class = "group-sysinfo";
+              transition-left-to-right = false;
+            };
             orientation = "inherit";
             modules = [
               "battery"
-              "cpu"
               "memory"
               "temperature"
+              "cpu"
+              "custom/asusctl"
             ];
           };
           "group/device" = {
-            drawer.transition-left-to-right = false;
+            drawer = {
+              transition-left-to-right = false;
+              children-class = "group-device";
+            };
             orientation = "inherit";
             modules = [
               "pulseaudio"
@@ -201,6 +209,14 @@ in
             on-click = "sleep 0.1 && ${swaync-client} -t -sw";
             on-click-right = "${swaync-client} -d -sw";
             escape = true;
+          };
+          "custom/asusctl" = {
+            format = "󰈐 {}";
+            exec = "${asusctl} profile get | grep 'Active profile' | awk '{print $NF}'";
+            interval = 5;
+            on-click = "${asusctl} profile next";
+            tooltip = true;
+            tooltip-format = "Profile: {}";
           };
           tray = {
             icon-size = 22;
