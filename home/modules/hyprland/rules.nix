@@ -3,76 +3,104 @@ with lib;
 with types;
 let
   cfg = config.wayland.windowManager.hyprland;
-  rulesType = attrsOf (coercedTo (either (listOf str) str) toList (listOf str));
-  windowRuleModule = submodule {
+  
+  propModule = submodule {
     options = {
-      class = mkOption {
-        type = rulesType;
-        default = { };
-        example = ''
-          {
-            "wechat" = [ "noblur" "float" ];
-          }
+      type = mkOption {
+        type = enum [ "class" "title" "initialClass" "initialTitle" "floating" "fullscreen" "pinned" "workspace" "xwayland" ];
+        description = "The type of match property";
+      };
+      value = mkOption {
+        type = str;
+        description = "The value to match against";
+      };
+    };
+  };
+  
+  effectModule = submodule {
+    options = {
+      type = mkOption {
+        type = str;
+        description = "The effect type (e.g., border_size, opacity, float, etc.)";
+      };
+      value = mkOption {
+        type = nullOr str;
+        default = null;
+        description = "The value for the effect (null if the effect is a boolean flag)";
+      };
+    };
+  };
+  
+  ruleModule = submodule {
+    options = {
+      props = mkOption {
+        type = listOf propModule;
+        default = [ ];
+        description = "List of match properties that must all be satisfied";
+        example = literalExpression ''
+          [
+            { type = "class"; value = "my-window"; }
+            { type = "floating"; value = "1"; }
+          ]
         '';
       };
-      title = mkOption {
-        type = rulesType;
-        default = { };
-        example = ''
-          {
-            "Visual Studio Code" = "opacity 0.95";
-          }
-        '';
-      };
-      initialClass = mkOption {
-        type = rulesType;
-        default = { };
-        example = ''
-          {
-            wechat = [ "noblur" "float" ];
-          }
-        '';
-      };
-      initialTitle = mkOption {
-        type = rulesType;
-        default = { };
-        example = ''
-          {
-            "^(Visual Studio Code)$" = "opacity 0.95";
-          }
-        '';
-      };
-      custom = mkOption {
-        type = rulesType;
-        default = { };
-        example = ''
-          {
-            "class:(pinentry-)(.*) floating:1" = "pin";
-          }
+      
+      effects = mkOption {
+        type = listOf effectModule;
+        default = [ ];
+        description = "List of effects to apply to matched windows";
+        example = literalExpression ''
+          [
+            { type = "border_size"; value = "10"; }
+            { type = "opacity"; value = "0.95"; }
+            { type = "float"; value = null; }
+          ]
         '';
       };
     };
   };
+  
+  generateWindowRule = name: rule:
+    let
+      propsStr = concatMapStringsSep "\n" (prop: "match:${prop.type} = ${prop.value}") rule.props;
+      effectsStr = concatMapStringsSep "\n" (effect: 
+        if effect.value == null 
+        then effect.type 
+        else "${effect.type} = ${effect.value}"
+      ) rule.effects;
+    in
+    ''
+      windowrule {
+        name = ${name}
+        ${propsStr}
+      
+        ${effectsStr}
+      }
+    '';
 in
 {
   options.wayland.windowManager.hyprland.windowRules = mkOption {
-    type = windowRuleModule;
+    type = attrsOf ruleModule;
     default = { };
+    description = "Named window rules for Hyprland";
+    example = literalExpression ''
+      {
+        vscode-opacity = {
+          props = [
+            { type = "class"; value = "code"; }
+          ];
+          effects = [
+            { type = "opacity"; value = "0.95"; }
+          ];
+        };
+      }
+    '';
   };
 
   config = mkIf cfg.enable {
-    wayland.windowManager.hyprland.settings.windowrulev2 =
-      (
-        (removeAttrs cfg.windowRules [ "custom" ])
-        |> mapAttrsToList (
-          field: ruleLines:
-          ruleLines |> mapAttrsToList (regex: rules: "${concatStringsSep ", " rules}, ${field}:${regex}")
-        )
-        |> flatten
-      )
-      ++ (
-        cfg.windowRules.custom
-        |> mapAttrsToList (fieldRegex: rules: "${concatStringsSep ", " rules}, ${fieldRegex}")
+    wayland.windowManager.hyprland.extraConfig = 
+      concatStringsSep "\n" (
+        mapAttrsToList generateWindowRule cfg.windowRules
       );
   };
 }

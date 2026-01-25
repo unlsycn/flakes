@@ -21,7 +21,14 @@ in
         I = "exec, ${vscode}";
       };
 
-      windowRules.class.code = "opacity 0.95";
+      windowRules.vscode-opacity = {
+        props = [
+          { type = "class"; value = "code"; }
+        ];
+        effects = [
+          { type = "opacity"; value = "0.95"; }
+        ];
+      };
     };
   };
 }
