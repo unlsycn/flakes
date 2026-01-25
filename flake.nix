@@ -14,6 +14,10 @@
       url = "github:nix-community/nixos-vscode-server";
       inputs.nixpkgs.follows = "nixpkgs";
     };
+    vscode-extensions = {
+      url = "github:nix-community/nix-vscode-extensions";
+      inputs.nixpkgs.follows = "nixpkgs";
+    };
     rose-pine-hyprcursor = {
       url = "github:ndom91/rose-pine-hyprcursor";
       inputs.nixpkgs.follows = "nixpkgs";
@@ -63,7 +67,7 @@
         lib = nixpkgs.lib;
         inherit inputs;
       };
-      overlaysList = builtins.attrValues overlays ++ [ inputs.nix-dram.overlay ];
+      overlaysList = builtins.attrValues overlays ++ [ inputs.nix-dram.overlay inputs.vscode-extensions.overlays.default ];
     in
     flake-parts.lib.mkFlake { inherit inputs; } {
       systems = [ "x86_64-linux" ];
