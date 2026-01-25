@@ -10,7 +10,10 @@ let
 in
 {
   config = mkIf config.services.hyprpaper.enable {
-    services.hyprpaper.settings.ipc = "on";
+    services.hyprpaper.settings = {
+      splash = false;
+      ipc = true;
+    };
 
     wayland.windowManager.hyprland.settings.exec-once = [ "sleep 0.5 && ${switch_wallpaper}" ];
   };
