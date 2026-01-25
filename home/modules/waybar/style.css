@@ -29,7 +29,7 @@
 @define-color base-translucent rgba(26, 27, 38, 0.85);
 
 * {
-    font-family: "Maple Mono NF", Roboto, sans-serif;
+    font-family: "Maple Mono NF", "Sarasa Mono SC", "Inter", sans-serif;
     font-size: 18px;
 }
 

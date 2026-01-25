@@ -9,11 +9,16 @@ with lib;
   config = lib.mkIf config.hasDesktopEnvironment {
     fonts.packages = with pkgs; [
       maple-mono.truetype
-      jetbrains-mono
-      roboto
-      lxgw-wenkai
-
       maple-mono.NF-unhinted
+      jetbrains-mono
+
+      inter
+      roboto
+      merriweather
+
+      lxgw-wenkai
+      sarasa-gothic
+
       nerd-fonts.jetbrains-mono
       nerd-fonts.roboto-mono
 
