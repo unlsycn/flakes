@@ -11,7 +11,7 @@
   gawk,
   findutils,
   fre,
-  hyprland,
+  systemd,
   ...
 }:
 let
@@ -22,8 +22,8 @@ let
     src = fetchFromGitHub {
       owner = "unlsycn";
       repo = "Unlauncher";
-      rev = "facb29fd1673ca6ea62d9024a0ae149fa3a63aff";
-      sha256 = "sha256-kotTgrWQPEP9SP1uVXnM/vcpA5Y2VVJQw80GuQ0KCbA=";
+      rev = "067095fe862688fa735e9f3b72ce1a2d893c746a";
+      sha256 = "sha256-c5zxT+CepS4DgSsbJlv2BeeV4fGgVgicvIPHD5+PcOM=";
     };
 
     buildPhase = ''
@@ -62,12 +62,13 @@ let
           gawk
           findutils
           fre
-          hyprland
+          systemd
         ];
         keep = [ "$in_section" ];
         execer = [
           "cannot:${ripgrep}/bin/rg"
           "cannot:${fzfmenu}/bin/fzfmenu"
+          "cannot:${systemd}/bin/systemd-run"
         ];
       };
     };
