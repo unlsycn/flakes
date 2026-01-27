@@ -134,174 +134,221 @@ in
         };
       };
       regions = {
-        "香港".filter = ''(?i)🇭🇰|港|hk|hong kong'';
-        "台湾".filter = ''(?i)🇹🇼|台|tw|taiwan'';
-        "日本".filter = ''(?i)🇯🇵|日|jp|japan'';
-        "美国".filter = ''(?i)🇺🇸|美|us|united states'';
-        "新加坡".filter = ''(?i)🇸🇬|新|sg|singapore'';
+        "香港".filter = ''(?i)🇭🇰|港|\bhk\b|hong kong'';
+        "台湾".filter = ''(?i)🇹🇼|台|\btw\b|taiwan'';
+        "日本".filter = ''(?i)🇯🇵|日|\bjp\b|japan'';
+        "美国".filter = ''(?i)🇺🇸|美|\bus\b|united states'';
+        "新加坡".filter = ''(?i)🇸🇬|新|\bsg\b|singapore'';
         "其他地区".filter =
-          ''(?i)^(?!.*(?:🇭🇰|🇹🇼|🇯🇵|🇺🇸|🇸🇬|港|hk|hongkong|台|tw|taiwan|日|jp|japan|新|sg|singapore|美|us|united states)).*'';
+          ''(?i)^(?!.*(?:🇭🇰|🇹🇼|🇯🇵|🇺🇸|🇸🇬|港|\bhk\b|hongkong|台|\btw\b|taiwan|日|\bjp\b|japan|新|\bsg\b|singapore|美|\bus\b|united states)).*'';
       };
       routes = {
-        "Apple" = [
-          {
-            type = "GEOSITE";
-            rule = "apple";
-          }
-          {
-            type = "GEOSITE";
-            rule = "apple-cn";
-          }
-        ];
-        "ehentai" = [
-          {
-            type = "GEOSITE";
-            rule = "ehentai";
-          }
-        ];
-        "Github" = [
-          {
-            type = "GEOSITE";
-            rule = "github";
-          }
-        ];
-        "Twitter" = [
-          {
-            type = "GEOSITE";
-            rule = "twitter";
-          }
-          {
-            type = "GEOIP";
-            rule = "twitter";
-          }
-        ];
-        "YouTube" = [
-          {
-            type = "GEOSITE";
-            rule = "youtube";
-          }
-        ];
-        "Google" = [
-          {
-            type = "GEOSITE";
-            rule = "google";
-          }
-          {
-            type = "GEOSITE";
-            rule = "google-cn";
-          }
-          {
-            type = "GEOIP";
-            rule = "google";
-          }
-        ];
-        "Telegram" = [
-          {
-            type = "GEOSITE";
-            rule = "telegram";
-          }
-          {
-            type = "GEOIP";
-            rule = "telegram";
-          }
-        ];
-        "NETFLIX" = [
-          {
-            type = "GEOSITE";
-            rule = "netflix";
-          }
-          {
-            type = "GEOIP";
-            rule = "netflix";
-          }
-        ];
-        "巴哈姆特" = [
-          {
-            type = "GEOSITE";
-            rule = "bahamut";
-          }
-        ];
-        "Spotify" = [
-          {
-            type = "GEOSITE";
-            rule = "spotify";
-          }
-        ];
-        "Pixiv" = [
-          {
-            type = "GEOSITE";
-            rule = "pixiv";
-          }
-        ];
-        "Steam" = [
-          {
-            type = "GEOSITE";
-            rule = "steam";
-          }
-        ];
-        "OneDrive" = [
-          {
-            type = "GEOSITE";
-            rule = "onedrive";
-          }
-        ];
-        "LLM Providers" = [
-          {
-            type = "GEOSITE";
-            rule = "openai";
-          }
-          {
-            type = "GEOSITE";
-            rule = "google-gemini";
-            priority = 75;
-          }
-          {
-            type = "GEOSITE";
-            rule = "anthropic";
-          }
-        ];
-        "国内" = [
-          {
-            type = "GEOSITE";
-            rule = "CN";
-          }
-          {
-            type = "GEOIP";
-            rule = "CN";
-          }
-          {
-            type = "GEOSITE";
-            rule = "steam@cn";
-            priority = 75;
-          }
-        ];
-        "国外" = [
-          {
-            type = "GEOSITE";
-            rule = "geolocation-!cn";
-            priority = 10;
-          }
-        ];
-        "非 Web 协议" = [
-          {
-            type = "NOT";
-            rule = "((DST-PORT,80/443))";
-            priority = 20;
-          }
-        ];
-        "其他" = [
-          {
-            type = "MATCH";
-            priority = 0;
-          }
-        ];
-        "广告拦截" = [
-          {
-            type = "AND";
-            rule = "((RULE-SET,anti-AD),(NOT,((RULE-SET,anti-AD-white))))";
-            priority = 100;
-          }
-        ];
+        "Apple" = {
+          rules = [
+            {
+              type = "GEOSITE";
+              rule = "apple";
+            }
+            {
+              type = "GEOSITE";
+              rule = "apple-cn";
+            }
+          ];
+        };
+        "DNS" = {
+          rules = [ ];
+        };
+        "E-Hentai" = {
+          rules = [
+            {
+              type = "GEOSITE";
+              rule = "ehentai";
+            }
+          ];
+        };
+        "Github" = {
+          rules = [
+            {
+              type = "GEOSITE";
+              rule = "github";
+            }
+          ];
+        };
+        "Google" = {
+          rules = [
+            {
+              type = "GEOSITE";
+              rule = "google";
+            }
+            {
+              type = "GEOSITE";
+              rule = "google-cn";
+            }
+            {
+              type = "GEOIP";
+              rule = "google";
+            }
+          ];
+          proxies = cfg._defaultProxies ++ [ "LLM Providers" ];
+          default = "LLM Providers";
+        };
+        "LLM Providers" = {
+          rules = [
+            {
+              type = "GEOSITE";
+              rule = "openai";
+            }
+            {
+              type = "GEOSITE";
+              rule = "google-gemini";
+              priority = 75;
+            }
+            {
+              type = "GEOSITE";
+              rule = "anthropic";
+            }
+          ];
+          default = "美国";
+        };
+        "Netflix" = {
+          rules = [
+            {
+              type = "GEOSITE";
+              rule = "netflix";
+            }
+            {
+              type = "GEOIP";
+              rule = "netflix";
+            }
+          ];
+        };
+        "OneDrive" = {
+          rules = [
+            {
+              type = "GEOSITE";
+              rule = "onedrive";
+            }
+          ];
+        };
+        "Pixiv" = {
+          rules = [
+            {
+              type = "GEOSITE";
+              rule = "pixiv";
+            }
+          ];
+        };
+        "Spotify" = {
+          rules = [
+            {
+              type = "GEOSITE";
+              rule = "spotify";
+            }
+          ];
+        };
+        "Steam" = {
+          rules = [
+            {
+              type = "GEOSITE";
+              rule = "steam";
+            }
+          ];
+        };
+        "Telegram" = {
+          rules = [
+            {
+              type = "GEOSITE";
+              rule = "telegram";
+            }
+            {
+              type = "GEOIP";
+              rule = "telegram";
+            }
+          ];
+        };
+        "Twitter" = {
+          rules = [
+            {
+              type = "GEOSITE";
+              rule = "twitter";
+            }
+            {
+              type = "GEOIP";
+              rule = "twitter";
+            }
+          ];
+        };
+        "YouTube" = {
+          rules = [
+            {
+              type = "GEOSITE";
+              rule = "youtube";
+            }
+          ];
+        };
+        "其他" = {
+          rules = [
+            {
+              type = "MATCH";
+              priority = 0;
+            }
+          ];
+        };
+        "巴哈姆特" = {
+          rules = [
+            {
+              type = "GEOSITE";
+              rule = "bahamut";
+            }
+          ];
+        };
+        "广告拦截" = {
+          rules = [
+            {
+              type = "AND";
+              rule = "((RULE-SET,anti-AD),(NOT,((RULE-SET,anti-AD-white))))";
+              priority = 100;
+            }
+          ];
+          default = "REJECT";
+        };
+        "国内" = {
+          rules = [
+            {
+              type = "GEOSITE";
+              rule = "CN";
+            }
+            {
+              type = "GEOIP";
+              rule = "CN";
+            }
+            {
+              type = "GEOSITE";
+              rule = "steam@cn";
+              priority = 75;
+            }
+          ];
+          default = "DIRECT";
+        };
+        "国外" = {
+          rules = [
+            {
+              type = "GEOSITE";
+              rule = "geolocation-!cn";
+              priority = 10;
+            }
+          ];
+        };
+        "非 Web 协议" = {
+          rules = [
+            {
+              type = "NOT";
+              rule = "((DST-PORT,80/443))";
+              priority = 20;
+            }
+          ];
+          default = "DIRECT";
+        };
       };
       configFile = config.sops.templates."mihomoConfig".path;
     };
@@ -343,64 +390,54 @@ in
               path = "./rule_provider/${name}.yaml";
             }
           );
-        proxyGroups =
-          let
-            proxies = [
-              "DIRECT"
-              "REJECT"
-            ]
-            ++ (attrNames cfg.regions);
-          in
-          [
-            {
-              name = "节点选择";
-              type = "select";
-              proxies = [
-                "自动选择"
-              ]
-              ++ proxies;
-            }
-            {
-              name = "自动选择";
-              type = "url-test";
-              use = attrNames cfg.proxyProviders;
-              exclude-filter = ''\b(?:[2-9](?:\.\d+)?|[1-9]\d+(?:\.\d+)?|1\.(?:0*[1-9]\d*|0+[1-9]))x\b'';
-              tolerance = 2;
-            }
-          ]
-          ++ (
-            cfg.regions
-            |> mapAttrsToList (
-              name: value: {
-                name = name;
-                type = "select";
-                use = attrNames cfg.proxyProviders;
-                filter = value.filter;
-              }
-            )
-          )
-          ++ (
-            [ "DNS" ] ++ (attrNames cfg.routes)
-            |> map (name: {
+        proxyGroups = [
+          {
+            name = "节点选择";
+            type = "select";
+            proxies = cfg._defaultProxies |> filter (x: x != "节点选择");
+          }
+          {
+            name = "自动选择";
+            type = "url-test";
+            use = attrNames cfg.proxyProviders;
+            exclude-filter = ''\b(?:[2-9](?:\.\d+)?|[1-9]\d+(?:\.\d+)?|1\.(?:0*[1-9]\d*|0+[1-9]))x\b'';
+            tolerance = 2;
+          }
+        ]
+        ++ (
+          cfg.regions
+          |> mapAttrsToList (
+            name: value: {
               name = name;
               type = "select";
+              use = attrNames cfg.proxyProviders;
+              filter = value.filter;
+            }
+          )
+        )
+        ++ (
+          cfg.routes
+          |> mapAttrsToList (
+            name: route:
+            let
               proxies =
-                if name == "国内" then
-                  # default to DIRECT
-                  proxies
+                if (route.default != null) && (elem route.default route.proxies) then
+                  [ route.default ] ++ (route.proxies |> filter (x: x != route.default))
                 else
-                  [
-                    "节点选择"
-                    "自动选择"
-                  ]
-                  ++ proxies;
-            })
-          );
+                  throw "Route '${name}': default '${route.default}' not found in proxies list";
+            in
+            {
+              name = name;
+              type = "select";
+              proxies = proxies;
+            }
+          )
+        );
         rules =
           cfg.routes
           |> mapAttrsToList (
-            name: rules:
-            rules
+            name: route:
+            route.rules
             |> map (rule: {
               priority = rule.priority;
               rule = "${rule.type},${optionalString (rule.rule != null) "${rule.rule},"}${name}";

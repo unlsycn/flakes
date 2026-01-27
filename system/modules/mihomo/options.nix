@@ -52,59 +52,83 @@ in
         };
       });
     };
+    _defaultProxies = mkOption {
+      type = listOf str;
+      default = [
+        "节点选择"
+        "自动选择"
+        "DIRECT"
+        "REJECT"
+      ]
+      ++ (attrNames cfg.regions);
+      internal = true;
+      readOnly = true;
+    };
     routes = mkOption {
-      type = attrsOf (
-        listOf (submodule {
-          options = {
-            type = mkOption {
-              type = enum [
-                "DOMAIN"
-                "DOMAIN-SUFFIX"
-                "DOMAIN-KEYWORD"
-                "DOMAIN-WILDCARD"
-                "DOMAIN-REGEX"
-                "GEOSITE"
-                "IP-CIDR"
-                "IP-CIDR6"
-                "IP-SUFFIX"
-                "IP-ASN"
-                "GEOIP"
-                "SRC-GEOIP"
-                "SRC-IP-ASN"
-                "SRC-IP-CIDR"
-                "SRC-IP-SUFFIX"
-                "DST-PORT"
-                "SRC-PORT"
-                "IN-PORT"
-                "IN-TYPE"
-                "IN-USER"
-                "IN-NAME"
-                "PROCESS-PATH"
-                "PROCESS-PATH-REGEX"
-                "PROCESS-NAME"
-                "PROCESS-NAME-REGEX"
-                "UID"
-                "NETWORK"
-                "DSCP"
-                "RULE-SET"
-                "AND"
-                "OR"
-                "NOT"
-                "SUB-RULE"
-                "MATCH"
-              ];
-            };
-            rule = mkOption {
-              type = nullOr str;
-              default = null;
-            };
-            priority = mkOption {
-              type = int;
-              default = 50;
-            };
+      type = attrsOf (submodule {
+        options = {
+          rules = mkOption {
+            type = listOf (submodule {
+              options = {
+                type = mkOption {
+                  type = enum [
+                    "DOMAIN"
+                    "DOMAIN-SUFFIX"
+                    "DOMAIN-KEYWORD"
+                    "DOMAIN-WILDCARD"
+                    "DOMAIN-REGEX"
+                    "GEOSITE"
+                    "IP-CIDR"
+                    "IP-CIDR6"
+                    "IP-SUFFIX"
+                    "IP-ASN"
+                    "GEOIP"
+                    "SRC-GEOIP"
+                    "SRC-IP-ASN"
+                    "SRC-IP-CIDR"
+                    "SRC-IP-SUFFIX"
+                    "DST-PORT"
+                    "SRC-PORT"
+                    "IN-PORT"
+                    "IN-TYPE"
+                    "IN-USER"
+                    "IN-NAME"
+                    "PROCESS-PATH"
+                    "PROCESS-PATH-REGEX"
+                    "PROCESS-NAME"
+                    "PROCESS-NAME-REGEX"
+                    "UID"
+                    "NETWORK"
+                    "DSCP"
+                    "RULE-SET"
+                    "AND"
+                    "OR"
+                    "NOT"
+                    "SUB-RULE"
+                    "MATCH"
+                  ];
+                };
+                rule = mkOption {
+                  type = nullOr str;
+                  default = null;
+                };
+                priority = mkOption {
+                  type = int;
+                  default = 50;
+                };
+              };
+            });
           };
-        })
-      );
+          proxies = mkOption {
+            type = listOf str;
+            default = cfg._defaultProxies;
+          };
+          default = mkOption {
+            type = nullOr str;
+            default = "节点选择";
+          };
+        };
+      });
     };
 
     settings = {
