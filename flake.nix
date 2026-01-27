@@ -6,8 +6,7 @@
     flake-parts.url = "github:hercules-ci/flake-parts";
     impermanence.url = "github:nix-community/impermanence";
     home-manager = {
-      # TODO: switch back to upstream when https://github.com/nix-community/home-manager/pull/8633 is merged
-      url = "github:unlsycn/home-manager/master";
+      url = "github:nix-community/home-manager/master";
       inputs.nixpkgs.follows = "nixpkgs";
     };
     vscode-server = {
@@ -67,7 +66,10 @@
         lib = nixpkgs.lib;
         inherit inputs;
       };
-      overlaysList = builtins.attrValues overlays ++ [ inputs.nix-dram.overlay inputs.vscode-extensions.overlays.default ];
+      overlaysList = builtins.attrValues overlays ++ [
+        inputs.nix-dram.overlay
+        inputs.vscode-extensions.overlays.default
+      ];
     in
     flake-parts.lib.mkFlake { inherit inputs; } {
       systems = [ "x86_64-linux" ];
