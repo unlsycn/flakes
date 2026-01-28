@@ -109,6 +109,11 @@ in
               "tls://8.8.4.4#DNS"
               "tls://1.0.0.1#DNS"
             ];
+            fallback-filter = {
+              geoip = true;
+              geoip-code = "CN";
+              geosite = [ "gfw" ];
+            };
 
             nameserver-policy = {
               "geosite:cn,private" = cn-doh;

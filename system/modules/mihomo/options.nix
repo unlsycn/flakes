@@ -368,6 +368,16 @@ in
             default-nameserver = mkOption { type = listOf str; };
             nameserver = mkOption { type = listOf str; };
             fallback = mkOption { type = listOf str; };
+            fallback-filter = mkOption {
+              type = nullOr (submodule {
+                options = {
+                  geoip = mkOption { type = bool; };
+                  geoip-code = mkOption { type = str; };
+                  geosite = mkOption { type = listOf str; };
+                };
+              });
+              default = null;
+            };
             proxy-server-nameserver = mkOption { type = listOf str; };
             nameserver-policy = mkOption { type = attrs; };
           };
