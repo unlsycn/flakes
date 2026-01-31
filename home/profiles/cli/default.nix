@@ -31,6 +31,7 @@ with lib;
       ripgrep.enable = true;
       nnn.enable = true;
       zellij.enable = true;
+      llm-cli.enable = true;
     };
 
     services = {
