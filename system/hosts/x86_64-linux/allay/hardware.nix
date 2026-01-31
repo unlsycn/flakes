@@ -22,11 +22,12 @@
       systemd-boot = {
         enable = true;
         xbootldrMountPoint = config.disko.devices.disk.main.content.partitions.boot.content.mountpoint;
-        extraInstallCommands = ''${pkgs.coreutils}/bin/install -D -m0755 ${pkgs.refind}/share/refind/drivers_x64/* -t ${config.boot.loader.efi.efiSysMountPoint}/EFI/systemd/drivers'';
+        extraInstallCommands = "${pkgs.coreutils}/bin/install -D -m0755 ${pkgs.refind}/share/refind/drivers_x64/* -t ${config.boot.loader.efi.efiSysMountPoint}/EFI/systemd/driver";
       };
       timeout = 1;
     };
     initrd = {
+      systemd.enable = true;
       availableKernelModules = [
         "xhci_pci"
         "thunderbolt"

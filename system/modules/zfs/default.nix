@@ -23,10 +23,27 @@ with lib;
       directories = [ "/etc/zfs/zfs-list.cache" ];
       files = [ "/etc/zfs/zpool.cache" ];
     };
-    fileSystems."/etc/zfs/zfs-list.cache" = mkIf config.environment.persistence."/persist".enable {
-      neededForBoot = true;
-    };
+    boot.initrd.systemd.mounts = [
+      {
+        wantedBy = [ "initrd.target" ];
+        before = [ "initrd-nixos-activation.service" ];
+        where = "/sysroot/etc/zfs/zfs-list.cache";
+        what = "/sysroot/persist/etc/zfs/zfs-list.cache";
+        unitConfig.DefaultDependencies = false;
+        type = "none";
+        options = concatStringsSep "," [
+          "bind"
+          "x-gvfs-hide"
+        ];
+      }
+    ];
     systemd.services.zfs-mount.enable = false;
+    assertions = [
+      {
+        assertion = config.boot.initrd.systemd.enable;
+        message = "zfs mount generator requires systemd in initrd";
+      }
+    ];
 
     services.zfs = {
       zed.settings.PATH = mkForce (
