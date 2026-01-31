@@ -2,7 +2,6 @@
   config,
   lib,
   pkgs,
-  user,
   ...
 }:
 with lib;
@@ -22,7 +21,7 @@ in
   };
 
   config = mkIf cfg.enable {
-    persist."/persist".users.${user}.directories = [
+    home.persistence."/persist".directories = [
       cfg.dataFolderName
       ".config/${cfg.nameShort}"
     ]

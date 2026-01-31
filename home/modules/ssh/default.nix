@@ -1,7 +1,6 @@
 {
   config,
   lib,
-  user,
   ...
 }:
 with lib;
@@ -28,7 +27,7 @@ with lib;
       };
     };
 
-    persist."/persist".users.${user} = {
+    home.persistence."/persist" = {
       directories = [
         {
           directory = ".ssh";

@@ -2,7 +2,6 @@
   config,
   lib,
   pkgs,
-  user,
   ...
 }:
 let
@@ -26,7 +25,7 @@ with lib;
         --enable-blink-features=MiddleClickAutoscroll'';
     };
     home.packages = [ cfg.package ];
-    persist."/persist".users.${user} = {
+    home.persistence."/persist" = {
       directories = [ ".config/microsoft-edge" ];
     };
   };

@@ -1,8 +1,6 @@
 {
   config,
   lib,
-  pkgs,
-  user,
   ...
 }:
 with lib;
@@ -22,7 +20,7 @@ in
       skip_file = "~*|.~*|*.tmp|*.lock|*.swp|*.partial|*desktop.ini";
     };
 
-    persist."/persist".users.${user} = {
+    home.persistence."/persist" = {
       directories = [
         ".config/onedrive"
       ]

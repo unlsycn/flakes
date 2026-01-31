@@ -1,6 +1,5 @@
 {
   self,
-  user,
   lib,
   ...
 }:
@@ -31,7 +30,7 @@
           }
           |> lib.mapAttrs (
             _: profiles:
-            self.buildConfigurationPhases.genHomeConfigurationForStandalone profiles { inherit user pkgs; }
+            self.buildConfigurationPhases.genHomeConfigurationForStandalone profiles { inherit pkgs; }
           );
       };
     };

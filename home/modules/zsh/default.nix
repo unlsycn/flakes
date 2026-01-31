@@ -140,7 +140,7 @@ in
 
     home.file.".p10k.zsh".source = ./.p10k.zsh;
 
-    persist."/persist".users.${user} = {
+    home.persistence."/persist" = {
       files = [ ".zsh_history" ];
     };
   };

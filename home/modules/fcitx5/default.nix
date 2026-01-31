@@ -2,7 +2,6 @@
   config,
   lib,
   pkgs,
-  user,
   ...
 }:
 let
@@ -39,6 +38,6 @@ with lib;
       };
     };
 
-    persist."/persist".users.${user}.directories = [ ".config/fcitx5" ];
+    home.persistence."/persist".directories = [ ".config/fcitx5" ];
   };
 }

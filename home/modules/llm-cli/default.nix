@@ -2,7 +2,6 @@
   config,
   lib,
   pkgs,
-  user,
   ...
 }:
 let
@@ -23,7 +22,7 @@ in
   config = lib.mkIf cfg.enable {
     home.packages = [ cfg.package ];
 
-    persist."/persist".users.${user}.directories = [
+    home.persistence."/persist".directories = [
       ".gemini"
     ];
   };

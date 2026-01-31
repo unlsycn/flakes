@@ -2,7 +2,6 @@
   config,
   lib,
   pkgs,
-  user,
   ...
 }:
 with lib;
@@ -48,7 +47,7 @@ with lib;
       rgfzf
     ];
 
-    persist."/persist".users.${user} = {
+    home.persistence."/persist" = {
       directories = [
         ".local"
         ".cache"
