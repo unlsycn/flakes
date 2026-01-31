@@ -10,6 +10,7 @@
     };
     loader.grub.device = "/dev/sda";
     initrd = {
+      systemd.enable = true;
       availableKernelModules = [
         "ata_piix"
         "uhci_hcd"
