@@ -19,6 +19,8 @@ with lib;
       blueman-applet.enable = true;
     };
 
+    home.persistence."/persist".enable = false;
+
     gtk.enable = true;
 
     qt = {

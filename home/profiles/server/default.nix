@@ -15,6 +15,8 @@ with lib;
 
     sops.secrets = mkForce { };
 
+    home.persistence."/persist".enable = false;
+
     programs = {
       ssh.matchBlocks."*".identityFile = mkForce [ ];
       zellij.copyCommand = "";
