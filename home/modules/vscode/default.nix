@@ -659,6 +659,9 @@ in
                 "jupyter-notebook" = "left";
               };
 
+              # Remote
+              "remote.autoForwardPortsFallback" = 0;
+              
               # Security
               "security.workspace.trust.emptyWindow" = true;
 
