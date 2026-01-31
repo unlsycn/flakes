@@ -47,154 +47,156 @@ in
       mutableExtensionsDir = false;
 
       profiles.default = {
-        extensions = with pkgs.nix-vscode-extensions.vscode-marketplace-release; [
-          # Themes
-          arcticicestudio.nord-visual-studio-code
-          whizkydee.material-palenight-theme
-          luqimin.tiny-light
-          pkief.material-icon-theme
+        extensions =
+          with pkgs.nix-vscode-extensions.vscode-marketplace-release;
+          [
+            # Themes
+            arcticicestudio.nord-visual-studio-code
+            whizkydee.material-palenight-theme
+            luqimin.tiny-light
+            pkief.material-icon-theme
 
-          # Git & Version Control
-          eamodio.gitlens
-          donjayamanne.githistory
-          wdhongtw.gpg-indicator
-          github.vscode-pull-request-github
-          github.vscode-github-actions
+            # Git & Version Control
+            eamodio.gitlens
+            donjayamanne.githistory
+            wdhongtw.gpg-indicator
+            github.vscode-pull-request-github
+            github.vscode-github-actions
 
-          # Editor Tools
-          asvetliakov.vscode-neovim
-          julianiaquinandi.nvim-ui-modifier
-          usernamehw.errorlens
-          gruntfuggly.todo-tree
-          adpyke.codesnap
-          sirtori.indenticator
-          mkxml.vscode-filesize
-          lacroixdavid1.vscode-format-context-menu
-          streetsidesoftware.code-spell-checker
-          vivaxy.vscode-conventional-commits
+            # Editor Tools
+            asvetliakov.vscode-neovim
+            julianiaquinandi.nvim-ui-modifier
+            usernamehw.errorlens
+            gruntfuggly.todo-tree
+            adpyke.codesnap
+            sirtori.indenticator
+            mkxml.vscode-filesize
+            lacroixdavid1.vscode-format-context-menu
+            streetsidesoftware.code-spell-checker
+            vivaxy.vscode-conventional-commits
 
-          # Remote Development
-          ms-vscode-remote.remote-ssh
-          ms-vscode-remote.remote-ssh-edit
-          ms-vscode-remote.remote-containers
-          ms-vscode-remote.remote-wsl
-          ms-vscode.remote-explorer
+            # Docker & Containers
+            ms-azuretools.vscode-docker
+            ms-azuretools.vscode-containers
+            docker.docker
 
-          # Docker & Containers
-          ms-azuretools.vscode-docker
-          ms-azuretools.vscode-containers
-          docker.docker
+            # Programming Languages
+            # Python
+            ms-python.python
+            ms-python.vscode-pylance
+            ms-python.isort
+            ms-python.pylint
+            eeyore.yapf
+            rickaym.manim-sideview
 
-          # LLM Assistant
-          github.copilot-chat
+            # JavaScript / TypeScript
+            esbenp.prettier-vscode
+            dbaeumer.vscode-eslint
+            angular.ng-template
 
-          # Programming Languages
-          # Python
-          ms-python.python
-          ms-python.vscode-pylance
-          ms-python.isort
-          ms-python.pylint
-          eeyore.yapf
-          rickaym.manim-sideview
+            # Go
+            golang.go
 
-          # JavaScript / TypeScript
-          esbenp.prettier-vscode
-          dbaeumer.vscode-eslint
-          angular.ng-template
+            # Rust
+            rust-lang.rust-analyzer
 
-          # Go
-          golang.go
+            # C/C++
+            llvm-vs-code-extensions.vscode-clangd
+            jeff-hykin.better-cpp-syntax
+            ms-vscode.cmake-tools
+            twxs.cmake
 
-          # Rust
-          rust-lang.rust-analyzer
+            # C#
+            # FIXME: https://github.com/nix-community/nix-vscode-extensions/issues/109
+            # ms-dotnettools.csharp
+            # ms-dotnettools.vscode-dotnet-runtime
 
-          # C/C++
-          llvm-vs-code-extensions.vscode-clangd
-          jeff-hykin.better-cpp-syntax
-          ms-vscode.cmake-tools
-          twxs.cmake
+            # Scala
+            scalameta.metals
+            scala-lang.scala
 
-          # C#
-          # FIXME: https://github.com/nix-community/nix-vscode-extensions/issues/109
-          # ms-dotnettools.csharp
-          # ms-dotnettools.vscode-dotnet-runtime
+            # OCaml
+            ocamllabs.ocaml-platform
 
-          # Scala
-          scalameta.metals
-          scala-lang.scala
+            # Zig
+            ziglang.vscode-zig
 
-          # OCaml
-          ocamllabs.ocaml-platform
+            # Idris
+            bamboo.idris2-lsp
 
-          # Zig
-          ziglang.vscode-zig
+            # Lua
+            sumneko.lua
 
-          # Idris
-          bamboo.idris2-lsp
+            # Nix
+            jnoortheen.nix-ide
+            mkhl.direnv
 
-          # Lua
-          sumneko.lua
+            # Typst
+            myriad-dreamin.tinymist
 
-          # Nix
-          jnoortheen.nix-ide
-          mkhl.direnv
+            # Hardware Description Languages
+            mshr-h.veriloghdl
+            zhwu95.riscv
 
-          # Typst
-          myriad-dreamin.tinymist
+            # LLVM
+            llvm-vs-code-extensions.vscode-mlir
+            jakob-erzar.llvm-tablegen
+            pkgs.nix-vscode-extensions.vscode-marketplace-release."13xforever".language-x86-64-assembly
 
-          # Hardware Description Languages
-          mshr-h.veriloghdl
-          jiang-percy.verilog-hdl-format
-          zhwu95.riscv
+            # Wolfram Language
+            lsp-wl.lsp-wl-client
+            shigma.vscode-wl
 
-          # LLVM
-          llvm-vs-code-extensions.vscode-mlir
-          jakob-erzar.llvm-tablegen
-          pkgs.nix-vscode-extensions.vscode-marketplace-release."13xforever".language-x86-64-assembly
+            # Kotlin
+            mathiasfrohlich.kotlin
 
-          # Wolfram Language
-          lsp-wl.lsp-wl-client
-          shigma.vscode-wl
+            # Web Development
+            ecmel.vscode-html-css
+            hollowtree.vue-snippets
+            ritwickdey.liveserver
+            foxundermoon.shell-format
 
-          # Kotlin
-          mathiasfrohlich.kotlin
+            # Markdown & Documentation
+            davidanson.vscode-markdownlint
+            shd101wyy.markdown-preview-enhanced
+            bierner.markdown-mermaid
+            gera2ld.markmap-vscode
 
-          # Web Development
-          ecmel.vscode-html-css
-          hollowtree.vue-snippets
-          ritwickdey.liveserver
-          foxundermoon.shell-format
+            # Data Formats
+            tamasfe.even-better-toml
+            redhat.vscode-yaml
+            redhat.vscode-xml
+            redhat.vscode-commons
 
-          # Markdown & Documentation
-          davidanson.vscode-markdownlint
-          shd101wyy.markdown-preview-enhanced
-          bierner.markdown-mermaid
-          gera2ld.markmap-vscode
+            # Jupyter Notebooks
+            ms-toolsai.jupyter
+            ms-toolsai.jupyter-keymap
+            ms-toolsai.jupyter-renderers
+            ms-toolsai.vscode-jupyter-cell-tags
+            ms-toolsai.vscode-jupyter-slideshow
 
-          # Data Formats
-          tamasfe.even-better-toml
-          redhat.vscode-yaml
-          redhat.vscode-xml
-          redhat.vscode-commons
+            # Utilities
+            ms-vscode.hexeditor
+            mateuszchudyk.hexinspector
+            ibm.output-colorizer
+            kamikillerto.vscode-colorize
+            anseki.vscode-color
+            christian-kohler.path-intellisense
+            ajshort.include-autocomplete
+            rioj7.vscode-remove-comments
+            wakatime.vscode-wakatime
+          ]
+          ++ lib.optional (!cfg.useAntigravity) [
+            # LLM Assistant
+            github.copilot-chat
 
-          # Jupyter Notebooks
-          ms-toolsai.jupyter
-          ms-toolsai.jupyter-keymap
-          ms-toolsai.jupyter-renderers
-          ms-toolsai.vscode-jupyter-cell-tags
-          ms-toolsai.vscode-jupyter-slideshow
-
-          # Utilities
-          ms-vscode.hexeditor
-          mateuszchudyk.hexinspector
-          ibm.output-colorizer
-          kamikillerto.vscode-colorize
-          anseki.vscode-color
-          christian-kohler.path-intellisense
-          ajshort.include-autocomplete
-          rioj7.vscode-remove-comments
-          wakatime.vscode-wakatime
-        ];
+            # Remote Development
+            ms-vscode-remote.remote-ssh
+            ms-vscode-remote.remote-ssh-edit
+            ms-vscode-remote.remote-containers
+            ms-vscode-remote.remote-wsl
+            ms-vscode.remote-explorer
+          ];
 
         userSettings =
           let
@@ -701,11 +703,6 @@ in
             when = "editorTextFocus && suggestWidgetMultipleSuggestions && suggestWidgetVisible";
           }
           {
-            key = "enter";
-            command = "-acceptSelectedSuggestion";
-            when = "acceptSuggestionOnEnter && suggestWidgetHasFocusedSuggestion && suggestWidgetVisible && suggestionMakesTextEdit && textInputFocus";
-          }
-          {
             key = "shift+enter";
             command = "selectPrevSuggestion";
             when = "editorTextFocus && suggestWidgetMultipleSuggestions && suggestWidgetVisible";
@@ -713,7 +710,7 @@ in
           {
             key = "tab";
             command = "acceptSelectedSuggestion";
-            when = "acceptSuggestionOnEnter && suggestWidgetHasFocusedSuggestion && suggestWidgetVisible && suggestionMakesTextEdit && textInputFocus";
+            when = "suggestWidgetHasFocusedSuggestion && suggestWidgetVisible && suggestionMakesTextEdit && textInputFocus";
           }
 
           # Terminal and Window Controls

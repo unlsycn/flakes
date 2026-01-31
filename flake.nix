@@ -4,9 +4,15 @@
   inputs = {
     nixpkgs.url = "nixpkgs/nixos-unstable";
     flake-parts.url = "github:hercules-ci/flake-parts";
-    impermanence.url = "github:nix-community/impermanence";
+    impermanence = {
+      url = "github:nix-community/impermanence";
+      inputs.nixpkgs.follows = "nixpkgs";
+      inputs.home-manager.follows = "home-manager";
+    };
     home-manager = {
-      url = "github:nix-community/home-manager/master";
+      # TODO: wait for https://github.com/nix-community/home-manager/pull/8674
+      # url = "github:nix-community/home-manager/master";
+      url = "github:unlsycn/home-manager/master";
       inputs.nixpkgs.follows = "nixpkgs";
     };
     vscode-server = {

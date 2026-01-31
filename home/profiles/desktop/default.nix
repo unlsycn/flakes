@@ -14,7 +14,7 @@ with lib;
     programs = {
       vscode = {
         enable = true;
-        useAntigravity = false;
+        useAntigravity = true;
       };
       alacritty.enable = true;
       waybar.enable = true;
