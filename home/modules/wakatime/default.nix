@@ -1,7 +1,6 @@
 {
   config,
   lib,
-  user,
   ...
 }:
 with lib;
@@ -12,7 +11,7 @@ in
   options.services.wakatime.enable = mkEnableOption "Wakatime integration for editors";
 
   config = mkIf cfg.enable {
-    persist."/persist".users.${user}.directories = [ ".wakatime" ];
+    home.persistence."/persist".directories = [ ".wakatime" ];
 
     sops.secrets.wakatime-api_key = {
       sopsFile = ./config.ini;

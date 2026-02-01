@@ -2,7 +2,6 @@
   config,
   lib,
   pkgs,
-  user,
   ...
 }:
 let
@@ -20,7 +19,7 @@ with lib;
   config = mkIf cfg.enable {
     home.packages = [ cfg.package ];
 
-    persist."/persist".users.${user}.directories = [
+    home.persistence."/persist".directories = [
       ".zotero"
     ];
   };

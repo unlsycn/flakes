@@ -1,13 +1,12 @@
 {
   config,
   lib,
-  user,
   ...
 }:
 with lib;
 {
   config = mkIf config.services.vscode-server.enable {
-    persist."/persist".users.${user} = {
+    home.persistence."/persist" = {
       directories = [ ".vscode-server" ];
     };
   };

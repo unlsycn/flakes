@@ -1,7 +1,6 @@
 {
   config,
   lib,
-  user,
   ...
 }:
 let
@@ -17,7 +16,7 @@ with lib;
       DisableTelemetry = true;
     };
 
-    persist."/persist".users.${user} = {
+    home.persistence."/persist" = {
       directories = [ ".zen" ];
     };
   };

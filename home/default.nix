@@ -70,6 +70,10 @@ with lib;
               home.homeDirectory = "/home/${user}";
               programs.home-manager.enable = true;
             }
+            {
+              # placeholder for impermanence config
+              options.home.persistence = with types; mkOption { type = attrsOf raw; };
+            }
           ];
         });
 

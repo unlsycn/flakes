@@ -1,6 +1,5 @@
 {
   config,
-  user,
   lib,
   ...
 }:
@@ -26,6 +25,6 @@ with lib;
       RestartSec = "5s";
     };
 
-    persist."/persist".users.${user}.files = [ ".config/age/key" ];
+    home.persistence."/persist".files = [ ".config/age/key" ];
   };
 }
