@@ -12,9 +12,7 @@
     ./samba.nix
   ];
 
-  homeManagerProfiles = [
-    "server"
-  ];
+  isServer = true;
 
   boot.tmp.cleanOnBoot = true;
 

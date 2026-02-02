@@ -11,8 +11,6 @@
   ];
 
   homeManagerProfiles = [
-    "cli"
-    "desktop"
     "intimate"
   ];
   hasDesktopEnvironment = true;

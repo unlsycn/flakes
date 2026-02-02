@@ -9,9 +9,7 @@
     ./hardware.nix
   ];
 
-  homeManagerProfiles = [
-    "server"
-  ];
+  isServer = true;
 
   boot = {
     kernelPackages = pkgs.linuxPackages_latest;

@@ -10,12 +10,9 @@ with lib;
   };
 
   config = mkIf config.profile.server.enable {
-    profile.cli.enable = mkForce true;
     targets.genericLinux.enable = true;
 
     sops.secrets = mkForce { };
-
-    home.persistence."/persist".enable = false;
 
     programs = {
       ssh.matchBlocks."*".identityFile = mkForce [ ];

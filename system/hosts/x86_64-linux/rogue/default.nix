@@ -8,11 +8,6 @@
     ./hardware.nix
   ];
 
-  homeManagerProfiles = [
-    "cli"
-    "handheld"
-  ];
-
   handheld = {
     enable = true;
     hhd.enable = true;

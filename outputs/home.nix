@@ -27,7 +27,10 @@
               "cli"
               "intimate"
             ];
-            "server" = [ "server" ];
+            "server" = [
+              "cli"
+              "server"
+            ];
           }
           |> lib.mapAttrs (
             _: profiles:

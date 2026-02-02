@@ -88,7 +88,17 @@ with lib;
               description = "Home Manager profiles to enable";
             };
 
+            options.isServer = mkEnableOption "Server host";
+
             config = {
+              homeManagerProfiles = [
+                "cli"
+              ]
+              ++ optionals config.isServer [ "server" ]
+              ++ optionals config.hasDesktopEnvironment [ "desktop" ]
+              ++ optionals config.handheld.enable [ "handheld" ]
+              ++ optionals config.environment.persistence."/persist".enable [ "stateless" ];
+
               home-manager = {
                 users.${user} = genSharedHomeConfiguration config.homeManagerProfiles;
                 useGlobalPkgs = true;
