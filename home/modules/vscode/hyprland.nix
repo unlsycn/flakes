@@ -23,10 +23,16 @@ in
 
       windowRules.vscode-opacity = {
         props = [
-          { type = "class"; value = "code"; }
+          {
+            type = "class";
+            value = cfg.package.meta.mainProgram;
+          }
         ];
         effects = [
-          { type = "opacity"; value = "0.95"; }
+          {
+            type = "opacity";
+            value = "0.95";
+          }
         ];
       };
     };
