@@ -136,12 +136,14 @@ in
           WORDCHARS=''${WORDCHARS//\/}
         ''
       ];
+
+      dotDir = "${config.xdg.configHome}/zsh";
     };
 
     home.file.".p10k.zsh".source = ./.p10k.zsh;
 
     home.persistence."/persist" = {
-      files = [ ".zsh_history" ];
+      directories = [ ".config/zsh" ];
     };
   };
 }
