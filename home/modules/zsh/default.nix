@@ -68,9 +68,10 @@ in
         "l" = "ls -CF";
         "diff" = icdiff;
         "n" = nnn;
-        "dev" = "${zellij} a dev || ${zellij} -s dev";
+        "dev" = "${zellij} a -c dev";
         "cdtmp" = "cd `mktemp -d`";
         "pastebin" = "curl -F \"c=@-\" \"http://fars.ee/\"";
+        "gcm" = "gemini -i /git:commit";
       };
 
       zinit = {
