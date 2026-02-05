@@ -10,6 +10,7 @@
     ./networking.nix
     ./wireguard.nix
     ./samba.nix
+    ./nginx.nix
   ];
 
   isServer = true;

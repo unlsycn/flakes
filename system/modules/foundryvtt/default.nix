@@ -24,6 +24,8 @@ with lib;
       telemetry = false;
     };
 
-    networking.firewall.allowedTCPPorts = [ config.services.foundryvtt.port ];
+    networking.firewall.allowedTCPPorts = mkIf (!config.services.nginx.enable) [
+      config.services.foundryvtt.port
+    ];
   };
 }
