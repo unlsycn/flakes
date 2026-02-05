@@ -27,7 +27,7 @@ with lib;
             ++ [
               vscode-server.homeModules.default
               sops-nix.homeManagerModules.sops
-              inputs.zen-browser.homeModules.beta
+              zen-browser.homeModules.beta
             ];
 
           profile =
@@ -45,9 +45,13 @@ with lib;
 
       genHomeConfigurationForStandalone =
         profiles:
-        { user, pkgs }:
+        {
+          user,
+          pkgs,
+          extraSpecialArgs,
+        }:
         (inputs.home-manager.lib.homeManagerConfiguration {
-          inherit pkgs;
+          inherit pkgs extraSpecialArgs;
           modules = [
             (genSharedHomeConfiguration profiles)
             {

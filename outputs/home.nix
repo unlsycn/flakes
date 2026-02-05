@@ -9,6 +9,7 @@
     {
       pkgs,
       config,
+      inputs',
       ...
     }:
     {
@@ -35,7 +36,10 @@
           }
           |> lib.mapAttrs (
             _: profiles:
-            self.buildConfigurationPhases.genHomeConfigurationForStandalone profiles { inherit user pkgs; }
+            self.buildConfigurationPhases.genHomeConfigurationForStandalone profiles {
+              inherit user pkgs;
+              extraSpecialArgs = { inherit inputs'; };
+            }
           );
       };
 
