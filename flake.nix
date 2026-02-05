@@ -10,9 +10,7 @@
       inputs.home-manager.follows = "home-manager";
     };
     home-manager = {
-      # TODO: wait for https://github.com/nix-community/home-manager/pull/8674
-      # url = "github:nix-community/home-manager/master";
-      url = "github:unlsycn/home-manager/master";
+      url = "github:nix-community/home-manager/master";
       inputs.nixpkgs.follows = "nixpkgs";
     };
     vscode-server = {
