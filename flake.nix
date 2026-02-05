@@ -61,6 +61,13 @@
         flake-parts.follows = "flake-parts";
       };
     };
+    buildbot-nix = {
+      url = "github:nix-community/buildbot-nix";
+      inputs = {
+        nixpkgs.follows = "nixpkgs";
+        flake-parts.follows = "flake-parts";
+      };
+    };
     nix-dram = {
       url = "github:dramforever/nix-dram";
       inputs.nixpkgs.follows = "nixpkgs";
@@ -128,7 +135,7 @@
             };
           };
 
-          formatter = pkgs.nixfmt-rfc-style;
+          formatter = pkgs.nixfmt;
 
           devShells.default = pkgs.mkShell {
             packages = with pkgs; [

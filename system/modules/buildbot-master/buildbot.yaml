@@ -1,0 +1,65 @@
+buildbot-github-webhook-secret: ENC[AES256_GCM,data:U+Dtjm9cMeBTXZkViSI=,iv:R1gWHP8QQHmO+16awRomDCSgAzZO8i+DRPPfY130UVk=,tag:H78W5BCgf+Ib5GPUm/LJGg==,type:str]
+buildbot-github-oauth-secret: ENC[AES256_GCM,data:g5MBiF/rpHSrdSLPebjcAsxJxp24U5/vGmFuq7kdAcmRZ5/ei2Uq2g==,iv:JHfwjeMq0a1fdaIaxdlzC7Gvttr47yknhCON9tkOGT8=,tag:7RIq3N8W7J57ShKlguiBFA==,type:str]
+sops:
+    age:
+        - recipient: age1f9shnyrs54j566xe90hmv0hu6tj9f7xc6zsmt9rr6qhgnc9qcvlq9m6ras
+          enc: |
+            -----BEGIN AGE ENCRYPTED FILE-----
+            YWdlLWVuY3J5cHRpb24ub3JnL3YxCi0+IFgyNTUxOSBOTGlOSkU0SEtMTjRkTnlZ
+            eFVqRHpqem1lZmVUWkR1R3BBRS9QU0U4YkNRCmxNSlhoM084eGoxdENjZ0NVTEJP
+            amZhdHZIQm5MT1Avb2dPaGxaR1hjZmMKLS0tIE9RaC8yelJ6STU5aE1ETmpPckVj
+            eVdVbVdWU09UMWlHOCtTSlhVNUpZYVkKgWNOFj8DQAf8x7CxvyquacGnq+VvcdTK
+            qdY0qnJ/3pN8Pa1gardBDr9Pa1buWjYm8w4cwlWq0oqBzhJPbzK8Nw==
+            -----END AGE ENCRYPTED FILE-----
+        - recipient: age1azuuur33nmpr6pwmts97vyth4q0aqy785945ktz27cwp3n8jaa6qlu6uuu
+          enc: |
+            -----BEGIN AGE ENCRYPTED FILE-----
+            YWdlLWVuY3J5cHRpb24ub3JnL3YxCi0+IFgyNTUxOSBmcjNsYjllK2Fyb1ZjUG8w
+            TkhRQ0I0cGVaQ3ZlTXRpRjhtWWlINUtzL3hVCnI0TnNTM1o5YXVLcERlRDNpMk04
+            azFKeHFzUjJEQ1BHeUx0SW8yZjJEQ2cKLS0tIDRJbWFBZlVqOCtMakJhaWtIdGk1
+            ZFNTRzJRSytKb3M4bU9rd3JDQllYT0EKkZWGDOHmmNMm6wZUPQLAncpW82rrANyD
+            gAbJSt1JrF4hHxBkwMlUF+3Z9ecr33udUI8qFzyGj7wqJLZ5B49R8Q==
+            -----END AGE ENCRYPTED FILE-----
+        - recipient: age167rgg809xt9thny888nwzrh54d8jywpf7zjfp3kdq66gq73y8prs3q49q2
+          enc: |
+            -----BEGIN AGE ENCRYPTED FILE-----
+            YWdlLWVuY3J5cHRpb24ub3JnL3YxCi0+IFgyNTUxOSBadEF5NG1meFM2bDMyeHU2
+            RmVKcjRIM2pTOEV4ZitYbHlHS3RJS3ppdUVFCkx3VWF6c2FIT2hLZGVKajhicURT
+            aW9uWGFUSVMvVkV4QzErMzhRcCtSMTQKLS0tIHBoVFlCN3JrTVMvbVRwc2VCR0Fw
+            RkdUS1dQRkNRZEh0YkJoNVVOcW9QbkkKzOYuc3jeU1BBFKLav13dKTedCNoIISCs
+            z2aistUmmLPtA8cimBj3LRgkw43fZR7MlFIzOmURFUEJJR+IPNVDmA==
+            -----END AGE ENCRYPTED FILE-----
+        - recipient: age14petwhzdexe7jyzq483svu35qe4a666m6tu6wr8cs7929s7krgyq72sagz
+          enc: |
+            -----BEGIN AGE ENCRYPTED FILE-----
+            YWdlLWVuY3J5cHRpb24ub3JnL3YxCi0+IFgyNTUxOSBYbzR2a0xMVlhXdWJHdGJt
+            NmpHUWROblBnZUlRd2hVZ3NlcHZRVTlDa2dBCmI2MUQyNldxRFJwekFvNzI0dVQy
+            aVZxbVpQRXlidnkra3cvRTRLYlRSYVEKLS0tIGNnUEp1UlZnaVlCMmh5RHpxTnNj
+            U2xOSHVPZU5VcUxEazZBL1JLdXd2UTgKFBWSHON109Yc76Mu8jMid+ymIccZekab
+            WiE2G5+3ahqca2kjEyr6c55P675TDE63O2lIvy8AlcWJltkCaUdzMQ==
+            -----END AGE ENCRYPTED FILE-----
+        - recipient: age1q7nwx94wx4vkwwqkp0r7qhpr4nr727u0tld69vlfq5k5zd8ejehscvfdzv
+          enc: |
+            -----BEGIN AGE ENCRYPTED FILE-----
+            YWdlLWVuY3J5cHRpb24ub3JnL3YxCi0+IFgyNTUxOSBYbTFvSWxVMHpDd2ppMGVC
+            YUdCQStJNlgzRTFpeGxnVlB4ZE42bXNERlRrCkd2eTJqbzZrS2VDWUNSQitHMld3
+            bERoeVFLUTNCZi84WmpPVnRSK3poTFkKLS0tIDRHdjVyZUNuK0NDY0w4L3ZqRWxD
+            aUdMR2g4OGtUaFNKbVB0bnBlOG54d1kKmvRZojiVNV2ei4bDxVJ/mH4fOfrw7IOO
+            yvGoklpY4lWUTO04OszkCpZacU7BDOUISmYvNxFbpgac4CEP+Qe0Mg==
+            -----END AGE ENCRYPTED FILE-----
+    lastmodified: "2026-02-05T16:03:54Z"
+    mac: ENC[AES256_GCM,data:JVJvlu9McCq3GdJcgcPKSl+hjf67TapOJ+ol1mN2siDzx2kAYHgConiT19KpCl/XKc8wMbjEQtQFP5Z2IQzIBFvDbiLS3tr18owDsyxOrQo6oTnzV7A93hTQ2kMqUDvadSxEUXX2sBGEVR57FgVzwvSgsnydry1kZbBUIp2aRp4=,iv:4kDhT5GiLwwj9jN2zhuEUL2ckeVE7yR23Fz9wsaP/wA=,tag:IqtSlXUIJ9nuOfQTDhr/Xg==,type:str]
+    pgp:
+        - created_at: "2026-02-05T15:27:49Z"
+          enc: |-
+            -----BEGIN PGP MESSAGE-----
+
+            hF4DpTKc/nNpEUcSAQdAES2ZsBs1lh20yXzv7g33KDJaYYE5xqzTh3SJzyM7i0Mw
+            vhW2i7mfwEbP5mhM60YV0ncfZ9ofRL2OU2Fkj4jLXWm9quzc9upvv0oIHqmomvf+
+            0l4BBbl3nFWN4/I4dmw/D5HmTYgJPAhHvhvq8s1pnf85+XRZYpxKe+CyBD8ELtoh
+            gjrv+VhiWZQh1/TY0XZAigPVs4tw40/TkfNM3a4CgyvsIow1Ms8VG6Jb/9Uz+FfK
+            =mcEI
+            -----END PGP MESSAGE-----
+          fp: 817ecf0aa56248a2b202f8610e50958c4ccbdd9c
+    unencrypted_suffix: _unencrypted
+    version: 3.11.0

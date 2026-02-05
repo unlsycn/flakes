@@ -8,6 +8,7 @@
   perSystem =
     {
       pkgs,
+      config,
       ...
     }:
     {
@@ -37,5 +38,9 @@
             self.buildConfigurationPhases.genHomeConfigurationForStandalone profiles { inherit user pkgs; }
           );
       };
+
+      checks =
+        config.legacyPackages.homeConfigurations
+        |> lib.mapAttrs' (name: cfg: lib.nameValuePair "home-manager-${name}" cfg.activationPackage);
     };
 }

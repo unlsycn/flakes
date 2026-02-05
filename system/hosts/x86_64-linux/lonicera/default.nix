@@ -11,6 +11,7 @@
     ./wireguard.nix
     ./samba.nix
     ./nginx.nix
+    ./buildbot.nix
   ];
 
   isServer = true;
@@ -43,6 +44,10 @@
         signKeyPaths = [ "/var/lib/secrets/harmonia.secret" ];
       };
       daemon.enable = true;
+    };
+    buildbot-nix = {
+      master.enable = true;
+      worker.enable = true;
     };
   };
 
