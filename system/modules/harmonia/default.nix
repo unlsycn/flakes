@@ -1,6 +1,7 @@
 {
   config,
   lib,
+  inputs,
   ...
 }:
 with lib;
@@ -8,6 +9,7 @@ let
   cfg = config.services.harmonia-dev;
 in
 {
+  imports = [ inputs.harmonia.nixosModules.harmonia ];
   options.services.harmonia-dev = {
     port = mkOption {
       type = types.int;

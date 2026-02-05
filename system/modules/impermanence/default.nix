@@ -1,10 +1,12 @@
 {
   lib,
   user,
+  inputs,
   ...
 }:
 with lib;
 {
+  imports = [ inputs.impermanence.nixosModules.impermanence ];
   environment.persistence."/persist" = {
     enable = mkDefault false;
     hideMounts = true;

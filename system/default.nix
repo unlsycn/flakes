@@ -43,12 +43,8 @@ in
             };
             modules = attrValues self.nixosModules ++ [
               ../system/hosts/${system}/${host}
-              impermanence.nixosModules.impermanence
               disko.nixosModules.disko
               sops-nix.nixosModules.sops
-              foundryvtt.nixosModules.foundryvtt
-              jovian-nixos.nixosModules.default
-              harmonia.nixosModules.harmonia
               home-manager.nixosModules.home-manager
               (self.buildConfigurationPhases.genHomeModuleForHost {
                 inherit user;

@@ -1,11 +1,13 @@
 {
   config,
+  inputs,
   inputs',
   lib,
   ...
 }:
 with lib;
 {
+  imports = [ inputs.foundryvtt.nixosModules.foundryvtt ];
   options.services.foundryvtt = {
     telemetry = mkOption {
       type = types.bool;

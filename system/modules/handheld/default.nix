@@ -3,10 +3,13 @@
   lib,
   user,
   pkgs,
+  inputs,
   ...
 }:
 with lib;
 {
+  imports = [ inputs.jovian-nixos.nixosModules.default ];
+
   options = {
     handheld = mkOption {
       type = types.submodule {
