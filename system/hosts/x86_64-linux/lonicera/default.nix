@@ -36,6 +36,7 @@
   services = {
     zfs.enable = true;
     foundryvtt.enable = true;
+    samba.enable = true;
     harmonia-dev = {
       cache = {
         enable = true;

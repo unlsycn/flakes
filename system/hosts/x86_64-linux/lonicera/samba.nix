@@ -1,7 +1,6 @@
 { ... }:
 {
   services.samba = {
-    enable = true;
     nmbd.enable = false;
     settings = {
       global = {
