@@ -35,6 +35,13 @@
   services = {
     zfs.enable = true;
     foundryvtt.enable = true;
+    harmonia-dev = {
+      cache = {
+        enable = true;
+        signKeyPaths = [ "/var/lib/secrets/harmonia.secret" ];
+      };
+      daemon.enable = true;
+    };
   };
 
   system.stateVersion = "23.11";
