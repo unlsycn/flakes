@@ -21,11 +21,18 @@ in
   };
 
   config = mkIf cfg.enable {
-    home.persistence."/persist".directories = [
-      cfg.dataFolderName
-      ".config/${cfg.nameShort}"
-    ]
-    ++ optional cfg.continue.enable ".continue";
+    home.persistence."/persist" = {
+      directories = [
+        cfg.dataFolderName
+        ".config/${cfg.nameShort}"
+      ]
+      ++ optionals cfg.useAntigravity [
+        ".gemini/antigravity"
+        ".gemini/antigravity-browser-profile"
+      ]
+      ++ optional cfg.continue.enable ".continue";
+      files = optional cfg.useAntigravity ".gemini/GEMINI.md";
+    };
 
     programs.vscode = {
       package =
@@ -661,7 +668,7 @@ in
 
               # Remote
               "remote.autoForwardPortsFallback" = 0;
-              
+
               # Security
               "security.workspace.trust.emptyWindow" = true;
 

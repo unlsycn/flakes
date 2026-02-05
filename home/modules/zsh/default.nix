@@ -31,8 +31,9 @@ let
   '';
 
   icdiff = "${pkgs.icdiff}/bin/icdiff";
-  zellij = getExe pkgs.zellij;
-  nnn = getExe pkgs.nnn;
+  zellij = getExe config.programs.zellij.package;
+  nnn = getExe config.programs.nnn.package;
+  opencode = getExe config.programs.opencode.package;
 in
 {
   imports = [ ./zinit.nix ];
@@ -71,7 +72,7 @@ in
         "dev" = "${zellij} a -c dev";
         "cdtmp" = "cd `mktemp -d`";
         "pastebin" = "curl -F \"c=@-\" \"http://fars.ee/\"";
-        "gcm" = "gemini -i /git:commit";
+        "gcm" = "${opencode} --prompt /commit";
       };
 
       zinit = {

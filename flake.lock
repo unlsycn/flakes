@@ -326,6 +326,26 @@
         "type": "indirect"
       }
     },
+    "opencode": {
+      "inputs": {
+        "nixpkgs": [
+          "nixpkgs"
+        ]
+      },
+      "locked": {
+        "lastModified": 1770280925,
+        "narHash": "sha256-See+ZbkNVYKiAGfdjiJd1rfoHXAEJ/WpuhiK9xJmCJQ=",
+        "owner": "anomalyco",
+        "repo": "opencode",
+        "rev": "fa20bc296b134d17840e993656e175e11ee15b3d",
+        "type": "github"
+      },
+      "original": {
+        "owner": "anomalyco",
+        "repo": "opencode",
+        "type": "github"
+      }
+    },
     "root": {
       "inputs": {
         "disko": "disko",
@@ -337,6 +357,7 @@
         "jovian-nixos": "jovian-nixos",
         "nix-dram": "nix-dram",
         "nixpkgs": "nixpkgs_2",
+        "opencode": "opencode",
         "rose-pine-hyprcursor": "rose-pine-hyprcursor",
         "sops-nix": "sops-nix",
         "ssh-keys": "ssh-keys",

@@ -30,7 +30,7 @@ with lib;
       ripgrep.enable = true;
       nnn.enable = true;
       zellij.enable = true;
-      gemini-cli.enable = true;
+      opencode.enable = true;
     };
 
     services = {
