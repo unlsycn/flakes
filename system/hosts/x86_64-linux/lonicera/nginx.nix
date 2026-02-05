@@ -1,5 +1,4 @@
 { config, lib, ... }:
-with lib;
 let
   port = 4433;
 in
@@ -15,82 +14,48 @@ in
 
   sops.secrets.dns-env = {
     sopsFile = ./dns.env;
-    format = "binary";
+    format = "dotenv";
   };
 
-  services.nginx = {
-    enable = true;
-    recommendedProxySettings = true;
-    recommendedTlsSettings = true;
-    clientMaxBodySize = "1024m";
+  services = {
+    nginx =
+      let
+        patchPort = {
+          listen = [
+            {
+              addr = "0.0.0.0";
+              inherit port;
+              ssl = true;
+            }
+            {
+              addr = "[::]";
+              inherit port;
+              ssl = true;
+            }
+          ];
+        };
+      in
+      {
+        enable = true;
+        recommendedProxySettings = true;
+        recommendedTlsSettings = true;
+        clientMaxBodySize = "1024m";
 
-    virtualHosts = {
-      "cache.unlsycn.com" = mkIf config.services.harmonia-dev.cache.enable {
-        listen = [
-          {
-            addr = "0.0.0.0";
-            port = port;
-            ssl = true;
-          }
-          {
-            addr = "[::]";
-            port = port;
-            ssl = true;
-          }
-        ];
-        enableACME = true;
-        onlySSL = true;
-        acmeRoot = null;
-        locations."/".proxyPass = "http://127.0.0.1:${config.services.harmonia-dev.port |> toString}";
-      };
-
-      "hydra.unlsycn.com" = mkIf config.services.hydra.enable {
-        listen = [
-          {
-            addr = "0.0.0.0";
-            port = port;
-            ssl = true;
-          }
-          {
-            addr = "[::]";
-            port = port;
-            ssl = true;
-          }
-        ];
-        enableACME = true;
-        onlySSL = true;
-        acmeRoot = null;
-        locations."/" = {
-          proxyPass = "http://127.0.0.1:${config.services.hydra.port |> toString}";
-          extraConfig = ''
-            proxy_set_header X-Forwarded-Port ${toString port};
-          '';
-
+        virtualHosts = {
+          "cache.unlsycn.com" = patchPort;
+          "hydra.unlsycn.com" = patchPort // {
+            locations."/".extraConfig = ''
+              proxy_set_header X-Forwarded-Port ${toString port};
+            '';
+          };
+          "fvtt.unlsycn.com" = patchPort;
+          "build.unlsycn.com" = patchPort;
         };
       };
-
-      "fvtt.unlsycn.com" = mkIf config.services.foundryvtt.enable {
-        listen = [
-          {
-            addr = "0.0.0.0";
-            port = port;
-            ssl = true;
-          }
-          {
-            addr = "[::]";
-            port = port;
-            ssl = true;
-          }
-        ];
-        enableACME = true;
-        onlySSL = true;
-        acmeRoot = null;
-        locations."/" = {
-          proxyPass = "http://127.0.0.1:${config.services.foundryvtt.port |> toString}";
-          proxyWebsockets = true;
-        };
-      };
-    };
+    # patch buildbot-master.buildbotUrl to use the non-standard port
+    buildbot-master.buildbotUrl = lib.mkForce "${
+      if config.services.buildbot-nix.master.useHTTPS then "https" else "http"
+    }://${config.services.buildbot-nix.master.domain}:${toString port}/";
   };
 
   networking.firewall.allowedTCPPorts = [ port ];

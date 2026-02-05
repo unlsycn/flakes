@@ -6,6 +6,9 @@
   ...
 }:
 with lib;
+let
+  cfg = config.services.foundryvtt;
+in
 {
   imports = [ inputs.foundryvtt.nixosModules.foundryvtt ];
   options.services.foundryvtt = {
@@ -15,7 +18,7 @@ with lib;
     };
   };
 
-  config = mkIf config.services.foundryvtt.enable {
+  config = mkIf cfg.enable {
     services.foundryvtt = {
       package = inputs'.foundryvtt.packages.foundryvtt_13;
       hostName = "fvtt.unlsycn.com";
@@ -26,8 +29,18 @@ with lib;
       telemetry = false;
     };
 
+    services.nginx.virtualHosts."fvtt.unlsycn.com" = mkIf config.services.nginx.enable {
+      onlySSL = true;
+      enableACME = true;
+      acmeRoot = null;
+      locations."/" = {
+        proxyPass = "http://127.0.0.1:${cfg.port |> toString}";
+        proxyWebsockets = true;
+      };
+    };
+
     networking.firewall.allowedTCPPorts = mkIf (!config.services.nginx.enable) [
-      config.services.foundryvtt.port
+      cfg.port
     ];
   };
 }

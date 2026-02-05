@@ -21,6 +21,12 @@ in
       bind = "${if config.services.nginx.enable then "localhost" else "[::]"}:${cfg.port |> toString}";
       enable_compression = true;
     };
+    services.nginx.virtualHosts."cache.unlsycn.com" = mkIf config.services.nginx.enable {
+      onlySSL = true;
+      enableACME = true;
+      acmeRoot = null;
+      locations."/".proxyPass = "http://127.0.0.1:${cfg.port |> toString}";
+    };
     networking.firewall.allowedTCPPorts = mkIf (!config.services.nginx.enable) [
       cfg.port
     ];

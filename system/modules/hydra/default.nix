@@ -9,6 +9,14 @@ with lib;
     minimumDiskFree = 4;
     useSubstitutes = true;
   };
+
+  services.nginx.virtualHosts."hydra.unlsycn.com" = mkIf config.services.nginx.enable {
+    onlySSL = true;
+    enableACME = true;
+    acmeRoot = null;
+    locations."/".proxyPass = "http://127.0.0.1:${config.services.hydra.port |> toString}";
+  };
+
   networking.firewall.allowedTCPPorts = mkIf (!config.services.nginx.enable) [
     config.services.hydra.port
   ];

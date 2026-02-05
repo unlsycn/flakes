@@ -2,7 +2,6 @@
   config,
   inputs,
   lib,
-  user,
   ...
 }:
 with lib;
@@ -23,12 +22,12 @@ with lib;
       github = {
         topic = "buildbot-unlsycn";
         appId = 2802083;
-        oauthId = "Iv23liQ8a05844a479d2";
+        oauthId = "Iv23livwH5gqKRzhSokO";
         appSecretKeyFile = config.sops.secrets."buildbot-github-app-secret-key".path;
         webhookSecretFile = config.sops.secrets."buildbot-github-webhook-secret".path;
         oauthSecretFile = config.sops.secrets."buildbot-github-oauth-secret".path;
       };
-      admins = [ user ];
+      admins = [ "unlsycn" ];
       useHTTPS = true;
     };
     nginx.virtualHosts."${config.services.buildbot-nix.master.domain}" =
