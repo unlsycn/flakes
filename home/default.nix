@@ -96,7 +96,6 @@ with lib;
               description = "Home Manager profiles to enable";
             };
 
-            options.isServer = mkEnableOption "Server host";
 
             config = {
               homeManagerProfiles = [
