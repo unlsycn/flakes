@@ -40,9 +40,12 @@
     kernelModules = [ "kvm-intel" ];
     extraModulePackages = [ ];
     kernelParams = [
+      # 2 GiB
+      "zfs.zfs_arc_max=2147483648"
       # 1 GiB
       "zfs.zfs_arc_min=1073741824"
     ];
+    kernel.sysctl."kernel.sysrq" = 246;
   };
 
   disko.devices = {

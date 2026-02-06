@@ -4,8 +4,8 @@ final: prev: {
 
     src = prev.fetchgit {
       url = "https://git.kernel.org/pub/scm/linux/kernel/git/firmware/linux-firmware.git";
-      rev = "47bc8a2407426274d099607d5af419cb616d9209";
-      hash = "sha256-V581DtceoFuY/GP4eTcq+aACUd+WY+SdtuDUX8UHB+4=";
+      rev = "575e6573d8f7bc88e33871bcb07292508577e46a";
+      hash = "sha256-zL2ck91IBjBw/10YirxfoScEjbvEXVBR7bpLzuF3kDc=";
     };
 
     installPhase = ''
@@ -18,9 +18,10 @@ final: prev: {
   };
 
   lnl-alsa-ucm-conf = prev.alsa-ucm-conf.overrideAttrs (oldAttrs: {
-    src = fetchTarball {
-      url = "https://github.com/alsa-project/alsa-ucm-conf/archive/421e37b.tar.gz";
-      sha256 = "sha256:08rsv6wn32d9zrw1gl2jp7rqzj8m6bdkn0xc7drzf9gfbf6fvmpb";
+    src = prev.fetchgit {
+      url = "https://github.com/alsa-project/alsa-ucm-conf.git";
+      rev = "858d3a2443c66a7d5a2b5598308619237e8fc75d";
+      sha256 = "sha256-Vds79ITUSZOqg4yf/dnYu2muxrvJuYBpvrtde/7+m9Y=";
     };
     installPhase = ''
       mkdir -p $out/share/alsa
