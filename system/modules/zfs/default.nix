@@ -23,7 +23,7 @@ with lib;
       directories = [ "/etc/zfs/zfs-list.cache" ];
       files = [ "/etc/zfs/zpool.cache" ];
     };
-    boot.initrd.systemd.mounts = [
+    boot.initrd.systemd.mounts = mkIf config.environment.persistence."/persist".enable [
       {
         wantedBy = [ "initrd.target" ];
         before = [ "initrd-nixos-activation.service" ];

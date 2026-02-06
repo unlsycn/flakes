@@ -85,6 +85,14 @@
           type = "zfs_fs";
           options."com.sun:auto-snapshot" = "true";
         };
+        "nix" = {
+          type = "zfs_fs";
+          mountpoint = "/nix";
+          options = {
+            mountpoint = "legacy";
+            "com.sun:auto-snapshot" = "false";
+          };
+        };
       };
     };
   };
