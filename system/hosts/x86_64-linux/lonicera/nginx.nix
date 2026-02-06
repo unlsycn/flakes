@@ -33,6 +33,7 @@ in
               ssl = true;
             }
           ];
+          extraConfig = "error_page 497 https://$host:${toString port}$request_uri; ";
         };
       in
       {
