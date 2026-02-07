@@ -72,6 +72,13 @@
       url = "github:dramforever/nix-dram";
       inputs.nixpkgs.follows = "nixpkgs";
     };
+    nvf = {
+      url = "github:notashelf/nvf";
+      inputs = {
+        nixpkgs.follows = "nixpkgs";
+        flake-parts.follows = "flake-parts";
+      };
+    };
 
     ssh-keys = {
       url = "https://github.com/unlsycn.keys";

@@ -18,7 +18,7 @@ with lib;
       ssh.enable = true;
       git.enable = true;
       gpg.enable = true;
-      neovim.enable = true;
+      nvf.enable = true;
       jq.enable = true;
       fastfetch.enable = true;
       fzf.enable = true;

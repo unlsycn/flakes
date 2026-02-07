@@ -1,28 +1,18 @@
 {
   config,
+  inputs,
   lib,
-  pkgs,
   ...
 }:
 with lib;
-let
-  configRepos = pkgs.callPackage ./_sources/generated.nix { };
-in
 {
-  config = mkIf config.programs.neovim.enable {
-    programs.neovim = {
-      defaultEditor = true;
-      viAlias = true;
-      vimAlias = true;
-      extraPackages = with pkgs; [
-        gcc
-        lua-language-server
-      ];
-    };
+  imports = [
+    inputs.nvf.homeManagerModules.default
+    ./cli.nix
+    ./vscode.nix
+  ];
 
-    xdg.configFile = {
-      "nvim".source = configRepos.nvim.src;
-      "nvim-vscode".source = configRepos.nvim-vscode.src;
-    };
+  config.programs.nvf = mkIf config.programs.nvf.enable {
+    defaultEditor = true;
   };
 }

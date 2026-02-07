@@ -1,9 +1,0 @@
-[nvim]
-src.git = "https://github.com/unlsycn/.vim"
-fetch.github = "unlsycn/.vim"
-src.branch = "cli"
-
-[nvim-vscode]
-src.git = "https://github.com/unlsycn/.vim"
-fetch.github = "unlsycn/.vim"
-src.branch = "vscode"

@@ -2,6 +2,7 @@
   self,
   user,
   lib,
+  inputs,
   ...
 }:
 {
@@ -38,7 +39,7 @@
             _: profiles:
             self.buildConfigurationPhases.genHomeConfigurationForStandalone profiles {
               inherit user pkgs;
-              extraSpecialArgs = { inherit inputs'; };
+              extraSpecialArgs = { inherit inputs inputs'; };
             }
           );
       };
