@@ -3,11 +3,21 @@ with lib;
 with types;
 let
   cfg = config.wayland.windowManager.hyprland;
-  
+
   propModule = submodule {
     options = {
       type = mkOption {
-        type = enum [ "class" "title" "initialClass" "initialTitle" "floating" "fullscreen" "pinned" "workspace" "xwayland" ];
+        type = enum [
+          "class"
+          "title"
+          "initialClass"
+          "initialTitle"
+          "floating"
+          "fullscreen"
+          "pinned"
+          "workspace"
+          "xwayland"
+        ];
         description = "The type of match property";
       };
       value = mkOption {
@@ -16,7 +26,7 @@ let
       };
     };
   };
-  
+
   effectModule = submodule {
     options = {
       type = mkOption {
@@ -30,7 +40,7 @@ let
       };
     };
   };
-  
+
   ruleModule = submodule {
     options = {
       props = mkOption {
@@ -44,7 +54,7 @@ let
           ]
         '';
       };
-      
+
       effects = mkOption {
         type = listOf effectModule;
         default = [ ];
@@ -59,21 +69,20 @@ let
       };
     };
   };
-  
-  generateWindowRule = name: rule:
+
+  generateWindowRule =
+    name: rule:
     let
       propsStr = concatMapStringsSep "\n" (prop: "match:${prop.type} = ${prop.value}") rule.props;
-      effectsStr = concatMapStringsSep "\n" (effect: 
-        if effect.value == null 
-        then effect.type 
-        else "${effect.type} = ${effect.value}"
+      effectsStr = concatMapStringsSep "\n" (
+        effect: if effect.value == null then effect.type else "${effect.type} = ${effect.value}"
       ) rule.effects;
     in
     ''
       windowrule {
         name = ${name}
         ${propsStr}
-      
+
         ${effectsStr}
       }
     '';
@@ -98,9 +107,8 @@ in
   };
 
   config = mkIf cfg.enable {
-    wayland.windowManager.hyprland.extraConfig = 
-      concatStringsSep "\n" (
-        mapAttrsToList generateWindowRule cfg.windowRules
-      );
+    wayland.windowManager.hyprland.extraConfig = concatStringsSep "\n" (
+      mapAttrsToList generateWindowRule cfg.windowRules
+    );
   };
 }
