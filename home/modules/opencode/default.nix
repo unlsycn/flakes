@@ -45,7 +45,7 @@ in
           skill = "allow";
           lsp = "allow";
           todoread = "allow";
-          todowrite = "ask";
+          todowrite = "allow";
           question = "ask";
           webfetch = "ask";
           #{  TODO: https://github.com/anomalyco/opencode/issues/7445
