@@ -20,6 +20,9 @@ with lib;
         lsp = {
           enable = true;
           formatOnSave = true;
+          inlayHints = true;
+          trouble.enable = true;
+          lspSignature.enable = true;
         };
 
         statusline.lualine.enable = true;
