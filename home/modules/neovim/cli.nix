@@ -20,6 +20,8 @@ with lib;
         lsp = {
           enable = true;
           formatOnSave = true;
+          inlayHints.enable = true;
+          trouble.enable = true;
         };
 
         statusline.lualine.enable = true;
@@ -56,6 +58,7 @@ with lib;
             next = "<C-CR>";
             previous = "<S-CR>";
           };
+          setupOpts.signature.enabled = true;
         };
         comments.comment-nvim = {
           enable = true;
