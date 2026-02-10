@@ -71,6 +71,7 @@ with lib;
                   ];
                   trusted-public-keys = [
                     "cache.unlsycn.com-1:beAofQCYfkbHnku0lL7kKzAc1ZCMA4NC3GWqcp5lsio="
+                    "cache.nixos.org-1:6NCHdD59X431o0gWypbMrAURkbJ16ZPMQFGspcDShjY="
                   ];
                 };
               };
