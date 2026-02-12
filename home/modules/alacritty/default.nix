@@ -55,8 +55,6 @@ in
       };
 
       general.live_config_reload = true;
-
-      colors = import ./colors.nix;
     };
   };
 }

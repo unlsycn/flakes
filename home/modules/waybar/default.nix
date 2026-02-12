@@ -195,13 +195,13 @@ in
             tooltip = true;
             format = "{icon}";
             format-icons = {
-              notification = "<span foreground='#ed8796'><sup></sup></span>";
+              notification = "<sup></sup>";
               none = "";
-              dnd-notification = "<span foreground='#ed8796'><sup></sup></span>";
+              dnd-notification = "<sup></sup>";
               dnd-none = "";
-              inhibited-notification = "<span foreground='#ed8796'><sup></sup></span>";
+              inhibited-notification = "<sup></sup>";
               inhibited-none = "";
-              dnd-inhibited-notification = "<span foreground='#ed8796'><sup></sup></span>";
+              dnd-inhibited-notification = "<sup></sup>";
               dnd-inhibited-none = "";
             };
             return-type = "json";

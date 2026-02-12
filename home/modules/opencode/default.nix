@@ -15,7 +15,6 @@ in
         plugin = [ "opencode-gemini-auth@latest" ];
         model = "google/gemini-3-pro-preview";
         small_model = "google/gemini-3-flash-preview";
-        theme = "catppuccin-macchiato";
         share = "manual";
         autoupdate = false;
         keybinds = {

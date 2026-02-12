@@ -626,12 +626,6 @@ in
                 "git-rebase-todo" = "gitlens.rebase";
               };
 
-              # Themes
-              "workbench.preferredDarkColorTheme" = "Palenight (Mild Contrast)";
-              "workbench.preferredLightColorTheme" = "Tiny Light";
-              "workbench.colorTheme" = "Palenight (Mild Contrast)";
-              "workbench.iconTheme" = "material-icon-theme";
-
               # Layout
               "workbench.sideBar.location" = "right";
               "workbench.navigationControl.enabled" = false;

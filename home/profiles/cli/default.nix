@@ -12,6 +12,7 @@ with lib;
 
   config = mkIf config.profile.cli.enable {
     xdg.enable = true;
+    catppuccin.enable = true;
 
     programs = {
       zsh.enable = true;
