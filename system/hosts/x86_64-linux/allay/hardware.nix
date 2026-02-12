@@ -22,7 +22,7 @@
       systemd-boot = {
         enable = true;
         xbootldrMountPoint = config.disko.devices.disk.main.content.partitions.boot.content.mountpoint;
-        extraInstallCommands = "${pkgs.coreutils}/bin/install -D -m0755 ${pkgs.refind}/share/refind/drivers_x64/* -t ${config.boot.loader.efi.efiSysMountPoint}/EFI/systemd/driver";
+        extraInstallCommands = "${pkgs.coreutils}/bin/install -D -m0755 ${pkgs.refind}/share/refind/drivers_x64/* -t ${config.boot.loader.efi.efiSysMountPoint}/EFI/systemd/drivers";
       };
       timeout = 1;
     };
