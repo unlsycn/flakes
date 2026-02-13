@@ -15,12 +15,12 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - name: Checkout repository
-        uses: actions/checkout@v4
+        uses: actions/checkout@v6.0.2
         with:
           ref: main
 
       - name: Install Nix
-        uses: determinateSystems/nix-installer-action@v9
+        uses: determinateSystems/nix-installer-action@v21
 
       - name: Update Flake
         run: nix flake update
