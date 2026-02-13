@@ -426,7 +426,7 @@ in
               };
 
               # Neovim
-              "vscode-neovim.NVIM_APPNAME" = "nvim-vscode";
+              "vscode-neovim.neovimExecutablePaths.linux" = "nvim-vscode";
               "vscode-neovim.compositeKeys" = {
                 "jk" = {
                   command = "vscode-neovim.lua";
