@@ -10,13 +10,21 @@ let
         type = enum [
           "class"
           "title"
-          "initialClass"
-          "initialTitle"
-          "floating"
-          "fullscreen"
-          "pinned"
-          "workspace"
+          "initial_class"
+          "initial_title"
+          "tag"
           "xwayland"
+          "float"
+          "fullscreen"
+          "pin"
+          "focus"
+          "group"
+          "modal"
+          "fullscreen_state_client"
+          "fullscreen_state_internal"
+          "workspace"
+          "content"
+          "xdg_tag"
         ];
         description = "The type of match property";
       };
@@ -50,7 +58,7 @@ let
         example = literalExpression ''
           [
             { type = "class"; value = "my-window"; }
-            { type = "floating"; value = "1"; }
+            { type = "float"; value = "1"; }
           ]
         '';
       };
