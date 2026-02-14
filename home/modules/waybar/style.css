@@ -6,7 +6,7 @@
 }
 
 window#waybar {
-    background-color: @base;
+    background-color: alpha(@base, 0.9);
     border: 1px solid @base;
     border-radius: 10px;
     transition:
