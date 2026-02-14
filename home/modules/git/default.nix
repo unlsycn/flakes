@@ -1,12 +1,8 @@
 {
   config,
   lib,
-  pkgs,
   ...
 }:
-let
-  nvim = lib.getExe pkgs.neovim;
-in
 {
   config = lib.mkIf config.programs.git.enable {
     programs = {
@@ -16,7 +12,7 @@ in
           user.name = "unlsycn";
 
           init.defaultBranch = "main";
-          core.editor = "${nvim}";
+          core.editor = lib.getExe config.programs.nvf.finalPackage;
           merge.conflictStyle = "diff3";
           log.decorate = "auto";
 
