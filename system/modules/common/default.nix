@@ -20,21 +20,12 @@ with lib;
   nix = {
     package = pkgs.nix-dram;
     settings = {
-      default-flake = "nixpkgs";
-      experimental-features = [
-        "nix-command"
-        "flakes"
-        "impure-derivations"
-        "pipe-operators"
-      ];
-      substituters = [
-        "https://cache.nixos.org"
-        "https://cache.unlsycn.com:4433"
-      ];
-      trusted-public-keys = [
-        "cache.unlsycn.com-1:beAofQCYfkbHnku0lL7kKzAc1ZCMA4NC3GWqcp5lsio="
-      ];
+      auto-optimise-store = true;
+      trusted-users = [ "root" "@wheel" ];
     };
+    extraOptions = ''
+      builders-use-substitutes = true
+    '';
     gc = {
       automatic = true;
       dates = "weekly";

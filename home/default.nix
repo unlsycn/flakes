@@ -55,26 +55,7 @@ with lib;
           modules = [
             (genSharedHomeConfiguration profiles)
             {
-              nix = {
-                package = pkgs.nix-dram;
-                settings = {
-                  default-flake = "nixpkgs";
-                  experimental-features = [
-                    "nix-command"
-                    "flakes"
-                    "impure-derivations"
-                    "pipe-operators"
-                  ];
-                  substituters = [
-                    "https://cache.nixos.org"
-                    "https://cache.unlsycn.com:4433"
-                  ];
-                  trusted-public-keys = [
-                    "cache.unlsycn.com-1:beAofQCYfkbHnku0lL7kKzAc1ZCMA4NC3GWqcp5lsio="
-                    "cache.nixos.org-1:6NCHdD59X431o0gWypbMrAURkbJ16ZPMQFGspcDShjY="
-                  ];
-                };
-              };
+              nix.package = pkgs.nix-dram;
               home.username = "${user}";
               home.homeDirectory = "/home/${user}";
               programs.home-manager.enable = true;
