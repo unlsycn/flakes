@@ -12,7 +12,10 @@ in
     programs.opencode = {
       package = inputs'.opencode.packages.opencode;
       settings = {
-        plugin = [ "opencode-gemini-auth@latest" ];
+        plugin = [
+          "opencode-gemini-auth@latest"
+          "@simonwjackson/opencode-direnv"
+        ];
         model = "google/gemini-3-pro-preview";
         small_model = "google/gemini-3-flash-preview";
         share = "manual";
