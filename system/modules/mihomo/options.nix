@@ -116,6 +116,14 @@ in
                   type = int;
                   default = 50;
                 };
+                params = mkOption {
+                  type = listOf (enum [
+                    "no-resolve"
+                    "src"
+                  ]);
+                  default = [ ];
+                  description = "Additional parameters";
+                };
               };
             });
           };

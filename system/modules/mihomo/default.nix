@@ -445,7 +445,9 @@ in
             route.rules
             |> map (rule: {
               priority = rule.priority;
-              rule = "${rule.type},${optionalString (rule.rule != null) "${rule.rule},"}${name}";
+              rule = "${rule.type},${optionalString (rule.rule != null) "${rule.rule},"}${name}${
+                optionalString (rule.params != [ ]) ",${rule.params |> concatStringsSep ","}"
+              }";
             })
           )
           |> flatten
