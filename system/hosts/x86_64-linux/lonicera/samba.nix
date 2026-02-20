@@ -5,7 +5,7 @@
     settings = {
       global = {
         workgroup = "WORKGROUP";
-        "server string" = "Lonicera Via Wireguard";
+        "server string" = "Lonicera Via Nebula";
         "netbios name" = "Lonicera-SMB";
         security = "user";
         "hosts allow" = "10.122.133. 127.0.0.1 localhost";
@@ -14,7 +14,7 @@
       };
 
       "FoundryVTT" = {
-        comment = "FoundryVTT Data (WireGuard Only)";
+        comment = "FoundryVTT Data (Nebula Only)";
         path = "/var/lib/foundryvtt/Data";
         browseable = "yes";
         "read only" = "no";

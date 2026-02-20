@@ -8,7 +8,6 @@
   imports = [
     ./hardware.nix
     ./networking.nix
-    ./wireguard.nix
     ./samba.nix
     ./nginx.nix
     ./buildbot.nix

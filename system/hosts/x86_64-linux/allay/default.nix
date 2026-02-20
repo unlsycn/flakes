@@ -7,7 +7,6 @@
   imports = [
     ./sound.nix
     ./hardware.nix
-    ./wireguard.nix
   ];
 
   homeManagerProfiles = [
@@ -44,11 +43,6 @@
   mesh = {
     enable = true;
     id = 72;
-  };
-
-  sops.secrets.nebula-ca-key = {
-    sopsFile = ./ca.key.admin;
-    format = "binary";
   };
 
   networking.hostId = "7715be29";
