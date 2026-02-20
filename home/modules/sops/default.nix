@@ -24,7 +24,5 @@ with lib;
       Restart = "on-failure";
       RestartSec = "5s";
     };
-
-    home.persistence."/persist".files = [ ".config/age/key" ];
   };
 }
