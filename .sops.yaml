@@ -1,6 +1,6 @@
 keys:
   - &admin_unlsycn 817ecf0aa56248a2b202f8610e50958c4ccbdd9c
-  - &host_common age1f9shnyrs54j566xe90hmv0hu6tj9f7xc6zsmt9rr6qhgnc9qcvlq9m6ras
+  - &admin_recovery age173lrtqm3yx6qzvny7z56fhqflu7e8gz6tm639n5st96nydwyq53q64s26u
   - &host_allay age1azuuur33nmpr6pwmts97vyth4q0aqy785945ktz27cwp3n8jaa6qlu6uuu
   - &host_sashimi age167rgg809xt9thny888nwzrh54d8jywpf7zjfp3kdq66gq73y8prs3q49q2
   - &host_rouge age14petwhzdexe7jyzq483svu35qe4a666m6tu6wr8cs7929s7krgyq72sagz
@@ -10,23 +10,41 @@ creation_rules:
     key_groups:
       - pgp:
           - *admin_unlsycn
+        age:
+          - *admin_recovery
   - path_regex: system/hosts/x86_64-linux/allay/.*
     key_groups:
       - pgp:
           - *admin_unlsycn
         age:
+          - *admin_recovery
           - *host_allay
   - path_regex: system/hosts/x86_64-linux/lonicera/.*
     key_groups:
       - pgp:
           - *admin_unlsycn
         age:
+          - *admin_recovery
           - *host_lonicera
+  - path_regex: system/hosts/x86_64-linux/sashimi/.*
+    key_groups:
+      - pgp:
+          - *admin_unlsycn
+        age:
+          - *admin_recovery
+          - *host_sashimi
+  - path_regex: system/hosts/x86_64-linux/rogue/.*
+    key_groups:
+      - pgp:
+          - *admin_unlsycn
+        age:
+          - *admin_recovery
+          - *host_rouge
   - key_groups:
       - pgp:
           - *admin_unlsycn
         age:
-          - *host_common
+          - *admin_recovery
           - *host_allay
           - *host_sashimi
           - *host_rouge

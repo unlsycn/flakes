@@ -83,6 +83,10 @@
         flake-parts.follows = "flake-parts";
       };
     };
+    git-hooks = {
+      url = "github:cachix/git-hooks.nix";
+      inputs.nixpkgs.follows = "nixpkgs";
+    };
 
     ssh-keys = {
       url = "https://github.com/unlsycn.keys";
@@ -116,6 +120,8 @@
         ./home
         ./outputs/nixos.nix
         ./outputs/home.nix
+        ./outputs/topology.nix
+        inputs.git-hooks.flakeModule
       ];
       _module.args = { inherit user; };
 
@@ -132,6 +138,7 @@
 
       perSystem =
         {
+          config,
           inputs',
           pkgs,
           system,
@@ -148,13 +155,31 @@
 
           formatter = pkgs.nixfmt;
 
+          apps.update-nebula-certs = {
+            type = "app";
+            program = "${pkgs.callPackage ./scripts/update-nebula-certs.nix { }}/bin/update-nebula-certs";
+          };
+
+          pre-commit = {
+            settings = {
+              hooks.nebula-certs = {
+                enable = true;
+                name = "nebula-certs";
+                entry = config.apps.update-nebula-certs.program;
+                pass_filenames = false;
+              };
+            };
+          };
+
           devShells.default = pkgs.mkShell {
+            shellHook = config.pre-commit.installationScript;
             packages = with pkgs; [
               nixd
               home-manager
               nvfetcher
               sops
               disko
+              nebula
             ];
 
             nativeBuildInputs = [ inputs'.sops-nix.packages.sops-import-keys-hook ];

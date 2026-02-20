@@ -41,6 +41,16 @@
     zfs.enable = true;
   };
 
+  mesh = {
+    enable = true;
+    id = 72;
+  };
+
+  sops.secrets.nebula-ca-key = {
+    sopsFile = ./ca.key.admin;
+    format = "binary";
+  };
+
   networking.hostId = "7715be29";
 
   system.stateVersion = "25.05"; # Dont touch it

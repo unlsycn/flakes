@@ -45,6 +45,11 @@
     openvpn.servers = { };
   };
 
+  mesh = {
+    enable = true;
+    id = 77;
+  };
+
   jovian = {
     hardware.has.amd.gpu = true;
     devices.ally-z1e.enable = true;
