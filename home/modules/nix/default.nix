@@ -11,7 +11,7 @@
       ];
       substituters = [
         "https://cache.nixos.org"
-        "https://cache.unlsycn.com:4433"
+        "https://cache.esper.ejo"
       ];
       trusted-public-keys = [
         "cache.unlsycn.com-1:beAofQCYfkbHnku0lL7kKzAc1ZCMA4NC3GWqcp5lsio="

@@ -330,7 +330,7 @@ in
         type = bool;
         default = true;
       };
-      mixed-port = mkOption { type = int; };
+      mixed-port = mkOption { type = port; };
 
       sniffer = mkOption {
         type = nullOr (submodule {
@@ -398,7 +398,7 @@ in
             enable = mkOption { type = bool; };
             write-to-system = mkOption { type = bool; };
             server = mkOption { type = str; };
-            port = mkOption { type = int; };
+            port = mkOption { type = port; };
             interval = mkOption { type = int; };
           };
         });

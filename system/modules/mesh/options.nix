@@ -12,6 +12,7 @@ let
     elemAt
     ;
   cfg = config.mesh;
+  nebulaCfg = config.services.nebula.networks.default;
 
   ipToInt =
     ipStr:
@@ -46,13 +47,6 @@ in
       description = "The unique integer ID of this node in the mesh network.";
     };
 
-    ip = mkOption {
-      type = types.str;
-      readOnly = true;
-      description = "The IP address of this node in the mesh";
-      default = calculateNodeIp cfg.nebula.cidr cfg.id;
-    };
-
     roles = mkOption {
       type = types.listOf (
         types.enum [
@@ -65,16 +59,10 @@ in
       description = "The roles of this node in the mesh";
     };
 
-    publicEndpoint = mkOption {
+    endpoint = mkOption {
       type = types.nullOr types.str;
       default = null;
-      description = "Public endpoint (IP:port) for lighthouses/relays";
-    };
-
-    domain = mkOption {
-      type = types.str;
-      default = "senesperejo.lan";
-      description = "Internal domain for the mesh";
+      description = "Public endpoint";
     };
 
     nebula = {
@@ -82,11 +70,114 @@ in
         default = config.mesh.enable;
       };
 
+      domain = mkOption {
+        type = types.str;
+        default = "esper.ejo";
+        description = "Internal domain for the nebula mesh";
+      };
+
       cidr = mkOption {
         type = types.str;
         default = "10.122.133.0/24";
         description = "The CIDR block of the network";
       };
+
+      ip = mkOption {
+        type = types.str;
+        readOnly = true;
+        description = "The IP address of this node in the mesh";
+        default = calculateNodeIp cfg.nebula.cidr cfg.id;
+      };
+
+      publicEndpoint = mkOption {
+        type = types.nullOr types.str;
+        readOnly = true;
+        default =
+          if cfg.endpoint != null then "${cfg.endpoint}:${toString nebulaCfg.listen.port}" else null;
+        description = "Public endpoint for lighthouses/relays";
+      };
+    };
+
+    tailnet = {
+      enable = lib.mkEnableOption "Tailnet" // {
+        default = config.mesh.enable;
+      };
+
+      domain = mkOption {
+        type = types.str;
+        default = "ts.unlsycn.com";
+        description = "Internal domain for the tailnet";
+      };
+
+      nativeDomain = mkOption {
+        type = types.str;
+        default = "ts-net.lan";
+        description = "Native domain for the tailnet";
+      };
+    };
+
+    services = mkOption {
+      description = "Declarative web services exposure configuration";
+      default = { };
+      type = types.attrsOf (
+        types.submodule (
+          { config, ... }:
+          {
+            options = {
+              internalPort = mkOption {
+                type = types.port;
+                description = "Port where the service is listening locally";
+              };
+
+              internalAddress = mkOption {
+                type = types.str;
+                default = "127.0.0.1";
+                description = "Address where the service is listening locally";
+              };
+
+              expose = {
+                nebula = mkOption {
+                  type = types.bool;
+                  default = false;
+                  description = "Expose on Nebula network";
+                };
+                tailscale = mkOption {
+                  type = types.bool;
+                  default = false;
+                  description = "Expose on Tailscale network";
+                };
+                public = mkOption {
+                  type = types.bool;
+                  default = false;
+                  description = "Expose on Public Internet";
+                };
+              };
+
+              publicDomain = mkOption {
+                type = types.nullOr types.str;
+                default = null;
+                description = "Custom public domain for public exposure";
+              };
+
+              locations = mkOption {
+                type = types.attrs;
+                default = {
+                  "/" = {
+                    proxyPass = "http://${config.internalAddress}:${toString config.internalPort}/";
+                  };
+                };
+                description = "Nginx location configurations";
+              };
+
+              extraConfig = mkOption {
+                type = types.lines;
+                default = "";
+                description = "Extra configuration for the nginx virtual host";
+              };
+            };
+          }
+        )
+      );
     };
   };
 }

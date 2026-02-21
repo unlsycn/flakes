@@ -21,7 +21,7 @@ in
   config = mkIf cfg.enable {
     services.foundryvtt = {
       package = inputs'.foundryvtt.packages.foundryvtt_13;
-      hostName = "fvtt.unlsycn.com";
+      hostName = "fvtt.${config.mesh.tailnet.domain}";
       port = 1501;
       minifyStaticFiles = true;
       upnp = false;
@@ -29,10 +29,13 @@ in
       telemetry = false;
     };
 
-    services.nginx.virtualHosts."fvtt.unlsycn.com" = mkIf config.services.nginx.enable {
-      onlySSL = true;
-      enableACME = true;
-      acmeRoot = null;
+    mesh.services.fvtt = {
+      expose = {
+        nebula = true;
+        tailscale = true;
+        public = true;
+      };
+      publicDomain = "fvtt.unlsycn.com";
       locations."/" = {
         proxyPass = "http://127.0.0.1:${cfg.port |> toString}";
         proxyWebsockets = true;
