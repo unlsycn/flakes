@@ -12,10 +12,9 @@ with lib;
       _: host: {
         inherit (host.config.mesh)
           roles
-          publicEndpoint
-          ip
+          services
           ;
-        inherit (host.config.mesh.nebula) cidr;
+        inherit (host.config.mesh.nebula) ip cidr publicEndpoint;
         system = host.pkgs.stdenv.hostPlatform.system;
       }
     );

@@ -9,7 +9,6 @@
     ./hardware.nix
     ./networking.nix
     ./samba.nix
-    ./nginx.nix
     ./buildbot.nix
   ];
 
@@ -57,7 +56,7 @@
       "lighthouse"
       "relay"
     ];
-    publicEndpoint = "lonicera.unlsycn.com:4242";
+    endpoint = "lonicera.unlsycn.com";
   };
 
   system.stateVersion = "23.11";

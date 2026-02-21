@@ -8,6 +8,7 @@
 with lib;
 let
   cfg = config.mesh;
+  nebulaCfg = config.services.nebula.networks.default;
 
   nodes = inputs.self.mesh-topology |> attrValues;
   generatedDir = ../../hosts/${pkgs.stdenv.hostPlatform.system}/${config.networking.hostName}/_generated;
@@ -21,9 +22,10 @@ in
         key = config.sops.secrets.nebula-key.path;
         ca = "${generatedDir}/nebula_ca.crt";
 
-        # manually set port to let nixos module generate correct firewall rules
+        # manually set port and device to let nixos module generate correct firewall rules
         # and we can reference it in other places
         listen.port = 4242;
+        tun.device = "nebula.default";
 
         lighthouses = nodes |> filter (n: n.roles |> elem "lighthouse") |> map (n: n.ip);
 
@@ -57,6 +59,10 @@ in
         };
       };
 
+      networking.firewall.trustedInterfaces = [
+        config.services.nebula.networks.default.tun.device
+      ];
+
       sops.secrets = {
         nebula-key = {
           sopsFile = "${generatedDir}/nebula.key";
@@ -69,7 +75,8 @@ in
         settings = {
           dns = {
             fake-ip-filter = [
-              "+.${cfg.domain}"
+              "+.${cfg.nebula.domain}"
+              "+.${cfg.tailnet.domain}"
             ]
             ++ (
               nodes
@@ -77,7 +84,8 @@ in
               |> map (n: n.publicEndpoint |> splitString ":" |> head)
             );
             nameserver-policy = {
-              "+.${cfg.domain}" = config.services.nebula.networks.default.lighthouses;
+              "+.${cfg.nebula.domain}" = nebulaCfg.lighthouses;
+              "+.${cfg.tailnet.domain}" = nebulaCfg.lighthouses;
             };
           };
         };
@@ -92,12 +100,12 @@ in
             }
             {
               type = "DST-PORT";
-              rule = config.services.nebula.networks.default.listen.port |> toString;
+              rule = nebulaCfg.listen.port |> toString;
               priority = 100;
             }
             {
               type = "SRC-PORT";
-              rule = config.services.nebula.networks.default.listen.port |> toString;
+              rule = nebulaCfg.listen.port |> toString;
               priority = 100;
             }
           ];

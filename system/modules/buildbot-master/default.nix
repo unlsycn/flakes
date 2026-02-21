@@ -8,15 +8,15 @@ with lib;
 {
   imports = [ inputs.buildbot-nix.nixosModules.buildbot-master ];
 
-  environment.persistence."/persist" = {
-    directories = [
-      "/var/lib/buildbot"
-    ];
-  };
+  config = mkIf config.services.buildbot-nix.master.enable {
+    environment.persistence."/persist" = {
+      directories = [
+        "/var/lib/buildbot"
+      ];
+    };
 
-  services = {
-    buildbot-nix.master = mkIf config.services.buildbot-nix.master.enable {
-      domain = "build.unlsycn.com";
+    services.buildbot-nix.master = {
+      domain = "build.${config.mesh.nebula.domain}";
       workersFile = config.sops.secrets."buildbot-workers".path;
       authBackend = "github";
       github = {
@@ -30,30 +30,32 @@ with lib;
       admins = [ "unlsycn" ];
       useHTTPS = true;
     };
-    nginx.virtualHosts."${config.services.buildbot-nix.master.domain}" =
-      mkIf config.services.nginx.enable
-        {
-          onlySSL = true;
-          enableACME = true;
-          acmeRoot = null;
-        };
-  };
 
-  sops.secrets = {
-    "buildbot-workers" = {
-      sopsFile = ./workers.json;
-      # sops --output-type=binary
-      format = "binary";
+    mesh.services.build = {
+      internalPort = config.services.buildbot-master.port;
+      internalAddress = "127.0.0.1";
+      expose = {
+        nebula = true;
+        tailscale = true;
+      };
     };
-    "buildbot-github-app-secret-key" = {
-      sopsFile = ./buildbot.pem;
-      format = "binary";
-    };
-    "buildbot-github-webhook-secret" = {
-      sopsFile = ./buildbot.yaml;
-    };
-    "buildbot-github-oauth-secret" = {
-      sopsFile = ./buildbot.yaml;
+
+    sops.secrets = {
+      "buildbot-workers" = {
+        sopsFile = ./workers.json;
+        # sops --output-type=binary
+        format = "binary";
+      };
+      "buildbot-github-app-secret-key" = {
+        sopsFile = ./buildbot.pem;
+        format = "binary";
+      };
+      "buildbot-github-webhook-secret" = {
+        sopsFile = ./buildbot.yaml;
+      };
+      "buildbot-github-oauth-secret" = {
+        sopsFile = ./buildbot.yaml;
+      };
     };
   };
 }

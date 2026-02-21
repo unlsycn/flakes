@@ -1,23 +1,27 @@
 { config, lib, ... }:
 with lib;
 {
-  services.hydra = {
-    port = 30073;
-    listenHost = if config.services.nginx.enable then "localhost" else "*";
-    smtpHost = "smtp.qiye.aliyun.com";
-    notificationSender = "hydra@unlsycn.com";
-    minimumDiskFree = 4;
-    useSubstitutes = true;
-  };
+  config = mkIf config.services.hydra.enable {
+    services.hydra = {
+      port = 30073;
+      listenHost = if config.services.nginx.enable then "localhost" else "*";
+      smtpHost = "smtp.qiye.aliyun.com";
+      notificationSender = "hydra@unlsycn.com";
+      minimumDiskFree = 4;
+      useSubstitutes = true;
+    };
 
-  services.nginx.virtualHosts."hydra.unlsycn.com" = mkIf config.services.nginx.enable {
-    onlySSL = true;
-    enableACME = true;
-    acmeRoot = null;
-    locations."/".proxyPass = "http://127.0.0.1:${config.services.hydra.port |> toString}";
-  };
+    mesh.services.hydra = mkIf config.services.nginx.enable {
+      internalPort = config.services.hydra.port;
+      internalAddress = "127.0.0.1";
+      expose = {
+        nebula = true;
+      };
+      publicDomain = "hydra.unlsycn.com";
+    };
 
-  networking.firewall.allowedTCPPorts = mkIf (!config.services.nginx.enable) [
-    config.services.hydra.port
-  ];
+    networking.firewall.allowedTCPPorts = mkIf (!config.services.nginx.enable) [
+      config.services.hydra.port
+    ];
+  };
 }
