@@ -15,7 +15,6 @@
     defaultGateway6 = null;
 
     useDHCP = false;
-    dhcpcd.enable = false;
     usePredictableInterfaceNames = lib.mkForce true;
 
     interfaces = {
