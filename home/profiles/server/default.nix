@@ -18,12 +18,5 @@ with lib;
       ssh.matchBlocks."*".identityFile = mkForce [ ];
       zellij.copyCommand = "";
     };
-
-    nix.settings.experimental-features = [
-      "nix-command"
-      "flakes"
-      "impure-derivations"
-      "pipe-operators"
-    ];
   };
 }

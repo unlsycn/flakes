@@ -1,4 +1,5 @@
 {
+  config,
   lib,
   pkgs,
   hostName,
@@ -21,7 +22,16 @@ with lib;
     package = pkgs.nix-dram;
     settings = {
       auto-optimise-store = true;
-      trusted-users = [ "root" "@wheel" ];
+      trusted-users = [
+        "root"
+        "@wheel"
+      ];
+      substituters = mkIf config.mesh.nebula.enable [
+        "https://cache.esper.ejo"
+      ];
+      trusted-public-keys = mkIf config.mesh.nebula.enable [
+        "cache.unlsycn.com-1:beAofQCYfkbHnku0lL7kKzAc1ZCMA4NC3GWqcp5lsio="
+      ];
     };
     extraOptions = ''
       builders-use-substitutes = true
