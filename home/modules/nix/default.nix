@@ -12,7 +12,6 @@
     };
 
     extraOptions = ''
-      fallback = true
       !include ${config.sops.templates.nix-extra-options.path}
     '';
   };
