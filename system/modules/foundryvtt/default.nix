@@ -2,6 +2,7 @@
   config,
   inputs,
   inputs',
+  user,
   lib,
   ...
 }:
@@ -41,6 +42,8 @@ in
         proxyWebsockets = true;
       };
     };
+
+    users.users.${user}.extraGroups = [ "foundryvtt" ];
 
     networking.firewall.allowedTCPPorts = mkIf (!config.services.nginx.enable) [
       cfg.port

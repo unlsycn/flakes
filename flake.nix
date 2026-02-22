@@ -87,6 +87,10 @@
       url = "github:cachix/git-hooks.nix";
       inputs.nixpkgs.follows = "nixpkgs";
     };
+    deploy-rs = {
+      url = "github:serokell/deploy-rs";
+      inputs.nixpkgs.follows = "nixpkgs";
+    };
 
     ssh-keys = {
       url = "https://github.com/unlsycn.keys";
@@ -161,6 +165,7 @@
           };
 
           pre-commit = {
+            check.enable = false;
             settings = {
               hooks.nebula-certs = {
                 enable = true;
@@ -180,6 +185,7 @@
               sops
               disko
               nebula
+              deploy-rs
             ];
 
             nativeBuildInputs = [ inputs'.sops-nix.packages.sops-import-keys-hook ];

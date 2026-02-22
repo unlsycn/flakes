@@ -22,10 +22,7 @@
     root.openssh.authorizedKeys.keys = sshKeys;
     ${user} = {
       isNormalUser = true;
-      extraGroups = [
-        "wheel"
-        "foundryvtt"
-      ];
+      extraGroups = [ "wheel" ];
       hashedPassword = "$y$j9T$vuizYbpJtFD5LDsQwiqp20$JzCV3wHnoEJ7fXDGPZDQBImGnMoEDmTYF5mSLfbfT45";
       shell = pkgs.zsh;
       openssh.authorizedKeys.keys = sshKeys;
