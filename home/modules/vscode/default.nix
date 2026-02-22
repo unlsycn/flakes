@@ -372,6 +372,7 @@ in
               # Word Wrap
               "editor.wordWrap" = "on";
               "editor.wordWrapColumn" = 120;
+              "editor.wrapOnEscapedLineFeeds" = true;
 
               # Suggestions
               "editor.suggestSelection" = "first";
