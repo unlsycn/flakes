@@ -8,7 +8,7 @@
       package = pkgs.zfs_unstable;
       extraPools = [ "data" ];
     };
-    loader.grub.device = "/dev/sda";
+    loader.grub.device = "/dev/disk/by-id/scsi-0QEMU_QEMU_HARDDISK_drive-scsi0";
     initrd = {
       systemd.enable = true;
       availableKernelModules = [
