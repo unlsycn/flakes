@@ -88,7 +88,7 @@ in
           ];
           "lucid light-mode" = [ "OMZ::plugins/extract/extract.plugin.zsh" ];
           "lucid depth=1 light-mode has'doas'" = [ "Senderman/doas-zsh-plugin" ];
-          "lucid has'sudo'" = [ "OMZ::plugins/sudo/sudo.plugin.zsh" ];
+          "lucid if'(( ! $+commands[doas] ))' has'sudo'" = [ "OMZ::plugins/sudo/sudo.plugin.zsh" ];
           "lucid depth=1 light-mode" = [
             "Aloxaf/fzf-tab"
           ];

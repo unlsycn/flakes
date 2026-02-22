@@ -6,7 +6,12 @@
 }:
 {
   security = {
-    sudo.enable = false;
+    sudo = {
+      enable = true;
+      wheelNeedsPassword = true;
+      keepTerminfo = true;
+      execWheelOnly = true;
+    };
     doas = {
       enable = true;
       wheelNeedsPassword = true;

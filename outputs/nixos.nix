@@ -26,7 +26,6 @@ with builtins;
           hostname = name;
           sshUser = if cfg.config.isServer then "root" else "unlsycn";
           interactiveSudo = if cfg.config.isServer then false else true;
-          sudo = if cfg.config.security.doas.enable then "doas -u" else "sudo -u";
           profiles.system = {
             user = "root";
             path = inputs.deploy-rs.lib.${cfg.pkgs.stdenv.hostPlatform.system}.activate.nixos cfg;
