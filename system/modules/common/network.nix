@@ -9,7 +9,7 @@ with lib;
   };
 
   services = {
-    mihomo.enable = true;
+    mihomo.enable = mkDefault true;
     blueman.enable = true;
   };
 }

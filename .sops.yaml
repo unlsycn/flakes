@@ -5,6 +5,7 @@ keys:
   - &host_sashimi age167rgg809xt9thny888nwzrh54d8jywpf7zjfp3kdq66gq73y8prs3q49q2
   - &host_rouge age14petwhzdexe7jyzq483svu35qe4a666m6tu6wr8cs7929s7krgyq72sagz
   - &host_lonicera age1q7nwx94wx4vkwwqkp0r7qhpr4nr727u0tld69vlfq5k5zd8ejehscvfdzv
+  - &host_ukiyo age1pysf6m46ekq4ghuxzp50fzsg2z3rryvuahujz7rz36jsddj7ug8spygg37
 creation_rules:
   - path_regex: .*.admin$
     key_groups:
@@ -40,6 +41,13 @@ creation_rules:
         age:
           - *admin_recovery
           - *host_rouge
+  - path_regex: system/hosts/x86_64-linux/ukiyo/.*
+    key_groups:
+      - pgp:
+          - *admin_unlsycn
+        age:
+          - *admin_recovery
+          - *host_ukiyo
   - key_groups:
       - pgp:
           - *admin_unlsycn
@@ -49,3 +57,4 @@ creation_rules:
           - *host_sashimi
           - *host_rouge
           - *host_lonicera
+          - *host_ukiyo

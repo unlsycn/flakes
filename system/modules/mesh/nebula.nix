@@ -117,6 +117,7 @@ in
     (mkIf
       (
         cfg.nebula.enable
+        && config.services.mihomo.enable
         && config.services.mihomo.settings.tun.enable
         && (
           [
