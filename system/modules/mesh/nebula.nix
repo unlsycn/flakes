@@ -117,10 +117,9 @@ in
 
         routes."Mesh" = {
           rules = [
-            # These rules ensure that Nebula's underlying encrypteid UDP traffic (Port 4242)
-            # is NOT encapsulated by upstream gateways' proxies.
-            # Local traffic already bypasses the local Mihomo TUN via kernel routing
-            # policy (suppress_prefixlength 0), so these are primarily for the WAN link.
+            # These rules ensure that Nebula's underlying encrypted UDP traffic is not encapsulated
+            # by upstream gateways' proxies. Local traffic already bypasses the local Mihomo TUN
+            # via kernel routing policy (suppress_prefixlength 0), so these are primarily for the WAN link.
             {
               type = "DST-PORT";
               rule = nebulaCfg.listen.port |> toString;
