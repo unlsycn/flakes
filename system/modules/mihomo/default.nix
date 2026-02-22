@@ -19,7 +19,7 @@ in
 
       settings = {
         mode = "rule";
-        ipv6 = false;
+        ipv6 = true;
         log-level = "info";
         allow-lan = true;
         mixed-port = 1970;
@@ -93,7 +93,7 @@ in
           {
             enable = true;
             listen = ":1053";
-            ipv6 = false;
+            ipv6 = true;
             enhanced-mode = "fake-ip";
             fake-ip-range = "28.0.0.1/8";
             fake-ip-filter = [
