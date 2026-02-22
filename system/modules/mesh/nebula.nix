@@ -60,7 +60,7 @@ in
       };
 
       networking.firewall.trustedInterfaces = [
-        config.services.nebula.networks.default.tun.device
+        nebulaCfg.tun.device
       ];
 
       sops.secrets = {
@@ -68,6 +68,26 @@ in
           sopsFile = "${generatedDir}/nebula.key";
           format = "binary";
           owner = config.systemd.services."nebula@default".serviceConfig.User;
+        };
+      };
+
+      assertions = [
+        {
+          assertion = config.systemd.network.enable;
+          message = "networkd is needed for nebula to split DNS resolution";
+        }
+      ];
+      systemd.network.networks."50-nebula" = {
+        matchConfig.Name = nebulaCfg.tun.device;
+        dns = nebulaCfg.lighthouses;
+        domains = [ "~${cfg.nebula.domain}" ];
+        # Prevent system boot from hanging if the mesh tunnel hasn't established yet
+        linkConfig.RequiredForOnline = false;
+        networkConfig = {
+          # Prevent networkd from dropping IP/routes manually managed by the Nebula binary
+          KeepConfiguration = "static";
+          # Disable IPv6 Link-Local and DAD to reach the "configured" state
+          LinkLocalAddressing = false;
         };
       };
 
@@ -83,21 +103,24 @@ in
               |> filter (n: n.publicEndpoint != null)
               |> map (n: n.publicEndpoint |> splitString ":" |> head)
             );
-            nameserver-policy = {
-              "+.${cfg.nebula.domain}" = nebulaCfg.lighthouses;
-              "+.${cfg.tailnet.domain}" = nebulaCfg.lighthouses;
-            };
           };
+
+          # Excluding the internal CIDR prevents Mihomo from hijacking DNS queries for internal hosts.
+          # Normal mesh traffic bypasses the Mihomo TUN interface via routing policy and never
+          # enters the proxy's routing table; this exclusion ensures DNS resolution follows suit.
+          # It creates a "hole" in Mihomo's routing table via address space decomposition,
+          # forcing excluded traffic to fall back to the main routing table for delivery.
+          tun.route-exclude-address = [
+            "${cfg.nebula.cidr}"
+          ];
         };
 
         routes."Mesh" = {
           rules = [
-            {
-              type = "IP-CIDR";
-              rule = "${cfg.nebula.cidr}";
-              priority = 100;
-              params = [ "no-resolve" ];
-            }
+            # These rules ensure that Nebula's underlying encrypteid UDP traffic (Port 4242)
+            # is NOT encapsulated by upstream gateways' proxies.
+            # Local traffic already bypasses the local Mihomo TUN via kernel routing
+            # policy (suppress_prefixlength 0), so these are primarily for the WAN link.
             {
               type = "DST-PORT";
               rule = nebulaCfg.listen.port |> toString;

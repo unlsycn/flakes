@@ -346,14 +346,124 @@ in
           options = {
             enable = mkOption {
               type = bool;
+              readOnly = true;
               default = cfg.tunMode;
             };
-            stack = mkOption { type = str; };
-            dns-hijack = mkOption { type = listOf str; };
-            auto-route = mkOption { type = bool; };
-            auto-detect-interface = mkOption { type = bool; };
+            stack = mkOption {
+              type = enum [
+                "system"
+                "gvisor"
+                "mixed"
+              ];
+              default = "gvisor";
+            };
+            auto-route = mkOption {
+              type = bool;
+              default = true;
+            };
+            auto-redirect = mkOption {
+              type = bool;
+              default = false;
+            };
+            auto-detect-interface = mkOption {
+              type = bool;
+              default = true;
+            };
+            dns-hijack = mkOption {
+              type = listOf str;
+              default = [ "0.0.0.0:53" ];
+            };
+            device = mkOption {
+              type = nullOr str;
+              default = null;
+            };
+            mtu = mkOption {
+              type = int;
+              default = 0;
+            };
+            strict-route = mkOption {
+              type = bool;
+              default = false;
+            };
+            gso = mkOption {
+              type = bool;
+              default = false;
+            };
+            gso-max-size = mkOption {
+              type = int;
+              default = 0;
+            };
+            udp-timeout = mkOption {
+              type = int;
+              default = 300;
+            };
+            iproute2-table-index = mkOption {
+              type = int;
+              default = 2022;
+            };
+            iproute2-rule-index = mkOption {
+              type = int;
+              default = 9000;
+            };
+            endpoint-independent-nat = mkOption {
+              type = bool;
+              default = false;
+            };
+            route-address-set = mkOption {
+              type = listOf str;
+              default = [ ];
+            };
+            route-exclude-address-set = mkOption {
+              type = listOf str;
+              default = [ ];
+            };
+            route-address = mkOption {
+              type = listOf str;
+              default = [ ];
+            };
+            route-exclude-address = mkOption {
+              type = listOf str;
+              default = [ ];
+            };
+            include-interface = mkOption {
+              type = listOf str;
+              default = [ ];
+            };
+            exclude-interface = mkOption {
+              type = listOf str;
+              default = [ ];
+            };
+            include-uid = mkOption {
+              type = listOf int;
+              default = [ ];
+            };
+            include-uid-range = mkOption {
+              type = listOf str;
+              default = [ ];
+            };
+            exclude-uid = mkOption {
+              type = listOf int;
+              default = [ ];
+            };
+            exclude-uid-range = mkOption {
+              type = listOf str;
+              default = [ ];
+            };
+            include-android-user = mkOption {
+              type = listOf int;
+              default = [ ];
+            };
+            include-package = mkOption {
+              type = listOf str;
+              default = [ ];
+            };
+            exclude-package = mkOption {
+              type = listOf str;
+              default = [ ];
+            };
           };
         });
+        default = null;
       };
 
       dns = mkOption {
