@@ -8,7 +8,8 @@
 with lib;
 let
   cfg = config.mesh;
-  nebulaCfg = config.services.nebula.networks.default;
+  nebulaName = "senesperejo";
+  nebulaCfg = config.services.nebula.networks.${nebulaName};
 
   nodes = inputs.self.mesh-topology |> attrValues;
   generatedDir = ../../hosts/${pkgs.stdenv.hostPlatform.system}/${config.networking.hostName}/_generated;
@@ -16,7 +17,7 @@ in
 {
   config = mkMerge [
     (mkIf cfg.nebula.enable {
-      services.nebula.networks.default = {
+      services.nebula.networks.${nebulaName} = {
         enable = true;
         cert = "${generatedDir}/nebula.crt";
         key = config.sops.secrets.nebula-key.path;
@@ -25,7 +26,7 @@ in
         # manually set port and device to let nixos module generate correct firewall rules
         # and we can reference it in other places
         listen.port = 4242;
-        tun.device = "nebula.default";
+        tun.device = nebulaName;
 
         lighthouses = nodes |> filter (n: n.roles |> elem "lighthouse") |> map (n: n.ip);
 
@@ -67,7 +68,7 @@ in
         nebula-key = {
           sopsFile = "${generatedDir}/nebula.key";
           format = "binary";
-          owner = config.systemd.services."nebula@default".serviceConfig.User;
+          owner = config.systemd.services."nebula@${nebulaName}".serviceConfig.User;
         };
       };
 
@@ -96,7 +97,6 @@ in
           dns = {
             fake-ip-filter = [
               "+.${cfg.nebula.domain}"
-              "+.${cfg.tailnet.domain}"
             ]
             ++ (
               nodes
@@ -160,7 +160,7 @@ in
         # `listen.so_mark: 4242` in Nebula and adding a higher-priority routing rule, we force
         # all Nebula-originated UDP traffic to bypass the proxy's routing table and use the
         # 'main' table directly, preserving the original source port and session integrity.
-        services.nebula.networks.default.settings.listen.so_mark = 4242;
+        services.nebula.networks.${nebulaName}.settings.listen.so_mark = 4242;
         networking.localCommands = ''
           ip rule add fwmark 4242 lookup main prio 100
         '';

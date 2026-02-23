@@ -12,7 +12,8 @@ let
     elemAt
     ;
   cfg = config.mesh;
-  nebulaCfg = config.services.nebula.networks.default;
+  nebulaName = "senesperejo";
+  nebulaCfg = config.services.nebula.networks.${nebulaName};
 
   ipToInt =
     ipStr:
