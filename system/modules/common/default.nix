@@ -22,6 +22,12 @@ with lib;
     package = pkgs.nix-dram;
     settings = {
       auto-optimise-store = true;
+      experimental-features = [
+        "nix-command"
+        "flakes"
+        "impure-derivations"
+        "pipe-operators"
+      ];
       trusted-users = [
         "root"
         "@wheel"
