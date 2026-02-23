@@ -8,9 +8,8 @@ in
   config = mkIf (cfg.enable && cfg.services != { }) {
     services.nginx = {
       enable = mkDefault true;
-      recommendedProxySettings = true;
-      recommendedTlsSettings = true;
-      clientMaxBodySize = "1024m";
+      recommendedProxySettings = mkDefault true;
+      recommendedTlsSettings = mkDefault true;
 
       virtualHosts =
         cfg.services

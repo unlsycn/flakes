@@ -8,6 +8,7 @@
   imports = [
     ./hardware.nix
     ./networking.nix
+    ./reserve-proxy.nix
   ];
 
   isServer = true;

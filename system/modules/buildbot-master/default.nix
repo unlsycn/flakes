@@ -29,6 +29,7 @@ with lib;
       };
       admins = [ "unlsycn" ];
       useHTTPS = true;
+      webhookBaseUrl = "https://webhook.unlsycn.com/";
     };
 
     mesh.services.build = {
@@ -38,6 +39,11 @@ with lib;
         nebula = true;
         tailscale = true;
       };
+      extraConfig = ''
+        set_real_ip_from ${config.mesh.nebula.cidr};
+        real_ip_header X-Forwarded-For;
+        real_ip_recursive on;
+      '';
     };
 
     sops.secrets = {

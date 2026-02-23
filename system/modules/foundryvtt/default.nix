@@ -34,14 +34,13 @@ in
       expose = {
         nebula = true;
         tailscale = true;
-        public = true;
       };
-      publicDomain = "fvtt.unlsycn.com";
       locations."/" = {
         proxyPass = "http://127.0.0.1:${cfg.port |> toString}";
         proxyWebsockets = true;
       };
     };
+    services.nginx.clientMaxBodySize = "1024m";
 
     users.users.${user}.extraGroups = [ "foundryvtt" ];
 
