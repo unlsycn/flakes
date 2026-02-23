@@ -149,22 +149,25 @@ in
           |> any (r: cfg.roles |> elem r)
         )
       )
-      {
-        # Prevent the transparent proxy from hijacking Nebula's handshake and relay packets.
-        # While source port mangling is tolerated on a pure client (acting like stateful NAT),
-        # Lighthouses and Relays act as servers or stateful intermediaries. When replying to
-        # handshakes or forwarding relayed traffic, Mihomo's tun auto-route intercepts the
-        # outgoing UDP packets and re-originates them via its own network stack, changing the
-        # source port from 4242 to a random ephemeral port. Remote nodes drop these packets
-        # because they strictly expect traffic from the negotiated port (4242). By setting
-        # `listen.so_mark: 4242` in Nebula and adding a higher-priority routing rule, we force
-        # all Nebula-originated UDP traffic to bypass the proxy's routing table and use the
-        # 'main' table directly, preserving the original source port and session integrity.
-        services.nebula.networks.${nebulaName}.settings.listen.so_mark = 4242;
-        networking.localCommands = ''
-          ip rule add fwmark 4242 lookup main prio 100
-        '';
-      }
+      (
+        let
+          mark = 4242;
+        in
+        {
+          # Marking Nebula traffic to use the 'main' table bypasses transparent proxies and prevents source port mangling.
+          # While simple clients might tolerate port shifting, Lighthouses and Relays require strict port integrity to
+          # maintain session persistence with remote peers; this ensures outgoing handshakes and relayed packets escape
+          # the proxy's virtual routing to avoid being re-originated from random ephemeral ports.
+          services.nebula.networks.${nebulaName}.settings.listen.so_mark = mark;
+          systemd.network.networks."50-nebula".routingPolicyRules = [
+            {
+              FirewallMark = mark;
+              Table = "main";
+              Priority = 100;
+            }
+          ];
+        }
+      )
     )
   ];
 
