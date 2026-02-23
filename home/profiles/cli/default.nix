@@ -46,6 +46,9 @@ with lib;
       rsync
       tldr
       rgfzf
+      tcpdump
+      mtr
+      doggo
     ];
 
     home.persistence."/persist" = {
