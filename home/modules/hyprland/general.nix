@@ -19,6 +19,8 @@ with lib;
         special_fallthrough = true;
         follow_mouse = 2;
         float_switch_override_focus = 0;
+        
+        accel_profile = "custom 0.32167162584878306 0.000 0.100 0.201 0.352 0.503 0.654 0.818 1.048 1.277 1.507 1.736 1.966 2.195 2.425 2.654 2.884 3.113 3.343 3.572 4.046";
       };
 
       binds = {
