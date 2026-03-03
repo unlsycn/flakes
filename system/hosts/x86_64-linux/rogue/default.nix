@@ -38,10 +38,7 @@
   };
 
   services = {
-    asusd = {
-      enable = true;
-      enableUserService = true;
-    };
+    asusd.enable = true;
     openvpn.servers = { };
   };
 
