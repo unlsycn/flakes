@@ -29,10 +29,7 @@
   };
 
   services = {
-    asusd = {
-      enable = true;
-      enableUserService = true;
-    };
+    asusd.enable = true;
     evremap = {
       enable = true;
       settings.device_name = "AT Translated Set 2 keyboard";
