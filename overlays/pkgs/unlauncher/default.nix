@@ -23,7 +23,7 @@ let
       owner = "unlsycn";
       repo = "Unlauncher";
       rev = "4b41cff719a688a9e2aa3db3f8a406ed91c7f379";
-      sha256 = "sha256-c5zxT+CepS4DgSsbJlv2BeeV4fGgVgicvIPHD5+PcOM=";
+      sha256 = "sha256-931TOlJ1ss+8hkImXJOnqFWf4oBSrWqPPjlS2etgLKg=";
     };
 
     buildPhase = ''
