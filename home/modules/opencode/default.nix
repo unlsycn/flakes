@@ -8,6 +8,8 @@ let
   cfg = config.programs.opencode;
 in
 {
+  imports = [ ./providers.nix ];
+
   config = lib.mkIf cfg.enable {
     programs.opencode = {
       package = inputs'.opencode.packages.opencode;
@@ -16,8 +18,6 @@ in
           "opencode-gemini-auth@latest"
           "@simonwjackson/opencode-direnv"
         ];
-        model = "google/gemini-3-pro-preview";
-        small_model = "google/gemini-3-flash-preview";
         share = "manual";
         autoupdate = false;
         keybinds = {
@@ -39,6 +39,8 @@ in
             "ls *" = "allow";
             "grep *" = "allow";
             "rg *" = "allow";
+            "head *" = "allow";
+            "tail *" = "allow";
             "git diff *" = "allow";
             "git log *" = "allow";
             "git status *" = "allow";
@@ -68,10 +70,6 @@ in
           "CONTRIBUTING.md"
           "CLAUDE.md"
           "GEMINI.md"
-        ];
-        enabled_providers = [
-          "google"
-          "deepseek"
         ];
       };
       commands = {
