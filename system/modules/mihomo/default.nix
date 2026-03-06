@@ -370,7 +370,7 @@ in
 
     sops.templates."mihomoConfig".content =
       let
-        porxyProviders =
+        proxyProviders =
           cfg.proxyProviders
           |> mapAttrs (
             name: value:
@@ -455,7 +455,7 @@ in
           |> map (x: x.rule);
       in
       {
-        proxy-providers = porxyProviders;
+        proxy-providers = proxyProviders;
         rule-providers = ruleProviders;
         proxy-groups = proxyGroups;
         rules = rules;
