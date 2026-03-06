@@ -167,11 +167,16 @@
           pre-commit = {
             check.enable = false;
             settings = {
-              hooks.nebula-certs = {
-                enable = true;
-                name = "nebula-certs";
-                entry = config.apps.update-nebula-certs.program;
-                pass_filenames = false;
+              hooks = {
+                nixfmt = {
+                  enable = true;
+                };
+                nebula-certs = {
+                  enable = true;
+                  name = "nebula-certs";
+                  entry = config.apps.update-nebula-certs.program;
+                  pass_filenames = false;
+                };
               };
             };
           };
