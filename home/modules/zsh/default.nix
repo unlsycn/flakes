@@ -7,29 +7,6 @@
 }:
 with lib;
 let
-  zinitConfig = config.programs.zsh.zinit;
-  zinitInit = optionalString zinitConfig.enable ''
-    declare -A ZINIT
-    ZINIT_HOME=${zinitConfig.homeDirectory}
-    ZINIT[HOME_DIR]=''${ZINIT_HOME}
-    [[ -r ''${ZINIT_HOME} ]] || mkdir -p ''${ZINIT_HOME}
-    source "${pkgs.zinit}/share/zinit/zinit.zsh"&>/dev/null
-    ln -sf "${pkgs.zinit}/share/zsh/site-functions/_zinit" ''${ZINIT_HOME}/completions
-    (( ''${+_comps} )) && _comps[zinit]="${pkgs.zinit}/share/zsh/site-functions/_zinit"
-
-    ${optionalString (zinitConfig.plugins != { }) ''
-      ${
-        (
-          zinitConfig.plugins
-          |> mapAttrsToList (
-            modifier: plugins: "zinit ${modifier} for \\\n ${plugins |> intersperse " \\\n " |> concatStrings}"
-          )
-        )
-        |> concatMapStrings (x: x + "\n")
-      }
-    ''}
-  '';
-
   icdiff = "${pkgs.icdiff}/bin/icdiff";
   zellij = getExe config.programs.zellij.package;
   nnn = getExe config.programs.nnn.package;
@@ -108,8 +85,6 @@ in
           [[ ! -r "$P10K_INSTANT_PROMPT" ]] || source "$P10K_INSTANT_PROMPT"
           (( ''${+commands[direnv]} )) && emulate zsh -c "$(direnv hook zsh)"
         '')
-
-        (lib.mkOrder 550 zinitInit)
 
         ''
           autoload -Uz compinit
