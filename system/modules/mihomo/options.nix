@@ -1,9 +1,15 @@
-{ config, lib, ... }:
+{
+  config,
+  lib,
+  pkgs,
+  ...
+}:
 
 with lib;
 with types;
 let
   cfg = config.services.mihomo;
+  yamlType = (pkgs.formats.yaml { }).type;
 in
 {
   options.services.mihomo = {
@@ -71,42 +77,7 @@ in
             type = listOf (submodule {
               options = {
                 type = mkOption {
-                  type = enum [
-                    "DOMAIN"
-                    "DOMAIN-SUFFIX"
-                    "DOMAIN-KEYWORD"
-                    "DOMAIN-WILDCARD"
-                    "DOMAIN-REGEX"
-                    "GEOSITE"
-                    "IP-CIDR"
-                    "IP-CIDR6"
-                    "IP-SUFFIX"
-                    "IP-ASN"
-                    "GEOIP"
-                    "SRC-GEOIP"
-                    "SRC-IP-ASN"
-                    "SRC-IP-CIDR"
-                    "SRC-IP-SUFFIX"
-                    "DST-PORT"
-                    "SRC-PORT"
-                    "IN-PORT"
-                    "IN-TYPE"
-                    "IN-USER"
-                    "IN-NAME"
-                    "PROCESS-PATH"
-                    "PROCESS-PATH-REGEX"
-                    "PROCESS-NAME"
-                    "PROCESS-NAME-REGEX"
-                    "UID"
-                    "NETWORK"
-                    "DSCP"
-                    "RULE-SET"
-                    "AND"
-                    "OR"
-                    "NOT"
-                    "SUB-RULE"
-                    "MATCH"
-                  ];
+                  type = str;
                 };
                 rule = mkOption {
                   type = nullOr str;
@@ -117,10 +88,7 @@ in
                   default = 50;
                 };
                 params = mkOption {
-                  type = listOf (enum [
-                    "no-resolve"
-                    "src"
-                  ]);
+                  type = listOf str;
                   default = [ ];
                   description = "Additional parameters";
                 };
@@ -139,379 +107,44 @@ in
       });
     };
 
-    settings = {
-      allow-lan = mkOption { type = bool; };
-      bind-address = mkOption {
-        type = str;
-        default = "*";
-      };
-      lan-allowed-ips = mkOption {
-        type = listOf str;
-        default = [
-          "0.0.0.0/0"
-          "::/0"
-        ];
-      };
-      lan-disallowed-ips = mkOption {
-        type = listOf str;
-        default = [ ];
-      };
-
-      authentication = mkOption {
-        type = listOf str;
-        default = [ ];
-      };
-      skip-auth-prefixes = mkOption {
-        type = listOf str;
-        default = [ ];
-      };
-
-      mode = mkOption {
-        type = enum [
-          "rule"
-          "global"
-          "direct"
-        ];
-      };
-      log-level = mkOption {
-        type = enum [
-          "silent"
-          "error"
-          "warning"
-          "info"
-          "debug"
-        ];
-      };
-      ipv6 = mkOption { type = bool; };
-
-      keep-alive-interval = mkOption { type = int; };
-      keep-alive-idle = mkOption {
-        type = int;
-        default = 15;
-      };
-      disable-keep-alive = mkOption {
-        type = bool;
-        default = false;
-      };
-
-      find-process-mode = mkOption {
-        type = enum [
-          "always"
-          "strict"
-          "off"
-        ];
-      };
-
-      external-controller = mkOption { type = str; };
-      external-controller-cors = mkOption {
-        type = submodule {
-          options = {
-            allow-origins = mkOption {
-              type = listOf str;
-              default = [ "*" ];
-            };
-            allow-private-network = mkOption {
-              type = bool;
-              default = true;
-            };
-          };
-        };
-        default = {
-          allow-origins = [ "*" ];
-          allow-private-network = true;
-        };
-      };
-      external-controller-unix = mkOption {
-        type = nullOr str;
-        default = null;
-      };
-      external-controller-pipe = mkOption {
-        type = nullOr str;
-        default = null;
-      };
-      external-controller-tls = mkOption {
-        type = nullOr str;
-        default = null;
-      };
-      secret = mkOption {
-        type = nullOr str;
-        default = "";
-      };
-
-      external-ui = mkOption {
-        type = nullOr str;
-        default = null;
-      };
-      external-ui-name = mkOption {
-        type = nullOr str;
-        default = null;
-      };
-      external-ui-url = mkOption {
-        type = nullOr str;
-        default = null;
-      };
-
-      profile = mkOption {
-        type = submodule {
-          options = {
-            store-selected = mkOption { type = bool; };
-            store-fake-ip = mkOption { type = bool; };
-          };
-        };
-      };
-
-      unified-delay = mkOption { type = bool; };
-      tcp-concurrent = mkOption { type = bool; };
-
-      tls = mkOption {
-        type = nullOr (submodule {
-          options = {
-            certificate = mkOption {
-              type = str;
-            };
-            private-key = mkOption {
-              type = str;
-            };
-            ech-key = mkOption {
-              type = nullOr str;
-            };
-          };
-        });
-        default = null;
-      };
-
-      global-client-fingerprint = mkOption {
-        type = nullOr (enum [
-          "chrome"
-          "firefox"
-          "safari"
-          "iOS"
-          "android"
-          "edge"
-          "360"
-          "qq"
-          "random"
-        ]);
-      };
-
-      geodata-mode = mkOption { type = bool; };
-      geodata-loader = mkOption {
-        type = enum [
-          "standard"
-          "memconservative"
-        ];
-        default = "memconservative";
-      };
-      geo-auto-update = mkOption {
-        type = bool;
-        default = false;
-      };
-      geo-update-interval = mkOption {
-        type = int;
-        default = 24;
-      };
-
-      geox-url = mkOption {
-        type = submodule {
-          options = {
-            geoip = mkOption { type = str; };
-            geosite = mkOption { type = str; };
-            mmdb = mkOption { type = str; };
-            asn = mkOption { type = str; };
-          };
-        };
-      };
-
-      global-ua = mkOption {
-        type = str;
-        default = "clash.meta";
-      };
-      etag-support = mkOption {
-        type = bool;
-        default = true;
-      };
-      mixed-port = mkOption { type = port; };
-
-      sniffer = mkOption {
-        type = nullOr (submodule {
-          options = {
-            enable = mkOption { type = bool; };
-            sniff = mkOption { type = attrs; };
-          };
-        });
-      };
-
-      tun = mkOption {
-        type = nullOr (submodule {
-          options = {
-            enable = mkOption {
-              type = bool;
-              readOnly = true;
-              default = cfg.tunMode;
-            };
-            stack = mkOption {
-              type = enum [
-                "system"
-                "gvisor"
-                "mixed"
-              ];
-              default = "gvisor";
-            };
-            auto-route = mkOption {
-              type = bool;
-              default = true;
-            };
-            auto-redirect = mkOption {
-              type = bool;
-              default = false;
-            };
-            auto-detect-interface = mkOption {
-              type = bool;
-              default = true;
-            };
-            dns-hijack = mkOption {
-              type = listOf str;
-              default = [ "0.0.0.0:53" ];
-            };
-            device = mkOption {
-              type = nullOr str;
-              default = null;
-            };
-            mtu = mkOption {
-              type = int;
-              default = 0;
-            };
-            strict-route = mkOption {
-              type = bool;
-              default = false;
-            };
-            gso = mkOption {
-              type = bool;
-              default = false;
-            };
-            gso-max-size = mkOption {
-              type = int;
-              default = 0;
-            };
-            udp-timeout = mkOption {
-              type = int;
-              default = 300;
-            };
-            iproute2-table-index = mkOption {
-              type = int;
-              default = 2022;
-            };
-            iproute2-rule-index = mkOption {
-              type = int;
-              default = 9000;
-            };
-            endpoint-independent-nat = mkOption {
-              type = bool;
-              default = false;
-            };
-            route-address-set = mkOption {
-              type = listOf str;
-              default = [ ];
-            };
-            route-exclude-address-set = mkOption {
-              type = listOf str;
-              default = [ ];
-            };
-            route-address = mkOption {
-              type = listOf str;
-              default = [ ];
-            };
-            route-exclude-address = mkOption {
-              type = listOf str;
-              default = [ ];
-            };
-            include-interface = mkOption {
-              type = listOf str;
-              default = [ ];
-            };
-            exclude-interface = mkOption {
-              type = listOf str;
-              default = [ ];
-            };
-            include-uid = mkOption {
-              type = listOf int;
-              default = [ ];
-            };
-            include-uid-range = mkOption {
-              type = listOf str;
-              default = [ ];
-            };
-            exclude-uid = mkOption {
-              type = listOf int;
-              default = [ ];
-            };
-            exclude-uid-range = mkOption {
-              type = listOf str;
-              default = [ ];
-            };
-            include-android-user = mkOption {
-              type = listOf int;
-              default = [ ];
-            };
-            include-package = mkOption {
-              type = listOf str;
-              default = [ ];
-            };
-            exclude-package = mkOption {
-              type = listOf str;
-              default = [ ];
-            };
-          };
-        });
-        default = null;
-      };
-
-      dns = mkOption {
-        type = nullOr (submodule {
-          options = {
-            enable = mkOption {
-              type = bool;
-              default = cfg.settings.tun.enable;
-            };
-            listen = mkOption { type = str; };
-            ipv6 = mkOption { type = bool; };
-            enhanced-mode = mkOption {
-              type = enum [
-                "redir-host"
-                "fake-ip"
-              ];
-            };
-            fake-ip-range = mkOption { type = str; };
-            fake-ip-filter = mkOption { type = listOf str; };
-            default-nameserver = mkOption { type = listOf str; };
-            nameserver = mkOption { type = listOf str; };
-            fallback = mkOption { type = listOf str; };
-            fallback-filter = mkOption {
-              type = nullOr (submodule {
-                options = {
-                  geoip = mkOption { type = bool; };
-                  geoip-code = mkOption { type = str; };
-                  geosite = mkOption { type = listOf str; };
+    settings = mkOption {
+      type = submodule {
+        freeformType = yamlType;
+        options = {
+          tun = mkOption {
+            type = nullOr (submodule {
+              freeformType = yamlType;
+              options = {
+                enable = mkOption {
+                  type = bool;
+                  readOnly = true;
+                  default = cfg.tunMode;
                 };
-              });
-              default = null;
-            };
-            proxy-server-nameserver = mkOption { type = listOf str; };
-            nameserver-policy = mkOption { type = attrs; };
+                route-exclude-address = mkOption {
+                  type = listOf str;
+                  default = [ ];
+                };
+              };
+            });
+            default = null;
           };
-        });
-      };
 
-      ntp = mkOption {
-        type = nullOr (submodule {
-          options = {
-            enable = mkOption { type = bool; };
-            write-to-system = mkOption { type = bool; };
-            server = mkOption { type = str; };
-            port = mkOption { type = port; };
-            interval = mkOption { type = int; };
+          dns = mkOption {
+            type = nullOr (submodule {
+              freeformType = yamlType;
+              options = {
+                enable = mkOption {
+                  type = bool;
+                  default = cfg.settings.tun.enable;
+                };
+                fake-ip-filter = mkOption {
+                  type = listOf str;
+                  default = [ ];
+                };
+              };
+            });
           };
-        });
+        };
       };
     };
   };
