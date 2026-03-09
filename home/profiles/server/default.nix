@@ -12,11 +12,8 @@ with lib;
   config = mkIf config.profile.server.enable {
     targets.genericLinux.enable = true;
 
-    sops.secrets = mkForce { };
+    sops.control.deploySecrets = false;
 
-    programs = {
-      ssh.matchBlocks."*".identityFile = mkForce [ ];
-      zellij.copyCommand = "";
-    };
+    programs.zellij.copyCommand = "";
   };
 }

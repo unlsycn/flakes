@@ -6,6 +6,11 @@
 with lib;
 {
   options.sops.control = {
+    deploySecrets = mkOption {
+      type = types.bool;
+      default = true;
+      description = "Whether to deploy sops secrets";
+    };
     deploySshSecrets = mkOption {
       type = types.bool;
       default = false;
