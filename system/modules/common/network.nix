@@ -9,8 +9,5 @@ with lib;
     firewall.enable = mkDefault true;
   };
 
-  services = {
-    mihomo.enable = mkDefault true;
-    blueman.enable = true;
-  };
+  services.mihomo.enable = mkDefault true;
 }

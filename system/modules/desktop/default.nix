@@ -13,6 +13,18 @@ with lib;
   };
 
   config = mkMerge [
+    (mkIf config.hasDesktopEnvironment {
+      services = {
+        pipewire = {
+          enable = true;
+          alsa.enable = true;
+          pulse.enable = true;
+        };
+        printing.enable = true;
+        libinput.enable = true;
+        blueman.enable = true;
+      };
+    })
     (mkIf (config.hasDesktopEnvironment && !config.handheld.enable) {
       programs.hyprland.enable = mkDefault true;
     })
