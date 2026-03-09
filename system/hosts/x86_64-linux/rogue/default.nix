@@ -37,10 +37,7 @@
     };
   };
 
-  services = {
-    asusd.enable = true;
-    openvpn.servers = { };
-  };
+  services.asusd.enable = true;
 
   mesh = {
     enable = true;

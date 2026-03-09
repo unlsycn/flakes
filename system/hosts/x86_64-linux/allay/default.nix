@@ -34,6 +34,7 @@
       enable = true;
       settings.device_name = "AT Translated Set 2 keyboard";
     };
+    openvpn.deploy = true;
     zfs.enable = true;
   };
 

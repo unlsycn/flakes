@@ -29,9 +29,6 @@
     };
   };
 
-  services = {
-    openvpn.servers = { };
-  };
   networking.proxy.default = "http://127.0.0.1:1970";
 
   mesh = {

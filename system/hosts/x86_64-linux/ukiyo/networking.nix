@@ -61,5 +61,4 @@
     ATTR{address}=="bc:24:11:65:03:20", NAME="ens19"
   '';
 
-  services.openvpn.servers = { };
 }
