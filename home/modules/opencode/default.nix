@@ -6,6 +6,35 @@
 }:
 let
   cfg = config.programs.opencode;
+
+  allowedBashCommands = [
+    "ls *"
+    "cat *"
+    "head *"
+    "tail *"
+    "wc *"
+    "file *"
+    "tree *"
+    "which *"
+    "grep *"
+    "rg *"
+    "sort *"
+    "cut *"
+    "uniq *"
+    "diff *"
+    "echo *"
+    "pwd"
+    "git diff *"
+    "git log *"
+    "git show *"
+    "git status *"
+    "git rev-parse *"
+    "gh *"
+    "nix eval *"
+    "nix flake show *"
+    "nix flake metadata *"
+    "nix flake check *"
+  ];
 in
 {
   imports = [ ./providers.nix ];
@@ -36,15 +65,8 @@ in
           list = "allow";
           bash = {
             "*" = "ask";
-            "ls *" = "allow";
-            "grep *" = "allow";
-            "rg *" = "allow";
-            "head *" = "allow";
-            "tail *" = "allow";
-            "git diff *" = "allow";
-            "git log *" = "allow";
-            "git status *" = "allow";
-          };
+          }
+          // lib.genAttrs allowedBashCommands (_: "allow");
           task = "ask";
           skill = "allow";
           lsp = "allow";

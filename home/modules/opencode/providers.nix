@@ -5,6 +5,10 @@
 }:
 let
   cfg = config.programs.opencode;
+
+  # Cap context window to avoid performance degradation at very long contexts.
+  maxContext = 256000;
+  capContext = limit: limit // { context = lib.min limit.context maxContext; };
 in
 {
   config.programs.opencode.settings = lib.mkIf cfg.enable {
@@ -146,7 +150,7 @@ in
         anthropic_models = {
           "claude-opus-4-6" = {
             name = "Claude Opus 4.6";
-            limit = {
+            limit = capContext {
               context = 1000000;
               output = 128000;
             };
@@ -158,7 +162,7 @@ in
           };
           "claude-sonnet-4-6" = {
             name = "Claude Sonnet 4.6";
-            limit = {
+            limit = capContext {
               context = 1000000;
               output = 64000;
             };
