@@ -32,6 +32,7 @@ with lib;
       nnn.enable = true;
       zellij.enable = true;
       opencode.enable = true;
+      claude-code.enable = true;
     };
 
     services = {

@@ -207,6 +207,9 @@ in
           npm = "@ai-sdk/anthropic";
           options = {
             baseURL = "https://claude2.sssaicode.com/api/v1";
+            headers = {
+              user-agent = "claude-cli/2.1.74 (external, cli)";
+            };
           };
           models = anthropic_models;
         };

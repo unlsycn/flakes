@@ -6,35 +6,15 @@
 }:
 let
   cfg = config.programs.opencode;
+  llmCfg = config.programs.llm-cli;
 
-  allowedBashCommands = [
-    "ls *"
-    "cat *"
-    "head *"
-    "tail *"
-    "wc *"
-    "file *"
-    "tree *"
-    "which *"
-    "grep *"
-    "rg *"
-    "sort *"
-    "cut *"
-    "uniq *"
-    "diff *"
-    "echo *"
-    "pwd"
-    "git diff *"
-    "git log *"
-    "git show *"
-    "git status *"
-    "git rev-parse *"
-    "gh *"
-    "nix eval *"
-    "nix flake show *"
-    "nix flake metadata *"
-    "nix flake check *"
-  ];
+  toFrontmatterCommand = _: cmd: ''
+    ---
+    description: ${cmd.description}
+    ---
+
+    ${cmd.prompt}
+  '';
 in
 {
   imports = [ ./providers.nix ];
@@ -66,7 +46,7 @@ in
           bash = {
             "*" = "ask";
           }
-          // lib.genAttrs allowedBashCommands (_: "allow");
+          // lib.genAttrs llmCfg.allowedBashCommands (_: "allow");
           task = "ask";
           skill = "allow";
           lsp = "allow";
@@ -94,18 +74,7 @@ in
           "GEMINI.md"
         ];
       };
-      commands = {
-        "commit" = ''
-          ---
-          description: Generate a commit message for the staged changes
-          agent: build
-          ---
-
-          Please analyze staged changes and recent git history to generate a concise commit message, following recent patterns. Only include a body if necessary to explain the rationale.
-
-          After generating the message, ask the user if they want to proceed with the commit. If confirmed, execute the commit with the `--signoff` flag.
-        '';
-      };
+      commands = llmCfg.commands |> lib.mapAttrs toFrontmatterCommand;
     };
 
     home.persistence."/persist".directories = [

@@ -10,7 +10,6 @@ let
   icdiff = "${pkgs.icdiff}/bin/icdiff";
   zellij = getExe config.programs.zellij.package;
   nnn = getExe config.programs.nnn.package;
-  opencode = getExe config.programs.opencode.package;
 in
 {
   imports = [ ./zinit.nix ];
@@ -49,7 +48,6 @@ in
         "dev" = "${zellij} a -c dev";
         "cdtmp" = "cd `mktemp -d`";
         "pastebin" = "curl -F \"c=@-\" \"http://fars.ee/\"";
-        "gcm" = "${opencode} --prompt /commit";
       };
 
       zinit = {

@@ -6,6 +6,7 @@
 }:
 let
   cfg = config.programs.gemini-cli;
+  llmCfg = config.programs.llm-cli;
 in
 {
 
@@ -24,12 +25,13 @@ in
           hash = "sha256-0bS3yl5EG2KyfBrw8SO1BfKwxb1f2LVsudeaQTb5/DQ=";
         };
       });
-      commands = {
-        "git/commit" = {
-          prompt = "Please analyze the staged changes and recent git history to generate a commit message";
-          description = "Generate a commit message for the staged changes";
-        };
-      };
+      commands =
+        llmCfg.commands
+        |> lib.mapAttrs (
+          _: cmd: {
+            inherit (cmd) prompt description;
+          }
+        );
       settings = {
         experimental = {
           enableAgents = true;
