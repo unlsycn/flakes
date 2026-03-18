@@ -1,3 +1,5 @@
 result
 .direnv/*
 .vscode/*
+.envrc
+.pre-commit-config.yaml
