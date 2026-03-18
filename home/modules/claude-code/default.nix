@@ -68,6 +68,10 @@ in
   # symlink, which prevents Claude Code from persisting runtime changes (permission
   # mode, "always allow", etc.). We override it with a mutable copy that gets reset
   # on each activation. See: github.com/anthropics/claude-code/issues/4808
+  #
+  # Additionally, "accept edits on" / bypass permissions mode is broken and does not
+  # suppress Edit prompts. This is a known upstream bug with no fix as of v2.1.74.
+  # See: github.com/anthropics/claude-code/issues/12070
   config = mkIf config.programs.claude-code.enable {
     programs.claude-code = {
       settings = {
