@@ -26,13 +26,13 @@ let
   statuslineScript = pkgs.writeShellScript "claude-statusline" ''
     input=$(cat)
 
-    read -r MODEL DIR COST PCT DURATION_MS LINES_ADD LINES_DEL < <(echo "$input" | ${getExe pkgs.jq} -r '
+    IFS=$'\t' read -r MODEL DIR COST PCT DURATION_MS LINES_ADD LINES_DEL < <(echo "$input" | ${getExe pkgs.jq} -r '
       [
         .model.display_name,
         .workspace.current_dir,
         (.cost.total_cost_usd // 0 | tostring),
-        (.context_window.used_percentage // 0 | tostring | split(".")[0]),
-        (.cost.total_duration_ms // 0 | tostring),
+        (.context_window.used_percentage // 0 | round | tostring),
+        (.cost.total_duration_ms // 0 | floor | tostring),
         (.cost.total_lines_added // 0 | tostring),
         (.cost.total_lines_removed // 0 | tostring)
       ] | @tsv
