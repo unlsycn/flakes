@@ -192,7 +192,7 @@ in
             rioj7.vscode-remove-comments
             wakatime.vscode-wakatime
           ]
-          ++ lib.optional (!cfg.useAntigravity) [
+          ++ lib.optionals (!cfg.useAntigravity) [
             # LLM Assistant
             github.copilot-chat
 
