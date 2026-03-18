@@ -63,9 +63,12 @@ in
           Analyze staged changes and recent git history to generate a concise
           commit message following recent patterns.
 
-          The body should explain *why*, not *what*. Do not list individual
-          file changes unless the rationale is non-obvious from the subject
-          line alone. Do not append Co-Authored-By trailers.
+          Default to a single subject line with no body. Only add a body when
+          the change is not self-explanatory and the subject alone cannot
+          convey *why* the change was made — e.g. working around an upstream
+          bug or adapting to a breaking change. The body should explain
+          rationale, not list individual file changes. Do not append
+          Co-Authored-By trailers.
 
           Ask the user whether to proceed, then commit with --signoff.
         '';
