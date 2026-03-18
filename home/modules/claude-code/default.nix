@@ -16,6 +16,13 @@ let
     ${cmd.prompt}
   '';
 
+  settingsFile = (pkgs.formats.json { }).generate "claude-code-settings.json" (
+    config.programs.claude-code.settings
+    // {
+      "$schema" = "https://json.schemastore.org/claude-code-settings.json";
+    }
+  );
+
   statuslineScript = pkgs.writeShellScript "claude-statusline" ''
     input=$(cat)
 
@@ -57,10 +64,10 @@ let
   '';
 in
 {
-  # NOTE: ~/.claude/settings.json is a read-only nix store symlink.
-  # Claude Code cannot persist runtime changes (permission mode, "always allow", etc.)
-  # because it doesn't fall back to settings.local.json on write failure.
-  # All settings must be declared here. See: github.com/anthropics/claude-code/issues/4808
+  # Upstream HM module generates ~/.claude/settings.json as a read-only nix store
+  # symlink, which prevents Claude Code from persisting runtime changes (permission
+  # mode, "always allow", etc.). We override it with a mutable copy that gets reset
+  # on each activation. See: github.com/anthropics/claude-code/issues/4808
   config = mkIf config.programs.claude-code.enable {
     programs.claude-code = {
       settings = {
@@ -89,6 +96,11 @@ in
       };
       commands = llmCfg.commands |> mapAttrs toFrontmatterCommand;
     };
+
+    home.file.".claude/settings.json".enable = mkForce false;
+    home.activation.claudeCodeSettings = lib.hm.dag.entryAfter [ "writeBoundary" ] ''
+      install -Dm644 ${settingsFile} "$HOME/.claude/settings.json"
+    '';
 
     home.persistence."/persist" = {
       directories = [ ".claude" ];
