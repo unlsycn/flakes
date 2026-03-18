@@ -37,6 +37,7 @@ in
           read = {
             "*" = "allow";
             "*.env" = "deny";
+            "**/.private/**" = "deny";
             ".direnv" = "ask";
           };
           edit = "ask";

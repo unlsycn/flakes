@@ -86,7 +86,10 @@ in
             "WebFetch(domain:raw.githubusercontent.com)"
           ]
           ++ (llmCfg.allowedBashCommands |> map (cmd: "Bash(${cmd})"));
-          deny = [ "Read(*.env)" ];
+          deny = [
+            "Read(*.env)"
+            "Read(**/.private/**)"
+          ];
           ask = [
             "Read(.direnv)"
             "Edit"
