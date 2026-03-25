@@ -69,11 +69,7 @@ in
           auto = true;
           prune = true;
         };
-        instructions = [
-          "CONTRIBUTING.md"
-          "CLAUDE.md"
-          "GEMINI.md"
-        ];
+        instructions = llmCfg.projectInstructions;
       };
       commands = llmCfg.commands |> lib.mapAttrs toFrontmatterCommand;
     };

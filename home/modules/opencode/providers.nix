@@ -12,14 +12,12 @@ let
 in
 {
   config.programs.opencode.settings = lib.mkIf cfg.enable {
-    model = "anthropic-sss/claude-opus-4-6";
-    small_model = "anthropic-sss/claude-sonnet-4-6";
+    model = "openai-rustcat/gpt-5.4";
+    small_model = "openai-rustcat/gpt-5.3-codex-spark";
     enabled_providers = [
       "google"
       "deepseek"
       "openai-rustcat"
-      "openai-sss"
-      "anthropic-sss"
     ];
     provider =
       let
@@ -195,23 +193,6 @@ in
             baseURL = "https://rust.cat/v1";
           };
           models = openai_models;
-        };
-        openai-sss = {
-          npm = "@ai-sdk/openai";
-          options = {
-            baseURL = "https://node-hk.sssaicode.com/api/v1";
-          };
-          models = openai_models;
-        };
-        anthropic-sss = {
-          npm = "@ai-sdk/anthropic";
-          options = {
-            baseURL = "https://claude2.sssaicode.com/api/v1";
-            headers = {
-              user-agent = "claude-cli/2.1.74 (external, cli)";
-            };
-          };
-          models = anthropic_models;
         };
       };
   };

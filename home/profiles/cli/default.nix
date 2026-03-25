@@ -12,6 +12,7 @@ with lib;
 
   config = mkIf config.profile.cli.enable {
     xdg.enable = true;
+    home.preferXdgDirectories = true;
     catppuccin.enable = true;
 
     programs = {
@@ -33,6 +34,7 @@ with lib;
       zellij.enable = true;
       opencode.enable = true;
       claude-code.enable = true;
+      codex.enable = true;
     };
 
     services = {

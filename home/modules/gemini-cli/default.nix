@@ -1,7 +1,6 @@
 {
   config,
   lib,
-  pkgs,
   ...
 }:
 let
@@ -9,22 +8,8 @@ let
   llmCfg = config.programs.llm-cli;
 in
 {
-
   config = lib.mkIf cfg.enable {
     programs.gemini-cli = {
-      package = pkgs.gemini-cli.overrideAttrs (old: rec {
-        version = "0.27.0";
-        src = pkgs.fetchFromGitHub {
-          owner = "google-gemini";
-          repo = "gemini-cli";
-          tag = "v${version}";
-          hash = "sha256-ptx+aBlw6Koyv5NWZNXOunPJfedv1JwprG1SaRLwrGg=";
-        };
-        npmDeps = pkgs.fetchNpmDeps {
-          inherit src;
-          hash = "sha256-0bS3yl5EG2KyfBrw8SO1BfKwxb1f2LVsudeaQTb5/DQ=";
-        };
-      });
       commands =
         llmCfg.commands
         |> lib.mapAttrs (
@@ -33,6 +18,7 @@ in
           }
         );
       settings = {
+        context.fileName = llmCfg.projectInstructions;
         experimental = {
           enableAgents = true;
           skills = true;

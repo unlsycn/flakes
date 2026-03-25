@@ -11,6 +11,7 @@ let
     claude-code = getExe config.programs.claude-code.finalPackage;
     opencode = getExe config.programs.opencode.package;
     gemini-cli = getExe config.programs.gemini-cli.package;
+    codex = getExe config.programs.codex.package;
   };
 
   mkCommandAlias =
@@ -19,6 +20,7 @@ let
       claude-code = "${backendBin.claude-code} /${cmd}";
       opencode = "${backendBin.opencode} --prompt /${cmd}";
       gemini-cli = "${backendBin.gemini-cli} -i /${cmd}";
+      codex = "${backendBin.codex} exec ${escapeShellArg (cfg.commands.${cmd}.prompt)}";
     }
     .${backend};
 
@@ -26,6 +28,7 @@ let
     claude-code = config.programs.claude-code.enable;
     opencode = config.programs.opencode.enable;
     gemini-cli = config.programs.gemini-cli.enable;
+    codex = config.programs.codex.enable;
   };
 
   commandSubmodule = types.submodule {
@@ -36,22 +39,41 @@ let
   };
 in
 {
+  imports = [
+    (mkRenamedOptionModule
+      [ "programs" "llm-cli" "projectInstructionFiles" ]
+      [
+        "programs"
+        "llm-cli"
+        "projectInstructions"
+      ]
+    )
+  ];
+
   options.programs.llm-cli = {
     defaultBackend = mkOption {
       type = types.enum (attrNames backendBin);
-      default = "claude-code";
+      default = "codex";
     };
 
     commands = mkOption {
       type = types.attrsOf commandSubmodule;
       default = { };
-      description = "Shared slash commands — each backend translates to its own format";
     };
 
     allowedBashCommands = mkOption {
       type = types.listOf types.str;
       default = [ ];
-      description = "Bash command patterns to allow across all backends";
+    };
+
+    projectInstructions = mkOption {
+      type = types.listOf types.str;
+      default = [
+        "AGENTS.md"
+        "CLAUDE.md"
+        "GEMINI.md"
+        "CONTRIBUTING.md"
+      ];
     };
   };
 
