@@ -126,6 +126,7 @@ in
         finishing-a-development-branch = pkgs.superpowers."finishing-a-development-branch";
         receiving-code-review = pkgs.superpowers."receiving-code-review";
         requesting-code-review = pkgs.superpowers."requesting-code-review";
+        routing-superpowers = pkgs."routing-superpowers";
         subagent-driven-development = pkgs.superpowers."subagent-driven-development";
         systematic-debugging = pkgs.superpowers."systematic-debugging";
         test-driven-development = pkgs.superpowers."test-driven-development";
