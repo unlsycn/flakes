@@ -7,6 +7,7 @@ with lib;
 let
   cfg = config.programs.codex;
   llmCfg = config.programs.llm-cli;
+  maxContext = 320000;
 
   toPrompt = _: cmd: ''
     ---
@@ -25,8 +26,8 @@ in
         review_model = "gpt-5.4";
         model_reasoning_effort = "high";
         plan_mode_reasoning_effort = "xhigh";
-        model_context_window = 1000000;
-        model_auto_compact_token_limit = 900000;
+        model_context_window = maxContext;
+        model_auto_compact_token_limit = maxContext * 9 / 10;
         approval_policy = "on-request";
         default_permissions = "default";
         check_for_update_on_startup = false;
