@@ -71,6 +71,7 @@ in
         };
         instructions = llmCfg.projectInstructions;
       };
+      skills = llmCfg.skills;
       commands = llmCfg.commands |> lib.mapAttrs toFrontmatterCommand;
     };
 

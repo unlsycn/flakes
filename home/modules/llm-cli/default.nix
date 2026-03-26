@@ -1,12 +1,12 @@
 {
   config,
   lib,
+  pkgs,
   ...
 }:
 with lib;
 let
   cfg = config.programs.llm-cli;
-
   backendBin = {
     claude-code = getExe config.programs.claude-code.finalPackage;
     opencode = getExe config.programs.opencode.package;
@@ -20,7 +20,7 @@ let
       claude-code = "${backendBin.claude-code} /${cmd}";
       opencode = "${backendBin.opencode} --prompt /${cmd}";
       gemini-cli = "${backendBin.gemini-cli} -i /${cmd}";
-      codex = "${backendBin.codex} exec ${escapeShellArg (cfg.commands.${cmd}.prompt)}";
+      codex = "${backendBin.codex} ${escapeShellArg (cfg.commands.${cmd}.prompt)}";
     }
     .${backend};
 
@@ -39,17 +39,6 @@ let
   };
 in
 {
-  imports = [
-    (mkRenamedOptionModule
-      [ "programs" "llm-cli" "projectInstructionFiles" ]
-      [
-        "programs"
-        "llm-cli"
-        "projectInstructions"
-      ]
-    )
-  ];
-
   options.programs.llm-cli = {
     defaultBackend = mkOption {
       type = types.enum (attrNames backendBin);
@@ -64,6 +53,11 @@ in
     allowedBashCommands = mkOption {
       type = types.listOf types.str;
       default = [ ];
+    };
+
+    skills = mkOption {
+      type = types.attrsOf types.path;
+      default = { };
     };
 
     projectInstructions = mkOption {
@@ -124,8 +118,23 @@ in
         "nix flake metadata *"
         "nix flake check *"
       ];
-    };
 
+      skills = {
+        brainstorming = pkgs.superpowers.brainstorming;
+        dispatching-parallel-agents = pkgs.superpowers."dispatching-parallel-agents";
+        executing-plans = pkgs.superpowers."executing-plans";
+        finishing-a-development-branch = pkgs.superpowers."finishing-a-development-branch";
+        receiving-code-review = pkgs.superpowers."receiving-code-review";
+        requesting-code-review = pkgs.superpowers."requesting-code-review";
+        subagent-driven-development = pkgs.superpowers."subagent-driven-development";
+        systematic-debugging = pkgs.superpowers."systematic-debugging";
+        test-driven-development = pkgs.superpowers."test-driven-development";
+        using-git-worktrees = pkgs.superpowers."using-git-worktrees";
+        verification-before-completion = pkgs.superpowers."verification-before-completion";
+        writing-plans = pkgs.superpowers."writing-plans";
+        writing-skills = pkgs.superpowers."writing-skills";
+      };
+    };
     programs.zsh.shellAliases = mkIf (
       config.programs.zsh.enable && enabledBackends ? ${cfg.defaultBackend}
     ) { gcm = mkCommandAlias cfg.defaultBackend "commit"; };

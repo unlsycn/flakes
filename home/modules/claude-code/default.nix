@@ -101,6 +101,7 @@ in
           ];
         };
       };
+      skills = llmCfg.skills;
       commands = llmCfg.commands |> mapAttrs toFrontmatterCommand;
     };
 

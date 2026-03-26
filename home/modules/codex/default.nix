@@ -1,17 +1,12 @@
 {
   config,
   lib,
-  inputs,
   ...
 }:
 with lib;
 let
   cfg = config.programs.codex;
   llmCfg = config.programs.llm-cli;
-  superpowersSkills = import ../../lib/superpowers.nix {
-    inherit lib;
-    source = inputs.superpowers;
-  };
 
   toPrompt = _: cmd: ''
     ---
@@ -70,16 +65,27 @@ in
           allow_local_binding = false;
         };
       };
-      skills = superpowersSkills;
     };
 
     home.file =
-      llmCfg.commands
-      |> mapAttrs' (
-        name: cmd:
-        nameValuePair ".config/codex/prompts/${name}.md" {
-          text = toPrompt name cmd;
-        }
+      (
+        llmCfg.commands
+        |> mapAttrs' (
+          name: cmd:
+          nameValuePair ".config/codex/prompts/${name}.md" {
+            text = toPrompt name cmd;
+          }
+        )
+      )
+      // (
+        llmCfg.skills
+        |> mapAttrs' (
+          name: content:
+          # Work around https://github.com/openai/codex/issues/10470.
+          nameValuePair ".agents/skills/${name}" {
+            source = content;
+          }
+        )
       );
 
     home.persistence."/persist".directories = [ ".config/codex" ];
