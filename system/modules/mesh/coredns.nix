@@ -53,6 +53,7 @@ in
       enable = true;
       config = ''
         ${cfg.nebula.domain} {
+          bind ${cfg.nebula.ip}
           hosts {
             ${nebulaNodeHosts}
             ${nebulaServiceHosts}
@@ -63,6 +64,7 @@ in
         }
 
         ${cfg.tailnet.domain} {
+          bind ${cfg.nebula.ip}
           file ${tailnetZoneFile}
           log
           errors
