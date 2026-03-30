@@ -17,6 +17,10 @@ If the current work does not already have an explicit active route, you MUST rou
 If new information may change the active route, you MUST route again before selecting skills, changing workflows, or delegating.
 
 Do not proceed on an implicit route. Do not choose skills first and justify the route later.
+
+For repo-changing work, include `requesting-code-review` and `verification-before-completion` in `Finish` from the start. Do not mark the task complete until both have been run.
+
+Repo-changing work includes adding, deleting, generating, formatting, or editing files that belong to the change.
 </EXTREMELY-IMPORTANT>
 
 ## When to Use
@@ -43,14 +47,15 @@ Choose the most appropriate lane for the task:
 - `Light`
   - work directly
   - skip `brainstorming` and `writing-plans`
-  - for implementation changes, finish with `requesting-code-review` and `verification-before-completion`
+  - for repo-changing work, add `requesting-code-review` and `verification-before-completion` to `Finish`
 - `Design-only`
   - use `brainstorming`
   - reroute after the design result
+  - if the planned result changes repo contents, keep review and verification in `Finish` now
 - `Designed execution`
   - use `brainstorming`, then `writing-plans`
   - execute with `executing-plans` or `subagent-driven-development`
-  - finish with `requesting-code-review` and `verification-before-completion`
+  - keep `Finish` intact through completion
 
 Add extra skills only when triggered:
 
@@ -59,17 +64,30 @@ Add extra skills only when triggered:
 - `test-driven-development` when behavior changes and practical tests can be written
 - `using-git-worktrees` when isolation, parallel work, or higher-risk execution justifies it
 
+Upgrade to a heavier lane when any of these are true:
+
+- the task touches multiple files or subsystems
+- the task changes behavior, not just wording
+- the task will be delegated to a child agent
+- the task has unclear acceptance criteria
+- the task would be expensive to redo
+
 ## Required Announcement
 
 Before substantive work, publish:
 
 ```text
-Route: <task_type> + <lane>
-Use: <skills selected>
+Route: <task_type>:<lane>
+Use: <skills selected for this phase>
+Finish: <skills that must be run before the task is complete>
 Skip: <heavy skills skipped and why>
 ```
 
 Then create a `Route Context`. Use the canonical template in `references/route-context.md`.
+
+- `Use` lists the skills active right now
+- `Finish` lists the skills that must actually be run before the task is complete
+- for repo-changing work, `Finish` MUST include `requesting-code-review` and `verification-before-completion`
 
 ## Propagation
 
@@ -83,5 +101,8 @@ When the route changes, replace the old block with the new active `Route Context
 
 - routing too late, after skills or workflows have already been chosen
 - treating every coding task as `Designed execution`
+- treating `Light` as permission to skip review or verification
+- dropping `Finish` because the current phase is only design or planning
+- carrying the route forward but not running the skills in `Finish`
+- treating new or generated files as outside repo-changing work
 - letting a reviewer or subagent continue on an outdated route
-- omitting `verification-before-completion`

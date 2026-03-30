@@ -4,8 +4,10 @@ Use this block verbatim in subtask and review prompts.
 
 ```yaml
 Route Context:
-  Route: implement:Designed-execution
+  Route: "<task_type>:<lane>"
   Use:
+    - ...
+  Finish:
     - ...
   Skip:
     - ...
@@ -13,33 +15,33 @@ Route Context:
   Rationale: "<1 short sentence>"
 ```
 
-## Minimal Example
+## Repo-Changing Example
 
 ```yaml
 Route Context:
-  Route: chore:Light
-  Use:
+  Route: "chore:Light"
+  Use: []
+  Finish:
     - requesting-code-review
     - verification-before-completion
   Skip:
     - brainstorming
     - writing-plans
-    - test-driven-development
-    - using-git-worktrees
   Propagate: Copy this block unchanged into every subtask and review prompt.
   Rationale: "Small scoped config edit with clear requirements."
 ```
 
-## Upgrade Example
+## Read-Only Example
 
 ```yaml
 Route Context:
-  Route: implement:Designed-execution
+  Route: "review:Light"
   Use:
+    - routing-superpowers
+  Finish: []
+  Skip:
     - brainstorming
     - writing-plans
-  Skip:
-    - using-git-worktrees
   Propagate: Copy this block unchanged into every subtask and review prompt.
-  Rationale: "Cross-cutting behavior change with unresolved design edges."
+  Rationale: "Bounded analysis task with no repo change."
 ```
