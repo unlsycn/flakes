@@ -21,7 +21,12 @@ in
 
   config = lib.mkIf cfg.enable {
     programs.opencode = {
-      package = inputs'.opencode.packages.opencode;
+      # FIXME: https://github.com/anomalyco/opencode/issues/23256
+      # package = inputs'.opencode.packages.opencode;
+      tui.keybinds = {
+        leader = "ctrl+o";
+        app_exit = "ctrl+q";
+      };
       settings = {
         plugin = [
           "opencode-gemini-auth@latest"
@@ -29,10 +34,6 @@ in
         ];
         share = "manual";
         autoupdate = false;
-        keybinds = {
-          leader = "ctrl+o";
-          app_exit = "ctrl+q";
-        };
         permission = {
           read = {
             "*" = "allow";

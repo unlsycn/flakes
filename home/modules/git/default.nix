@@ -29,6 +29,7 @@
         };
         signing = {
           signByDefault = true;
+          format = "openpgp";
           key = null;
         };
         lfs.enable = true;
