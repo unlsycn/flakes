@@ -56,6 +56,15 @@ in
       };
     };
 
+    home.file =
+      llmCfg.skills
+      |> lib.mapAttrs' (
+        name: content:
+        lib.nameValuePair ".gemini/skills/${name}" {
+          source = content;
+        }
+      );
+
     home.persistence."/persist".directories = [
       ".gemini"
     ];
