@@ -14,13 +14,13 @@ let
     codex = getExe config.programs.codex.package;
   };
 
-  mkCommandAlias =
-    backend: cmd:
+  mkSkillAlias =
+    backend: skill:
     {
-      claude-code = "${backendBin.claude-code} /${cmd}";
-      opencode = "${backendBin.opencode} --prompt /${cmd}";
-      gemini-cli = "${backendBin.gemini-cli} -i /${cmd}";
-      codex = "${backendBin.codex} ${escapeShellArg (cfg.commands.${cmd}.prompt)}";
+      claude-code = "${backendBin.claude-code} /${skill}";
+      opencode = "${backendBin.opencode} --prompt /${skill}";
+      gemini-cli = "${backendBin.gemini-cli} -i /${skill}";
+      codex = "${backendBin.codex} ${escapeShellArg ("$" + skill)}";
     }
     .${backend};
 
@@ -73,23 +73,6 @@ in
 
   config = {
     programs.llm-cli = {
-      commands.commit = {
-        description = "Generate a commit message for the staged changes";
-        prompt = ''
-          Analyze staged changes and recent git history to generate a concise
-          commit message following recent patterns.
-
-          Default to a single subject line with no body. Only add a body when
-          the change is not self-explanatory and the subject alone cannot
-          convey *why* the change was made — e.g. working around an upstream
-          bug or adapting to a breaking change. The body should explain
-          rationale, not list individual file changes. Do not append
-          Co-Authored-By trailers.
-
-          Ask the user whether to proceed, then commit with --signoff.
-        '';
-      };
-
       allowedBashCommands = [
         "ls *"
         "cat *"
@@ -120,6 +103,7 @@ in
       ];
 
       skills = {
+        commit-message = pkgs."commit-message";
         brainstorming = pkgs.superpowers.brainstorming;
         dispatching-parallel-agents = pkgs.superpowers."dispatching-parallel-agents";
         executing-plans = pkgs.superpowers."executing-plans";
@@ -138,6 +122,6 @@ in
     };
     programs.zsh.shellAliases = mkIf (
       config.programs.zsh.enable && enabledBackends ? ${cfg.defaultBackend}
-    ) { gcm = mkCommandAlias cfg.defaultBackend "commit"; };
+    ) { gcm = mkSkillAlias cfg.defaultBackend "commit-message"; };
   };
 }
