@@ -1,24 +1,16 @@
 {
   config,
   lib,
+  pkgs,
   ...
 }:
 with lib;
 let
-  cfg = config.programs.codex;
   llmCfg = config.programs.llm-cli;
   maxContext = 320000;
-
-  toPrompt = _: cmd: ''
-    ---
-    description: ${cmd.description}
-    ---
-
-    ${cmd.prompt}
-  '';
 in
 {
-  config = mkIf cfg.enable {
+  config = mkIf config.programs.codex.enable {
     programs.codex = {
       settings = {
         model_provider = "OpenAI";
@@ -32,6 +24,7 @@ in
         default_permissions = "default";
         check_for_update_on_startup = false;
         notice.hide_rate_limit_model_nudge = true;
+        features.codex_hooks = true;
         project_doc_fallback_filenames = filter (name: name != "AGENTS.md") llmCfg.projectInstructions;
         features.multi_agent = true;
         model_providers.OpenAI = {
@@ -74,12 +67,18 @@ in
         |> mapAttrs' (
           name: cmd:
           nameValuePair ".config/codex/prompts/${name}.md" {
-            text = toPrompt name cmd;
+            text = ''
+              ---
+              description: ${cmd.description}
+              ---
+
+              ${cmd.prompt}
+            '';
           }
         )
       )
       // (
-        llmCfg.skills
+        (llmCfg.skills // llmCfg.codexSkills)
         |> mapAttrs' (
           name: content:
           # Work around https://github.com/openai/codex/issues/10470.
@@ -87,7 +86,20 @@ in
             source = content;
           }
         )
-      );
+      )
+      // {
+        ".config/codex/hooks.json".source = pkgs.humanize.codexHooksFile;
+        ".config/humanize/config.json".source = (pkgs.formats.json { }).generate "humanize-config.json" (
+          {
+            bitlesson_model = config.programs.codex.settings.model;
+            codex_model = config.programs.codex.settings.model;
+            codex_effort = config.programs.codex.settings.model_reasoning_effort;
+          }
+          // optionalAttrs (!config.programs.claude-code.enable) {
+            provider_mode = "codex-only";
+          }
+        );
+      };
 
     home.persistence."/persist".directories = [ ".config/codex" ];
   };

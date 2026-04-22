@@ -1,9 +1,10 @@
-# Route Context
+# Flow Context
 
-Use this block verbatim in subtask and review prompts.
+Use this block verbatim in subtask and review prompts for Superpowers work only.
 
 ```yaml
-Route Context:
+Flow Context:
+  Flow: "superpowers"
   Route: "<task_type>:<lane>"
   Use:
     - ...
@@ -18,7 +19,8 @@ Route Context:
 ## Repo-Changing Example
 
 ```yaml
-Route Context:
+Flow Context:
+  Flow: "superpowers"
   Route: "chore:Light"
   Use: []
   Finish:
@@ -26,7 +28,7 @@ Route Context:
     - verification-before-completion
   Skip:
     - brainstorming
-    - writing-plans
+    - humanize-rlcr
   Propagate: Copy this block unchanged into every subtask and review prompt.
   Rationale: "Small scoped config edit with clear requirements."
 ```
@@ -34,14 +36,15 @@ Route Context:
 ## Read-Only Example
 
 ```yaml
-Route Context:
+Flow Context:
+  Flow: "superpowers"
   Route: "review:Light"
   Use:
-    - routing-superpowers
+    - routing-flows
   Finish: []
   Skip:
     - brainstorming
-    - writing-plans
+    - humanize-rlcr
   Propagate: Copy this block unchanged into every subtask and review prompt.
   Rationale: "Bounded analysis task with no repo change."
 ```

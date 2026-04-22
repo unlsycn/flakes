@@ -6,36 +6,12 @@
 }:
 with lib;
 let
-  cfg = config.programs.llm-cli;
+  humanizeRuntime = pkgs.humanize.runtime;
   backendBin = {
     claude-code = getExe config.programs.claude-code.finalPackage;
     opencode = getExe config.programs.opencode.package;
     gemini-cli = getExe config.programs.gemini-cli.package;
     codex = getExe config.programs.codex.package;
-  };
-
-  mkSkillAlias =
-    backend: skill:
-    {
-      claude-code = "${backendBin.claude-code} /${skill}";
-      opencode = "${backendBin.opencode} --prompt /${skill}";
-      gemini-cli = "${backendBin.gemini-cli} -i /${skill}";
-      codex = "${backendBin.codex} ${escapeShellArg ("$" + skill)}";
-    }
-    .${backend};
-
-  enabledBackends = filterAttrs (_: v: v) {
-    claude-code = config.programs.claude-code.enable;
-    opencode = config.programs.opencode.enable;
-    gemini-cli = config.programs.gemini-cli.enable;
-    codex = config.programs.codex.enable;
-  };
-
-  commandSubmodule = types.submodule {
-    options = {
-      description = mkOption { type = types.str; };
-      prompt = mkOption { type = types.lines; };
-    };
   };
 in
 {
@@ -46,7 +22,14 @@ in
     };
 
     commands = mkOption {
-      type = types.attrsOf commandSubmodule;
+      type = types.attrsOf (
+        types.submodule {
+          options = {
+            description = mkOption { type = types.str; };
+            prompt = mkOption { type = types.lines; };
+          };
+        }
+      );
       default = { };
     };
 
@@ -58,6 +41,16 @@ in
     skills = mkOption {
       type = types.attrsOf types.path;
       default = { };
+    };
+
+    codexSkills = mkOption {
+      type = types.attrsOf types.path;
+      default = { };
+    };
+
+    claudePlugins = mkOption {
+      type = with types; listOf (either package path);
+      default = [ ];
     };
 
     projectInstructions = mkOption {
@@ -100,28 +93,55 @@ in
         "nix flake show *"
         "nix flake metadata *"
         "nix flake check *"
+        (unsafeDiscardStringContext "${humanizeRuntime}/scripts/*")
+        (unsafeDiscardStringContext "${humanizeRuntime}/scripts/* *")
+        (unsafeDiscardStringContext "${humanizeRuntime}/hooks/*")
       ];
 
       skills = {
         commit-message = pkgs."commit-message";
-        brainstorming = pkgs.superpowers.brainstorming;
-        dispatching-parallel-agents = pkgs.superpowers."dispatching-parallel-agents";
-        executing-plans = pkgs.superpowers."executing-plans";
+        brainstorming = pkgs.brainstorming;
         finishing-a-development-branch = pkgs.superpowers."finishing-a-development-branch";
         receiving-code-review = pkgs.superpowers."receiving-code-review";
         requesting-code-review = pkgs.superpowers."requesting-code-review";
-        routing-superpowers = pkgs."routing-superpowers";
+        "routing-flows" = pkgs."routing-flows";
         subagent-driven-development = pkgs.superpowers."subagent-driven-development";
         systematic-debugging = pkgs.superpowers."systematic-debugging";
         test-driven-development = pkgs.superpowers."test-driven-development";
         using-git-worktrees = pkgs.superpowers."using-git-worktrees";
         verification-before-completion = pkgs.superpowers."verification-before-completion";
-        writing-plans = pkgs.superpowers."writing-plans";
         writing-skills = pkgs.superpowers."writing-skills";
       };
+
+      codexSkills = {
+        humanize = pkgs.humanize.humanize;
+        "humanize-gen-plan" = pkgs.humanize."humanize-gen-plan";
+        "humanize-refine-plan" = pkgs.humanize."humanize-refine-plan";
+        "humanize-rlcr" = pkgs.humanize."humanize-rlcr";
+      };
+
+      claudePlugins = [ pkgs.humanize.claudePlugin ];
     };
-    programs.zsh.shellAliases = mkIf (
-      config.programs.zsh.enable && enabledBackends ? ${cfg.defaultBackend}
-    ) { gcm = mkSkillAlias cfg.defaultBackend "commit-message"; };
+    programs.zsh.shellAliases =
+      mkIf
+        (
+          config.programs.zsh.enable
+          && (filterAttrs (_: v: v) {
+            claude-code = config.programs.claude-code.enable;
+            opencode = config.programs.opencode.enable;
+            gemini-cli = config.programs.gemini-cli.enable;
+            codex = config.programs.codex.enable;
+          }) ? ${config.programs.llm-cli.defaultBackend}
+        )
+        {
+          gcm =
+            {
+              claude-code = "${backendBin.claude-code} /commit-message";
+              opencode = "${backendBin.opencode} --prompt /commit-message";
+              gemini-cli = "${backendBin.gemini-cli} -i /commit-message";
+              codex = "${backendBin.codex} ${escapeShellArg "$commit-message"}";
+            }
+            .${config.programs.llm-cli.defaultBackend};
+        };
   };
 }

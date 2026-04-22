@@ -3,7 +3,7 @@
   ...
 }:
 builtins.path {
-  name = "routing-superpowers";
+  name = "routing-flows";
   path = ./.;
   filter = path: _type: lib.baseNameOf path != "default.nix";
 }

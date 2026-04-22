@@ -4,11 +4,10 @@
   ...
 }:
 let
-  cfg = config.programs.gemini-cli;
   llmCfg = config.programs.llm-cli;
 in
 {
-  config = lib.mkIf cfg.enable {
+  config = lib.mkIf config.programs.gemini-cli.enable {
     programs.gemini-cli = {
       commands =
         llmCfg.commands

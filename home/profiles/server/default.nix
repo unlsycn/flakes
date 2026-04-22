@@ -14,6 +14,8 @@ with lib;
 
     sops.control.deploySecrets = false;
 
+    programs.claude-code.enable = true;
+
     programs.zellij.copyCommand = "";
   };
 }

@@ -5,21 +5,12 @@
   ...
 }:
 let
-  cfg = config.programs.opencode;
   llmCfg = config.programs.llm-cli;
-
-  toFrontmatterCommand = _: cmd: ''
-    ---
-    description: ${cmd.description}
-    ---
-
-    ${cmd.prompt}
-  '';
 in
 {
   imports = [ ./providers.nix ];
 
-  config = lib.mkIf cfg.enable {
+  config = lib.mkIf config.programs.opencode.enable {
     programs.opencode = {
       # FIXME: https://github.com/anomalyco/opencode/issues/23256
       # package = inputs'.opencode.packages.opencode;
@@ -72,8 +63,18 @@ in
         };
         instructions = llmCfg.projectInstructions;
       };
-      skills = llmCfg.skills;
-      commands = llmCfg.commands |> lib.mapAttrs toFrontmatterCommand;
+      skills = llmCfg.skills |> lib.mapAttrs (_: content: toString content);
+      commands =
+        llmCfg.commands
+        |> lib.mapAttrs (
+          _: cmd: ''
+            ---
+            description: ${cmd.description}
+            ---
+
+            ${cmd.prompt}
+          ''
+        );
     };
 
     home.persistence."/persist".directories = [
