@@ -2,15 +2,18 @@
   bash,
   coreutils,
   fetchFromGitHub,
+  findutils,
   gawk,
   git,
   gnugrep,
   gnused,
   jq,
   lib,
+  ncurses,
   python3,
   runCommand,
   rsync,
+  util-linux,
   writeShellApplication,
   ...
 }:
@@ -92,10 +95,13 @@ let
     name = "humanize";
     runtimeInputs = [
       coreutils
+      findutils
       git
-      jq
-      gnused
       gnugrep
+      gnused
+      jq
+      ncurses
+      util-linux
     ];
     excludeShellChecks = [ "SC1091" ];
     text = ''
