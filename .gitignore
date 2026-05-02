@@ -4,4 +4,5 @@ result
 .envrc
 .pre-commit-config.yaml
 .humanize/
+.codex
 AGENTS.md
