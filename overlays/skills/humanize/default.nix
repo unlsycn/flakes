@@ -35,17 +35,10 @@ let
       ''
                 export HOME="$TMPDIR/home"
                 export XDG_CONFIG_HOME="$TMPDIR/xdg-config"
-                export CODEX_HOME="$TMPDIR/codex-home"
-                export HUMANIZE_COMMAND_BIN_DIR="$TMPDIR/bin"
+                export CODEX_HOME="$out/codex-home"
                 export HUMANIZE_SRC="$TMPDIR/humanize-src"
 
-                mkdir -p \
-                  "$HOME" \
-                  "$XDG_CONFIG_HOME" \
-                  "$CODEX_HOME" \
-                  "$HUMANIZE_COMMAND_BIN_DIR" \
-                  "$TMPDIR/fake-bin" \
-                  "$out"
+                mkdir -p "$HOME" "$XDG_CONFIG_HOME" "$TMPDIR/fake-bin" "$out"
 
                 cp -r ${src} "$HUMANIZE_SRC"
                 chmod -R u+w "$HUMANIZE_SRC"
@@ -78,22 +71,16 @@ let
 
                 export PATH="$TMPDIR/fake-bin:$PATH"
 
+                # Install directly into $out so that path hydration
+                # ({{HUMANIZE_RUNTIME_ROOT}}) and the bitlesson-selector shim
+                # embed the final Nix store path instead of sandbox temporaries.
                 ${bash}/bin/bash "$HUMANIZE_SRC/scripts/install-skill.sh" \
                   --repo-root "$HUMANIZE_SRC" \
                   --target codex \
-                  --codex-skills-dir "$CODEX_HOME/skills" \
-                  --codex-config-dir "$CODEX_HOME" \
-                  --command-bin-dir "$HUMANIZE_COMMAND_BIN_DIR"
-
-                mkdir -p "$out/codex-home" "$out/xdg-config" "$out/bin"
-                cp -r "$CODEX_HOME"/. "$out/codex-home/"
-                cp -r "$XDG_CONFIG_HOME"/. "$out/xdg-config/"
-                cp -r "$HUMANIZE_COMMAND_BIN_DIR"/. "$out/bin/"
-
-                ${bash}/bin/bash "$HUMANIZE_SRC/scripts/install-codex-hooks.sh" \
+                  --codex-skills-dir "$out/codex-home/skills" \
                   --codex-config-dir "$out/codex-home" \
-                  --runtime-root "$out/codex-home/skills/humanize" \
-                  --skip-enable-feature
+                  --kimi-skills-dir "$out/codex-home/skills" \
+                  --command-bin-dir "$out/bin"
       '';
 in
 lib.genAttrs [
