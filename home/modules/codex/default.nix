@@ -87,7 +87,7 @@ in
           }
         )
       )
-      // {
+      // optionalAttrs llmCfg.humanize.enable {
         ".config/codex/hooks.json".source = pkgs.humanize.codexHooksFile;
         ".config/humanize/config.json".source = (pkgs.formats.json { }).generate "humanize-config.json" (
           {

@@ -6,6 +6,7 @@
 }:
 with lib;
 let
+  hmzCfg = config.programs.llm-cli.humanize;
   humanizeRuntime = pkgs.humanize.runtime;
   backendBin = {
     claude-code = getExe config.programs.claude-code.finalPackage;
@@ -62,41 +63,53 @@ in
         "CONTRIBUTING.md"
       ];
     };
+
+    humanize = {
+      enable = mkEnableOption "humanize" // {
+        default = true;
+      };
+      monitor.enable = mkEnableOption "humanize CLI wrapper" // {
+        default = hmzCfg.enable;
+      };
+    };
   };
 
   config = {
     programs.llm-cli = {
-      allowedBashCommands = [
-        "ls *"
-        "cat *"
-        "head *"
-        "tail *"
-        "wc *"
-        "file *"
-        "tree *"
-        "which *"
-        "grep *"
-        "rg *"
-        "sort *"
-        "cut *"
-        "uniq *"
-        "diff *"
-        "echo *"
-        "pwd"
-        "git diff *"
-        "git log *"
-        "git show *"
-        "git status *"
-        "git rev-parse *"
-        "gh *"
-        "nix eval *"
-        "nix flake show *"
-        "nix flake metadata *"
-        "nix flake check *"
-        (unsafeDiscardStringContext "${humanizeRuntime}/scripts/*")
-        (unsafeDiscardStringContext "${humanizeRuntime}/scripts/* *")
-        (unsafeDiscardStringContext "${humanizeRuntime}/hooks/*")
-      ];
+      allowedBashCommands =
+        [
+          "ls *"
+          "cat *"
+          "head *"
+          "tail *"
+          "wc *"
+          "file *"
+          "tree *"
+          "which *"
+          "grep *"
+          "rg *"
+          "sort *"
+          "cut *"
+          "uniq *"
+          "diff *"
+          "echo *"
+          "pwd"
+          "git diff *"
+          "git log *"
+          "git show *"
+          "git status *"
+          "git rev-parse *"
+          "gh *"
+          "nix eval *"
+          "nix flake show *"
+          "nix flake metadata *"
+          "nix flake check *"
+        ]
+        ++ optionals hmzCfg.enable [
+          (unsafeDiscardStringContext "${humanizeRuntime}/scripts/*")
+          (unsafeDiscardStringContext "${humanizeRuntime}/scripts/* *")
+          (unsafeDiscardStringContext "${humanizeRuntime}/hooks/*")
+        ];
 
       skills = {
         commit-message = pkgs."commit-message";
@@ -113,15 +126,18 @@ in
         writing-skills = pkgs.superpowers."writing-skills";
       };
 
-      codexSkills = {
+      codexSkills = optionalAttrs hmzCfg.enable {
         humanize = pkgs.humanize.humanize;
         "humanize-gen-plan" = pkgs.humanize."humanize-gen-plan";
         "humanize-refine-plan" = pkgs.humanize."humanize-refine-plan";
         "humanize-rlcr" = pkgs.humanize."humanize-rlcr";
       };
 
-      claudePlugins = [ pkgs.humanize.claudePlugin ];
+      claudePlugins = optionals hmzCfg.enable [ pkgs.humanize.claudePlugin ];
     };
+
+    home.packages = optionals hmzCfg.monitor.enable [ pkgs.humanize.humanizeWrapper ];
+
     programs.zsh.shellAliases =
       mkIf
         (

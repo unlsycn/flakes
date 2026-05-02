@@ -3,12 +3,15 @@
   coreutils,
   fetchFromGitHub,
   gawk,
+  git,
+  gnugrep,
   gnused,
   jq,
   lib,
   python3,
   runCommand,
   rsync,
+  writeShellApplication,
   ...
 }:
 let
@@ -82,6 +85,23 @@ let
                   --kimi-skills-dir "$out/codex-home/skills" \
                   --command-bin-dir "$out/bin"
       '';
+
+  runtime = codexInstall + "/codex-home/skills/humanize";
+
+  humanizeWrapper = writeShellApplication {
+    name = "humanize";
+    runtimeInputs = [
+      coreutils
+      git
+      jq
+      gnused
+      gnugrep
+    ];
+    text = ''
+      source ${runtime}/scripts/humanize.sh
+      humanize "$@"
+    '';
+  };
 in
 lib.genAttrs [
   "humanize"
@@ -90,7 +110,7 @@ lib.genAttrs [
   "humanize-rlcr"
 ] (name: codexInstall + "/codex-home/skills/${name}")
 // {
-  inherit codexInstall src;
+  inherit codexInstall src runtime humanizeWrapper;
   claudePlugin =
     runCommand "humanize-claude-plugin"
       {
@@ -105,7 +125,6 @@ lib.genAttrs [
         chmod -R u+w "$out"
         patchShebangs "$out/scripts" "$out/hooks"
       '';
-  runtime = codexInstall + "/codex-home/skills/humanize";
   codexHooksFile = codexInstall + "/codex-home/hooks.json";
   codexConfigToml = codexInstall + "/codex-home/config.toml";
   bitlessonSelector = codexInstall + "/bin/bitlesson-selector";
