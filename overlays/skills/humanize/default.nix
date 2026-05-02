@@ -100,6 +100,7 @@ let
     excludeShellChecks = [ "SC1091" ];
     text = ''
       source ${runtime}/scripts/humanize.sh
+      set +eu
       humanize "$@"
     '';
   };
