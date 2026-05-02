@@ -3,3 +3,5 @@ result
 .vscode/*
 .envrc
 .pre-commit-config.yaml
+.humanize/
+AGENTS.md
