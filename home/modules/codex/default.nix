@@ -24,7 +24,7 @@ in
         default_permissions = "default";
         check_for_update_on_startup = false;
         notice.hide_rate_limit_model_nudge = true;
-        features.codex_hooks = true;
+        features.codex_hooks = llmCfg.humanize.enable;
         project_doc_fallback_filenames = filter (name: name != "AGENTS.md") llmCfg.projectInstructions;
         features.multi_agent = true;
         model_providers.OpenAI = {
