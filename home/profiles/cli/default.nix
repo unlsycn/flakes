@@ -34,6 +34,7 @@ with lib;
       zellij.enable = true;
       opencode.enable = true;
       codex.enable = true;
+      claude-code.enable = true;
     };
 
     services = {

@@ -14,8 +14,8 @@ in
     programs.codex = {
       settings = {
         model_provider = "OpenAI";
-        model = "gpt-5.4";
-        review_model = "gpt-5.4";
+        model = "gpt-5.5";
+        review_model = "gpt-5.5";
         model_reasoning_effort = "high";
         plan_mode_reasoning_effort = "xhigh";
         model_context_window = maxContext;
