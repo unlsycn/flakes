@@ -76,58 +76,57 @@ in
 
   config = {
     programs.llm-cli = {
-      allowedBashCommands =
-        [
-          "ls *"
-          "cat *"
-          "head *"
-          "tail *"
-          "wc *"
-          "file *"
-          "tree *"
-          "which *"
-          "grep *"
-          "rg *"
-          "sort *"
-          "cut *"
-          "uniq *"
-          "diff *"
-          "echo *"
-          "pwd"
-          "git diff *"
-          "git log *"
-          "git show *"
-          "git status *"
-          "git rev-parse *"
-          "gh *"
-          "nix eval *"
-          "nix flake show *"
-          "nix flake metadata *"
-          "nix flake check *"
-        ]
-        ++ optionals hmzCfg.enable [
-          (unsafeDiscardStringContext "${humanizeRuntime}/scripts/*")
-          (unsafeDiscardStringContext "${humanizeRuntime}/scripts/* *")
-          (unsafeDiscardStringContext "${humanizeRuntime}/hooks/*")
-        ];
+      allowedBashCommands = [
+        "ls *"
+        "cat *"
+        "head *"
+        "tail *"
+        "wc *"
+        "file *"
+        "tree *"
+        "which *"
+        "grep *"
+        "rg *"
+        "sort *"
+        "cut *"
+        "uniq *"
+        "diff *"
+        "echo *"
+        "pwd"
+        "git diff *"
+        "git log *"
+        "git show *"
+        "git status *"
+        "git rev-parse *"
+        "gh *"
+        "nix eval *"
+        "nix flake show *"
+        "nix flake metadata *"
+        "nix flake check *"
+      ]
+      ++ optionals hmzCfg.enable [
+        (unsafeDiscardStringContext "${humanizeRuntime}/scripts/*")
+        (unsafeDiscardStringContext "${humanizeRuntime}/scripts/* *")
+        (unsafeDiscardStringContext "${humanizeRuntime}/hooks/*")
+      ];
 
-      skills =
-        {
-          commit-message = pkgs."commit-message";
-          finishing-a-development-branch = pkgs.superpowers."finishing-a-development-branch";
-          receiving-code-review = pkgs.superpowers."receiving-code-review";
-          requesting-code-review = pkgs.superpowers."requesting-code-review";
-          subagent-driven-development = pkgs.superpowers."subagent-driven-development";
-          systematic-debugging = pkgs.superpowers."systematic-debugging";
-          test-driven-development = pkgs.superpowers."test-driven-development";
-          using-git-worktrees = pkgs.superpowers."using-git-worktrees";
-          verification-before-completion = pkgs.superpowers."verification-before-completion";
-          writing-skills = pkgs.superpowers."writing-skills";
-        }
-        // optionalAttrs hmzCfg.enable {
-          brainstorming = pkgs.brainstorming;
-          "routing-flows" = pkgs."routing-flows";
-        };
+      skills = {
+        commit-message = pkgs."commit-message";
+        typst = pkgs."claude-skill-typst";
+        finishing-a-development-branch = pkgs.superpowers."finishing-a-development-branch";
+        receiving-code-review = pkgs.superpowers."receiving-code-review";
+        requesting-code-review = pkgs.superpowers."requesting-code-review";
+        subagent-driven-development = pkgs.superpowers."subagent-driven-development";
+        systematic-debugging = pkgs.superpowers."systematic-debugging";
+        test-driven-development = pkgs.superpowers."test-driven-development";
+        using-git-worktrees = pkgs.superpowers."using-git-worktrees";
+        verification-before-completion = pkgs.superpowers."verification-before-completion";
+        writing-skills = pkgs.superpowers."writing-skills";
+      }
+      // optionalAttrs hmzCfg.enable {
+        brainstorming = pkgs.brainstorming;
+        "routing-flows" = pkgs."routing-flows";
+      };
 
       codexSkills = optionalAttrs hmzCfg.enable {
         humanize = pkgs.humanize.humanize;
