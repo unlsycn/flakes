@@ -5,36 +5,54 @@
 }:
 with lib;
 let
-  cfg = config.programs.vscode;
-  vscode = getExe cfg.package;
-in
-{
-  options.programs.vscode.enableHyprlandIntegration = mkOption {
-    default = config.wayland.windowManager.hyprland.enable;
-    type = types.bool;
-    description = "Whether to enable Hyprland integration";
+  editors = {
+    vscode = {
+      name = "Visual Studio Code";
+      cfg = config.programs.vscode;
+    };
+    antigravity = {
+      name = "Antigravity";
+      cfg = config.programs.antigravity;
+    };
   };
 
-  config = mkIf (cfg.enable && cfg.enableHyprlandIntegration) {
+  editorEnabled = editor: editor.cfg.enable && editor.cfg.enableHyprlandIntegration;
+  enabledEditors = filterAttrs (_: editorEnabled) editors;
+  primaryEditor = if editorEnabled editors.antigravity then editors.antigravity else editors.vscode;
+
+  mkOpacityRule = editor: {
+    props = [
+      {
+        type = "class";
+        value = editor.cfg.package.meta.mainProgram;
+      }
+    ];
+    effects = [
+      {
+        type = "opacity";
+        value = "0.95";
+      }
+    ];
+  };
+in
+{
+  options.programs = mapAttrs (_: editor: {
+    enableHyprlandIntegration = mkOption {
+      default = config.wayland.windowManager.hyprland.enable;
+      type = types.bool;
+      description = "Whether to enable Hyprland integration for ${editor.name}";
+    };
+  }) editors;
+
+  config = mkIf (enabledEditors != { }) {
     wayland.windowManager.hyprland = with config.wayland.windowManager.hyprland.lib.bindingUtils; {
       settings.bind = mainBind {
-        I = "exec, ${vscode}";
+        I = "exec, ${getExe primaryEditor.cfg.package}";
       };
 
-      windowRules.vscode-opacity = {
-        props = [
-          {
-            type = "class";
-            value = cfg.package.meta.mainProgram;
-          }
-        ];
-        effects = [
-          {
-            type = "opacity";
-            value = "0.95";
-          }
-        ];
-      };
+      windowRules = mapAttrs' (
+        name: editor: nameValuePair "${name}-opacity" (mkOpacityRule editor)
+      ) enabledEditors;
     };
   };
 }
