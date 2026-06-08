@@ -122,9 +122,9 @@ in
       };
 
       proxyProviders = {
-        "Haita".type = "http";
-        "Longmao".type = "http";
+        "Ky".type = "http";
         "Sakana".type = "http";
+        "BoostNet".type = "http";
       };
       ruleProviders = {
         "anti-AD" = {
