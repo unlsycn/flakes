@@ -12,6 +12,8 @@ with lib;
   };
 
   config = mkIf config.services.zfs.enable {
+    boot.zfs.forceImportRoot = true;
+
     # generate mount units from zfs-list.cache
     systemd.generators."zfs-mount-generator" =
       "${config.boot.zfs.package}/lib/systemd/system-generator/zfs-mount-generator";

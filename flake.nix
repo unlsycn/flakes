@@ -62,14 +62,12 @@
       url = "github:nix-community/harmonia";
       inputs = {
         nixpkgs.follows = "nixpkgs";
-        flake-parts.follows = "flake-parts";
       };
     };
     buildbot-nix = {
       url = "github:nix-community/buildbot-nix";
       inputs = {
         nixpkgs.follows = "nixpkgs";
-        flake-parts.follows = "flake-parts";
       };
     };
     nix-dram = {

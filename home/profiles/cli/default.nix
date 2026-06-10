@@ -35,6 +35,7 @@ with lib;
       opencode.enable = true;
       codex.enable = true;
       claude-code.enable = true;
+      gh.enable = true;
     };
 
     services = {

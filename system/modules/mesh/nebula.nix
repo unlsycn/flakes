@@ -13,15 +13,18 @@ let
 
   nodes = inputs.self.mesh-topology |> attrValues;
   generatedDir = ../../hosts/${pkgs.stdenv.hostPlatform.system}/${config.networking.hostName}/_generated;
+  nebulaCert = generatedDir + "/nebula.crt";
+  nebulaKey = generatedDir + "/nebula.key";
+  nebulaCa = generatedDir + "/nebula_ca.crt";
 in
 {
   config = mkMerge [
     (mkIf cfg.nebula.enable {
       services.nebula.networks.${nebulaName} = {
         enable = true;
-        cert = "${generatedDir}/nebula.crt";
+        cert = nebulaCert;
         key = config.sops.secrets.nebula-key.path;
-        ca = "${generatedDir}/nebula_ca.crt";
+        ca = nebulaCa;
 
         # manually set port and device to let nixos module generate correct firewall rules
         # and we can reference it in other places
@@ -66,7 +69,7 @@ in
 
       sops.secrets = {
         nebula-key = {
-          sopsFile = "${generatedDir}/nebula.key";
+          sopsFile = nebulaKey;
           format = "binary";
           owner = config.systemd.services."nebula@${nebulaName}".serviceConfig.User;
         };
