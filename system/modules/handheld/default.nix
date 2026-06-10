@@ -30,6 +30,8 @@ with lib;
 
   config = mkMerge [
     (mkIf config.handheld.enable {
+      services.desktopManager.gnome.enable = true;
+
       jovian = {
         steam = {
           enable = true;
