@@ -83,7 +83,7 @@ with lib;
                 "cli"
               ]
               ++ optionals config.isServer [ "server" ]
-              ++ optionals config.hasDesktopEnvironment [ "desktop" ]
+              ++ optionals config.desktop.enable [ "desktop" ]
               ++ optionals config.handheld.enable [ "handheld" ]
               ++ optionals config.environment.persistence."/persist".enable [ "stateless" ];
 

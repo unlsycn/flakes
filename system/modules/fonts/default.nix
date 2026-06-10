@@ -6,7 +6,7 @@
 }:
 with lib;
 {
-  config = lib.mkIf config.hasDesktopEnvironment {
+  config = lib.mkIf config.hasGraphicalEnvironment {
     fonts = {
       packages = with pkgs; [
         maple-mono.truetype

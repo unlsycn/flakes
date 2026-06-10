@@ -12,7 +12,7 @@
   homeManagerProfiles = [
     "intimate"
   ];
-  hasDesktopEnvironment = true;
+  desktop.enable = true;
 
   environment.persistence."/persist".enable = true;
 

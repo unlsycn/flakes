@@ -6,14 +6,17 @@
 with lib;
 {
   options = {
-    hasDesktopEnvironment = mkOption {
+    hasGraphicalEnvironment = mkOption {
       type = types.bool;
-      default = config.handheld.enable;
+      default = config.desktop.enable || config.handheld.enable;
+      description = "Whether this host has any graphical environment.";
     };
+
+    desktop.enable = mkEnableOption "desktop workstation environment";
   };
 
   config = mkMerge [
-    (mkIf config.hasDesktopEnvironment {
+    (mkIf config.hasGraphicalEnvironment {
       services = {
         pipewire = {
           enable = true;
@@ -25,11 +28,8 @@ with lib;
         blueman.enable = true;
       };
     })
-    (mkIf (config.hasDesktopEnvironment && !config.handheld.enable) {
+    (mkIf config.desktop.enable {
       programs.hyprland.enable = mkDefault true;
-    })
-    (mkIf config.handheld.enable {
-      services.desktopManager.gnome.enable = true;
     })
   ];
 }
