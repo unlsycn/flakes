@@ -9,7 +9,7 @@ with lib;
     programs.ssh = {
       enableDefaultConfig = false;
       includes = [ "hosts_config" ];
-      matchBlocks."*" = {
+      settings."*" = {
         forwardAgent = true;
         addKeysToAgent = "yes";
         compression = false;

@@ -17,6 +17,7 @@ with lib;
 
   config = mkIf config.wayland.windowManager.hyprland.enable {
     wayland.windowManager.hyprland = {
+      configType = "hyprlang";
       systemd.variables = [ "--all" ];
 
       monitors = [
