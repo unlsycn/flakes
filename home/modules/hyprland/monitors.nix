@@ -2,7 +2,7 @@
 with lib;
 let
   cfg = config.wayland.windowManager.hyprland;
-  forMonitor = monitor: rule: optionalString (builtins.elem monitor cfg.monitors) rule;
+  enabled = monitor: builtins.elem monitor cfg.monitors;
 in
 {
   options.wayland.windowManager.hyprland.monitors = mkOption {
@@ -16,10 +16,26 @@ in
   };
 
   config = mkIf cfg.enable {
-    wayland.windowManager.hyprland.settings.monitor = [
-      (forMonitor "allay" "eDP-1, 2880x1800@120, 0x0, 1.8")
-      (forMonitor "philips" "DP-1, 2560x1440@165, 0x-1152, 1.25")
-      (forMonitor "philips" "HDMI-A-1, 2560x1440@144, 0x-1152, 1.25")
-    ];
+    wayland.windowManager.hyprland.settings.monitor =
+      optional (enabled "allay") {
+        output = "eDP-1";
+        mode = "2880x1800@120";
+        position = "0x0";
+        scale = 1.8;
+      }
+      ++ optionals (enabled "philips") [
+        {
+          output = "DP-1";
+          mode = "2560x1440@165";
+          position = "0x-1152";
+          scale = 1.25;
+        }
+        {
+          output = "HDMI-A-1";
+          mode = "2560x1440@144";
+          position = "0x-1152";
+          scale = 1.25;
+        }
+      ];
   };
 }

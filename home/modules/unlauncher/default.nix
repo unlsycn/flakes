@@ -20,40 +20,32 @@ in
     home.packages = [ cfg.package ];
 
     wayland.windowManager.hyprland = {
-      extraConfig = ''
-        bindn = , control_l, exec, sleep 0.2 && hyprctl dispatch submap reset
-        bindn = , control_l, submap, launcher
-        submap = launcher
-        bind = , control_l, exec, ${cfg.package}/bin/unlauncher
-        bind = , control_l, submap, reset
-        submap = reset
-      '';
+      settings.bind =
+        with config.wayland.windowManager.hyprland.lib.bindingUtils;
+        none {
+          control_l = many [
+            (opts { non_consuming = true; } (dsp.exec "sleep 0.2 && hyprctl dispatch submap reset"))
+            (opts { non_consuming = true; } (dsp.submap "launcher"))
+          ];
+        };
+
+      submaps.launcher = {
+        onDispatch = "reset";
+        settings.bind =
+          with config.wayland.windowManager.hyprland.lib.bindingUtils;
+          none {
+            control_l = dsp.exec "${cfg.package}/bin/unlauncher";
+          };
+      };
 
       windowRules.unlauncher = {
-        props = [
-          {
-            type = "title";
-            value = "Unlauncher";
-          }
-          {
-            type = "initial_title";
-            value = "Unlauncher";
-          }
-        ];
-        effects = [
-          {
-            type = "center";
-            value = "true";
-          }
-          {
-            type = "float";
-            value = "true";
-          }
-          {
-            type = "size";
-            value = "monitor_w*0.4 monitor_h*0.3";
-          }
-        ];
+        match = {
+          title = "Unlauncher";
+          initial_title = "Unlauncher";
+        };
+        center = true;
+        float = true;
+        size = "monitor_w*0.4 monitor_h*0.3";
       };
     };
   };

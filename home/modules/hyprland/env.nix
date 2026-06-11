@@ -4,6 +4,9 @@ with lib;
   config = mkIf config.wayland.windowManager.hyprland.enable {
     # See https://wiki.hyprland.org/Configuring/Environment-variables/
     wayland.windowManager.hyprland.settings.env =
+      let
+        lua = config.wayland.windowManager.hyprland.lib.luaUtils;
+      in
       {
         IN_HYPRLAND = "1";
 
@@ -27,6 +30,12 @@ with lib;
         QT_QPA_PLATFORMTHEME = "qt6ct";
         QT_WAYLAND_DISABLE_WINDOWDECORATION = "1";
       }
-      |> mapAttrsToList (name: value: "${name},${value}");
+      |> mapAttrsToList (
+        name: value:
+        lua.call [
+          name
+          value
+        ]
+      );
   };
 }

@@ -21,18 +21,8 @@ let
   primaryEditor = if editorEnabled editors.antigravity then editors.antigravity else editors.vscode;
 
   mkOpacityRule = editor: {
-    props = [
-      {
-        type = "class";
-        value = editor.cfg.package.meta.mainProgram;
-      }
-    ];
-    effects = [
-      {
-        type = "opacity";
-        value = "0.95";
-      }
-    ];
+    match.class = editor.cfg.package.meta.mainProgram;
+    opacity = "0.95";
   };
 in
 {
@@ -46,8 +36,8 @@ in
 
   config = mkIf (enabledEditors != { }) {
     wayland.windowManager.hyprland = with config.wayland.windowManager.hyprland.lib.bindingUtils; {
-      settings.bind = mainBind {
-        I = "exec, ${getExe primaryEditor.cfg.package}";
+      settings.bind = main {
+        I = dsp.exec (getExe primaryEditor.cfg.package);
       };
 
       windowRules = mapAttrs' (

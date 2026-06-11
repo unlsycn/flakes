@@ -15,6 +15,6 @@ in
       ipc = true;
     };
 
-    wayland.windowManager.hyprland.settings.exec-once = [ "sleep 0.5 && ${switch_wallpaper}" ];
+    wayland.windowManager.hyprland.startupCommands = [ "sleep 0.5 && ${switch_wallpaper}" ];
   };
 }

@@ -18,7 +18,7 @@ in
   };
 
   config = mkIf (cfg.enable && cfg.enableHyprlandIntegration) {
-    wayland.windowManager.hyprland.settings.exec-once = [
+    wayland.windowManager.hyprland.startupCommands = [
       telegram
       "sleep 5 && ${hyprctl} dispatch closewindow class:org.telegram.desktop"
     ];

@@ -19,10 +19,10 @@ in
     wayland.windowManager.hyprland.settings = {
       bind =
         with config.wayland.windowManager.hyprland.lib.bindingUtils;
-        mainBind {
-          T = "exec, ${alacritty}";
+        main {
+          T = dsp.exec alacritty;
         };
-      misc.swallow_regex = "(Alacritty)";
+      config.misc.swallow_regex = "(Alacritty)";
     };
 
   };

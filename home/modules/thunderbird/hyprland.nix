@@ -16,7 +16,7 @@ in
   };
 
   config = mkIf (cfg.enable && cfg.enableHyprlandIntegration) {
-    wayland.windowManager.hyprland.settings.exec-once = [
+    wayland.windowManager.hyprland.startupCommands = [
       thunderbird
       "sleep 5 && hyprctl dispatch movetoworkspacesilent special:chat,class:thunderbird"
     ];

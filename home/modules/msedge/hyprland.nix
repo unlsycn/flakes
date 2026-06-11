@@ -18,8 +18,8 @@ in
   config = mkIf (cfg.enable && cfg.enableHyprlandIntegration) {
     wayland.windowManager.hyprland.settings.bind =
       with config.wayland.windowManager.hyprland.lib.bindingUtils;
-      mainBind {
-        W = "exec, ${msedge}";
+      main {
+        W = dsp.exec msedge;
       };
   };
 }

@@ -8,9 +8,9 @@ with lib;
   config = mkIf config.programs.hyprshot.enable {
     wayland.windowManager.hyprland.settings.bind =
       with config.wayland.windowManager.hyprland.lib.bindingUtils;
-      bindKeys "Control Alt" {
-        "A" = "exec, hyprshot -m region --clipboard-only";
-        "S" = "exec, hyprshot -m window --clipboard-only";
+      ctrlAlt {
+        "A" = dsp.exec "hyprshot -m region --clipboard-only";
+        "S" = dsp.exec "hyprshot -m window --clipboard-only";
       };
   };
 }
