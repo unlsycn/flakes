@@ -16,7 +16,6 @@ with lib;
       alacritty.enable = true;
       waybar.enable = true;
       zen-browser.enable = true;
-      unlauncher.enable = true;
       telegram.enable = true;
       hyprshot.enable = true;
       zotero.enable = true;
@@ -29,6 +28,7 @@ with lib;
       hyprpaper.enable = true;
       cliphist.enable = true;
       hypridle.enable = true;
+      hyprshell.enable = true;
       blueman-applet.enable = true;
     };
 

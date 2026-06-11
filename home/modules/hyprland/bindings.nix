@@ -38,9 +38,14 @@ in
             {
               X = dsp.window.close;
               P = dsp.window.toggleFloating;
-              B = dsp.layout "togglesplit"; # dwindle
-              E = dsp.layout "swapwithmaster"; # master
-              A = dsp.window.maximize;
+              Tab = dsp.toggleLayout "scrolling" "master";
+              E = dsp.layoutFor {
+                scrolling = "promote";
+                master = "swapwithmaster";
+              };
+              # Hyprland 0.55 scrolling maximize is not reversible yet:
+              # https://github.com/hyprwm/Hyprland/discussions/14380
+              A = dsp.unlessLayout [ "scrolling" ] dsp.window.maximize;
 
               mouse_down = dsp.exec "${switch_workspace} -p";
               mouse_up = dsp.exec "${switch_workspace}";
@@ -51,11 +56,15 @@ in
             // mapActions dsp.window.move arrowDirections
             // mapActions dsp.workspace.focus workspaceKeys
             // mapActions dsp.workspace.toggleSpecial specialWorkspaces
-            // mapActions (ratio: opts { repeating = true; } (dsp.layout "splitratio ${ratio}")) {
-              Minus = "-0.1";
-              Equal = "+0.1";
-              Semicolon = "-0.1";
-              Apostrophe = "+0.1";
+            // mapActions (messages: opts { repeating = true; } (dsp.layoutFor messages)) {
+              Semicolon = {
+                scrolling = "colresize -0.1";
+                master = "mfact -0.05";
+              };
+              Apostrophe = {
+                scrolling = "colresize +0.1";
+                master = "mfact +0.05";
+              };
             }
           )
           ++ mainShift (
@@ -67,12 +76,6 @@ in
             // mapActions dsp.window.moveToWorkspace workspaceKeys
             // mapActions (workspace: dsp.window.moveToWorkspace "special:${workspace}") specialWorkspaces
           )
-          ++ alt {
-            Tab = dsp.exec "${switch_workspace}";
-          }
-          ++ altShift {
-            Tab = dsp.exec "${switch_workspace} -p";
-          }
           ++ none (
             mapActions
               (
@@ -93,9 +96,13 @@ in
         gesture = [
           {
             fingers = 3;
+            direction = "horizontal";
+            action = "scroll_move";
+          }
+          {
+            fingers = 3;
             direction = "vertical";
-            action = "fullscreen";
-            mode = "maximize";
+            action = dsp.unlessLayout [ "scrolling" ] dsp.window.maximize;
           }
           {
             fingers = 4;

@@ -36,12 +36,56 @@ in
       exec = command: raw "hl.dsp.exec_cmd(${toLua command})";
       focus = direction: raw "hl.dsp.focus({ direction = ${toLua direction} })";
       layout = message: raw "hl.dsp.layout(${toLua message})";
+      unlessLayout =
+        layouts: dispatcher:
+        raw ''
+          function()
+            local ws = hl.get_active_special_workspace() or hl.get_active_workspace()
+            if ws == nil then return end
+
+            local disabled = (${toLua (genAttrs layouts (_: true))})[ws.tiled_layout]
+            if disabled then return end
+
+            hl.dispatch(${dispatcher.expr})
+          end
+        '';
+      layoutFor =
+        messages:
+        raw ''
+          function()
+            local ws = hl.get_active_special_workspace() or hl.get_active_workspace()
+            if ws == nil then return end
+
+            local message = (${toLua messages})[ws.tiled_layout]
+            if message == nil then return end
+
+            hl.dispatch(hl.dsp.layout(message))
+          end
+        '';
+      toggleLayout =
+        defaultLayout: alternateLayout:
+        raw ''
+          function()
+            local ws = hl.get_active_special_workspace() or hl.get_active_workspace()
+            if ws == nil then return end
+
+            local layout = ${toLua defaultLayout}
+            if ws.tiled_layout == ${toLua defaultLayout} then
+              layout = ${toLua alternateLayout}
+            end
+
+            hl.workspace_rule({
+              workspace = ws.name,
+              layout = layout,
+            })
+          end
+        '';
       submap = name: raw "hl.dsp.submap(${toLua name})";
 
       window = {
         close = raw "hl.dsp.window.close()";
         toggleFloating = raw "hl.dsp.window.float({ action = \"toggle\" })";
-        maximize = raw "hl.dsp.window.fullscreen({ mode = \"maximized\" })";
+        maximize = raw "hl.dsp.window.fullscreen({ mode = \"maximized\", action = \"toggle\" })";
         fullscreen = raw "hl.dsp.window.fullscreen({ mode = \"fullscreen\" })";
         move = direction: raw "hl.dsp.window.move({ direction = ${toLua direction} })";
         moveToWorkspace =

@@ -79,7 +79,7 @@ in
 
           resize_on_border = true;
           no_focus_fallback = true;
-          layout = "master";
+          layout = "scrolling";
 
           allow_tearing = true; # This just allows the `immediate` window rule to work
         };
@@ -88,6 +88,16 @@ in
         master = {
           new_status = "master";
           new_on_top = true;
+        };
+
+        # https://wiki.hypr.land/Configuring/Layouts/Scrolling-Layout
+        scrolling = {
+          column_width = 0.5;
+          focus_fit_method = 1;
+          follow_focus = true;
+          wrap_focus = true;
+          wrap_swapcol = true;
+          direction = "right";
         };
 
         # https://wiki.hyprland.org/Configuring/Dwindle-Layout
