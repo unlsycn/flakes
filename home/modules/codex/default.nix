@@ -6,11 +6,13 @@
 }:
 with lib;
 let
+  cfg = config.programs.codex;
   llmCfg = config.programs.llm-cli;
   maxContext = 320000;
+  codexConfigFile = "/.config/codex/config.toml";
 in
 {
-  config = mkIf config.programs.codex.enable {
+  config = mkIf cfg.enable {
     programs.codex = {
       settings = {
         model_provider = "OpenAI";
@@ -61,7 +63,39 @@ in
       };
     };
 
-    home.file =
+    assertions = [
+      {
+        assertion = config.home.preferXdgDirectories;
+        message = "The local Codex mutable config workaround assumes home.preferXdgDirectories = true.";
+      }
+    ];
+
+    home.activation.codexConfigActivation = hm.dag.entryAfter [ "linkGeneration" ] ''
+      configPath=${escapeShellArg "${config.xdg.configHome}/codex/config.toml"}
+      mkdir -p "$(dirname -- "$configPath")"
+
+      if [ -e "$configPath" ] || [ -L "$configPath" ]; then
+        dynamic="$(${getExe pkgs.yj} -tj < "$configPath" 2>/dev/null || echo '{}')"
+      else
+        dynamic='{}'
+      fi
+      static="$(${getExe pkgs.yj} -tj < ${escapeShellArg config.home.file.${codexConfigFile}.source})"
+      merged="$(${getExe pkgs.jq} -n '$dynamic * $static' --argjson dynamic "$dynamic" --argjson static "$static")"
+
+      tmp="$(mktemp)"
+      printf '%s\n' "$merged" | ${getExe pkgs.yj} -jt > "$tmp"
+      if [ -L "$configPath" ]; then
+        rm -f "$configPath"
+      fi
+      install -m 0644 "$tmp" "$configPath"
+      rm -f "$tmp"
+      unset configPath dynamic static merged tmp
+    '';
+
+    home.file = mkMerge [
+      {
+        ${codexConfigFile}.enable = mkForce false;
+      }
       (
         llmCfg.commands
         |> mapAttrs' (
@@ -77,7 +111,7 @@ in
           }
         )
       )
-      // (
+      (
         (llmCfg.skills // llmCfg.codexSkills)
         |> mapAttrs' (
           name: content:
@@ -87,19 +121,20 @@ in
           }
         )
       )
-      // optionalAttrs llmCfg.humanize.enable {
+      (optionalAttrs llmCfg.humanize.enable {
         ".config/codex/hooks.json".source = pkgs.humanize.codexHooksFile;
         ".config/humanize/config.json".source = (pkgs.formats.json { }).generate "humanize-config.json" (
           {
-            bitlesson_model = config.programs.codex.settings.model;
-            codex_model = config.programs.codex.settings.model;
-            codex_effort = config.programs.codex.settings.model_reasoning_effort;
+            bitlesson_model = cfg.settings.model;
+            codex_model = cfg.settings.model;
+            codex_effort = cfg.settings.model_reasoning_effort;
           }
           // optionalAttrs (!config.programs.claude-code.enable) {
             provider_mode = "codex-only";
           }
         );
-      };
+      })
+    ];
 
     home.persistence."/persist".directories = [ ".config/codex" ];
   };
