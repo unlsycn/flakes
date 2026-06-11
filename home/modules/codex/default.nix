@@ -16,7 +16,7 @@ in
         model_provider = "OpenAI";
         model = "gpt-5.5";
         review_model = "gpt-5.5";
-        model_reasoning_effort = "high";
+        model_reasoning_effort = "xhigh";
         plan_mode_reasoning_effort = "xhigh";
         model_context_window = maxContext;
         model_auto_compact_token_limit = maxContext * 9 / 10;
