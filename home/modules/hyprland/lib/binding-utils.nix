@@ -104,6 +104,30 @@ in
       inherit action options;
     };
     many = actions: { inherit actions; };
+    doubleTap =
+      delayMs: dispatcher:
+      raw ''
+        (function()
+          local armed = false
+
+          return function()
+            if armed then
+              armed = false
+              hl.dispatch(${dispatcher.expr})
+              return
+            end
+
+            armed = true
+
+            hl.timer(function()
+              armed = false
+            end, {
+              timeout = ${toString delayMs},
+              type = "oneshot",
+            })
+          end
+        end)()
+      '';
 
     bind = modifier: key: dispatcher: options: {
       _args = [

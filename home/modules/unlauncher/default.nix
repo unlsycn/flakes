@@ -7,7 +7,7 @@
 with lib;
 let
   cfg = config.programs.unlauncher;
-  tapDelay = "0.2";
+  tapMs = 200;
 in
 {
   options.programs.unlauncher = {
@@ -24,21 +24,9 @@ in
       settings.bind =
         with config.wayland.windowManager.hyprland.lib.bindingUtils;
         none {
-          control_l = many [
-            (opts { non_consuming = true; } (
-              dsp.exec "sleep ${tapDelay} && hyprctl dispatch 'hl.dsp.submap(\"reset\")'"
-            ))
-            (opts { non_consuming = true; } (dsp.submap "launcher"))
-          ];
-        };
-
-      submaps.launcher.settings.bind =
-        with config.wayland.windowManager.hyprland.lib.bindingUtils;
-        none {
-          control_l = many [
-            (dsp.exec "${cfg.package}/bin/unlauncher")
-            (dsp.submap "reset")
-          ];
+          control_l = opts { non_consuming = true; } (
+            doubleTap tapMs (dsp.exec "${cfg.package}/bin/unlauncher")
+          );
         };
 
       windowRules.unlauncher = {
