@@ -6,13 +6,15 @@
 }:
 with lib;
 let
+  cfg = config.programs.claude-code;
   llmCfg = config.programs.llm-cli;
+  claudeSettingsFile = "${config.home.homeDirectory}/.claude/settings.json";
 in
 {
   # "accept edits on" / bypass permissions mode is broken and does not
   # suppress Edit prompts. This is a known upstream bug with no fix as of v2.1.74.
   # See: github.com/anthropics/claude-code/issues/12070
-  config = mkIf config.programs.claude-code.enable {
+  config = mkIf cfg.enable {
     programs.claude-code = {
       settings = {
         model = "opus";
@@ -95,6 +97,30 @@ in
       skills = llmCfg.skills;
       plugins = llmCfg.claudePlugins;
     };
+
+    home.activation.claudeCodeSettingsActivation = hm.dag.entryAfter [ "linkGeneration" ] ''
+      settingsPath=${escapeShellArg claudeSettingsFile}
+      mkdir -p "$(dirname -- "$settingsPath")"
+
+      if [ -e "$settingsPath" ] || [ -L "$settingsPath" ]; then
+        dynamic="$(${getExe pkgs.jq} . "$settingsPath" 2>/dev/null || echo '{}')"
+      else
+        dynamic='{}'
+      fi
+      static="$(${getExe pkgs.jq} . ${escapeShellArg config.home.file.${claudeSettingsFile}.source})"
+      merged="$(${getExe pkgs.jq} -n '$dynamic * $static' --argjson dynamic "$dynamic" --argjson static "$static")"
+
+      tmp="$(mktemp)"
+      printf '%s\n' "$merged" | ${getExe pkgs.jq} . > "$tmp"
+      if [ -L "$settingsPath" ]; then
+        rm -f "$settingsPath"
+      fi
+      install -m 0644 "$tmp" "$settingsPath"
+      rm -f "$tmp"
+      unset settingsPath dynamic static merged tmp
+    '';
+
+    home.file.${claudeSettingsFile}.enable = mkForce false;
 
     home.persistence."/persist" = {
       directories = [ ".claude" ];
