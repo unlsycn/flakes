@@ -21,8 +21,8 @@ let
   src = fetchFromGitHub {
     owner = "PolyArch";
     repo = "humanize";
-    rev = "179a87c6753fb9a804251668af6bd824439fdb9e";
-    hash = "sha256-sIhXInq5/EIE8CGfW2btK2LmWRiO7v8U9IaM55XPZAA=";
+    rev = "eec73c4dfcc4f9791933e3cbaa616d4f261ed9e2";
+    hash = "sha256-gPrZrqJl0sSOJkqPuikHYCnsukgBKRWQJ5DsFUnEJao=";
   };
 
   codexInstall =
@@ -55,16 +55,22 @@ let
         set -euo pipefail
 
         case "\''${1:-} \''${2:-} \''${3:-}" in
+          "--help  ")
+            cat <<'HELP'
+        Usage: codex [OPTIONS]
+          --disable <FEATURE>
+        HELP
+            ;;
           "features list ")
             cat <<'LIST'
-        codex_hooks                      under development  false
+        hooks                            stable             false
         LIST
             ;;
-          "features enable codex_hooks")
+          "features enable hooks")
             mkdir -p "\''${CODEX_HOME:?}"
             cat > "\''${CODEX_HOME}/config.toml" <<'TOML'
         [features]
-        codex_hooks = true
+        hooks = true
         TOML
             ;;
           *)
@@ -118,7 +124,12 @@ lib.genAttrs [
   "humanize-rlcr"
 ] (name: codexInstall + "/codex-home/skills/${name}")
 // {
-  inherit codexInstall src runtime humanizeWrapper;
+  inherit
+    codexInstall
+    src
+    runtime
+    humanizeWrapper
+    ;
   claudePlugin =
     runCommand "humanize-claude-plugin"
       {
