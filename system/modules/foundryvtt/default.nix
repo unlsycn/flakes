@@ -1,7 +1,7 @@
 {
   config,
   inputs,
-  inputs',
+  pkgs,
   user,
   lib,
   ...
@@ -9,9 +9,16 @@
 with lib;
 let
   cfg = config.services.foundryvtt;
+  # https://github.com/nix-foundryvtt/nix-foundryvtt/issues/49
+  foundryvttPackage =
+    (pkgs.callPackage "${inputs.foundryvtt}/pkgs/foundryvtt" { }).overrideAttrs
+      (_: {
+        version = "13.0.0+351";
+      });
 in
 {
   imports = [ inputs.foundryvtt.nixosModules.foundryvtt ];
+
   options.services.foundryvtt = {
     telemetry = mkOption {
       type = types.bool;
@@ -21,7 +28,7 @@ in
 
   config = mkIf cfg.enable {
     services.foundryvtt = {
-      package = inputs'.foundryvtt.packages.foundryvtt_13;
+      package = mkDefault foundryvttPackage;
       hostName = "fvtt.${config.mesh.tailnet.domain}";
       port = 1501;
       minifyStaticFiles = true;

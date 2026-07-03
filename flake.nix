@@ -161,6 +161,10 @@
             type = "app";
             program = "${pkgs.callPackage ./scripts/update-nebula-certs.nix { }}/bin/update-nebula-certs";
           };
+          apps.seed-foundryvtt-zip = {
+            type = "app";
+            program = "${pkgs.callPackage ./scripts/seed-foundryvtt-zip.nix { }}/bin/seed-foundryvtt-zip";
+          };
 
           pre-commit = {
             check.enable = false;
