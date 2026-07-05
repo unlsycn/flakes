@@ -5,63 +5,151 @@ let
   toLua = generators.toLua { };
   raw = generators.mkLuaInline;
 
-  normalizeKey =
-    key:
-    {
-      Super = "SUPER";
-      Alt = "ALT";
-      Control = "CTRL";
-      Ctrl = "CTRL";
-      Shift = "SHIFT";
-    }
-    .${key} or key;
-
-  keyCombo =
-    modifier: key:
-    concatStringsSep " + " (
-      map normalizeKey ((optionals (modifier != "") (splitString " " modifier)) ++ [ key ])
-    );
-
   workspaceSelector = workspace: if isInt workspace then toString workspace else workspace;
 
-  isWrappedAction = action: isAttrs action && action ? action && action ? options;
-  isManyAction = action: isAttrs action && action ? actions;
+  mainModifier = "Super";
+  usualModifier = "Alt";
+
+  opts = options: action: {
+    inherit action options;
+  };
+  many = actions: { inherit actions; };
+  doubleTap =
+    delayMs: dispatcher:
+    raw ''
+      (function()
+        local armed = false
+
+        return function()
+          if armed then
+            armed = false
+            hl.dispatch(${dispatcher.expr})
+            return
+          end
+
+          armed = true
+
+          hl.timer(function()
+            armed = false
+          end, {
+            timeout = ${toString delayMs},
+            type = "oneshot",
+          })
+        end
+      end)()
+    '';
+
+  bind = modifier: key: dispatcher: options: {
+    _args = [
+      (concatStringsSep " + " (
+        map (
+          part:
+          {
+            Super = "SUPER";
+            Alt = "ALT";
+            Control = "CTRL";
+            Ctrl = "CTRL";
+            Shift = "SHIFT";
+          }
+          .${part} or part
+        ) ((optionals (modifier != "") (splitString " " modifier)) ++ [ key ])
+      ))
+      dispatcher
+    ]
+    ++ optional (options != { }) options;
+  };
+
+  compile =
+    modifier: keymap:
+    let
+      compileAction =
+        key: action:
+        if isAttrs action && action ? actions then
+          concatMap (compileAction key) action.actions
+        else
+          let
+            resolved =
+              if isAttrs action && action ? action && action ? options then
+                action
+              else
+                {
+                  inherit action;
+                  options = { };
+                };
+          in
+          [ (bind modifier key resolved.action resolved.options) ];
+    in
+    keymap |> mapAttrsToList compileAction |> flatten;
+
+  mapActions = action: mapAttrs (_: action);
 in
 {
-  config.wayland.windowManager.hyprland.lib.bindingUtils = rec {
-    mainModifier = "Super";
-    usualModifier = "Alt";
+  config.wayland.windowManager.hyprland.lib.bindingUtils = {
+    inherit
+      bind
+      compile
+      doubleTap
+      many
+      mapActions
+      opts
+      ;
 
-    dsp = rec {
+    dsp = {
       exec = command: raw "hl.dsp.exec_cmd(${toLua command})";
       focus = direction: raw "hl.dsp.focus({ direction = ${toLua direction} })";
-      layout = message: raw "hl.dsp.layout(${toLua message})";
-      unlessLayout =
-        layouts: dispatcher:
-        raw ''
-          function()
-            local ws = hl.get_active_special_workspace() or hl.get_active_workspace()
-            if ws == nil then return end
-
-            local disabled = (${toLua (genAttrs layouts (_: true))})[ws.tiled_layout]
-            if disabled then return end
-
-            hl.dispatch(${dispatcher.expr})
-          end
-        '';
       layoutFor =
-        messages:
+        actions:
         raw ''
           function()
             local ws = hl.get_active_special_workspace() or hl.get_active_workspace()
             if ws == nil then return end
 
-            local message = (${toLua messages})[ws.tiled_layout]
-            if message == nil then return end
+            local function run(action)
+              if type(action) == "function" then
+                action()
+              else
+                hl.dispatch(action)
+              end
+            end
 
-            hl.dispatch(hl.dsp.layout(message))
+            ${
+              actions
+              |> mapAttrsToList (
+                layout: action: ''
+                  if ws.tiled_layout == ${toLua layout} then
+                    run(${
+                      if isString action then
+                        "hl.dsp.layout(${toLua action})"
+                      else if isAttrs action && action ? expr then
+                        action.expr
+                      else
+                        throw "layoutFor values must be layout message strings or Lua actions"
+                    })
+                    return
+                  end
+                ''
+              )
+              |> concatStringsSep "\n"
+            }
           end
         '';
+      smartColumnToggle = raw ''
+        function()
+          local win = hl.get_active_window()
+          local layout = win ~= nil and win.layout or nil
+          local column_windows = layout ~= nil and layout.column ~= nil and layout.column.windows or nil
+          local column_window_count = 0
+
+          if column_windows ~= nil then
+            for _, _ in pairs(column_windows) do
+              column_window_count = column_window_count + 1
+            end
+          end
+
+          local message = column_window_count > 1 and "promote" or "consume_or_expel prev"
+          hl.dispatch(hl.dsp.layout(message))
+        end
+      '';
       toggleLayout =
         defaultLayout: alternateLayout:
         raw ''
@@ -88,6 +176,19 @@ in
         maximize = raw "hl.dsp.window.fullscreen({ mode = \"maximized\", action = \"toggle\" })";
         fullscreen = raw "hl.dsp.window.fullscreen({ mode = \"fullscreen\" })";
         move = direction: raw "hl.dsp.window.move({ direction = ${toLua direction} })";
+        moveOrSwapScrollingColumn =
+          direction:
+          raw ''
+            function()
+              local ws = hl.get_active_special_workspace() or hl.get_active_workspace()
+              if ws ~= nil and ws.tiled_layout == "scrolling" then
+                hl.dispatch(hl.dsp.layout(${toLua "swapcol ${direction}"}))
+                return
+              end
+
+              hl.dispatch(hl.dsp.window.move({ direction = ${toLua direction} }))
+            end
+          '';
         moveToWorkspace =
           workspace: raw "hl.dsp.window.move({ workspace = ${toLua (workspaceSelector workspace)} })";
         drag = raw "hl.dsp.window.drag()";
@@ -100,70 +201,8 @@ in
       };
     };
 
-    opts = options: action: {
-      inherit action options;
-    };
-    many = actions: { inherit actions; };
-    doubleTap =
-      delayMs: dispatcher:
-      raw ''
-        (function()
-          local armed = false
-
-          return function()
-            if armed then
-              armed = false
-              hl.dispatch(${dispatcher.expr})
-              return
-            end
-
-            armed = true
-
-            hl.timer(function()
-              armed = false
-            end, {
-              timeout = ${toString delayMs},
-              type = "oneshot",
-            })
-          end
-        end)()
-      '';
-
-    bind = modifier: key: dispatcher: options: {
-      _args = [
-        (keyCombo modifier key)
-        dispatcher
-      ]
-      ++ optional (options != { }) options;
-    };
-
-    compile =
-      modifier: keymap:
-      let
-        compileAction =
-          key: action:
-          if isManyAction action then
-            concatMap (compileAction key) action.actions
-          else
-            let
-              resolved =
-                if isWrappedAction action then
-                  action
-                else
-                  {
-                    inherit action;
-                    options = { };
-                  };
-            in
-            [ (bind modifier key resolved.action resolved.options) ];
-      in
-      keymap |> mapAttrsToList compileAction |> flatten;
-
-    mapActions = action: mapAttrs (_: action);
-
     main = compile mainModifier;
-    mainShiftModifier = "${mainModifier} Shift";
-    mainShift = compile mainShiftModifier;
+    mainShift = compile "${mainModifier} Shift";
     alt = compile usualModifier;
     altShift = compile "${usualModifier} Shift";
     ctrlAlt = compile "Control Alt";

@@ -16,12 +16,6 @@ let
     K = "u";
     J = "d";
   };
-  arrowDirections = {
-    Left = "l";
-    Right = "r";
-    Up = "u";
-    Down = "d";
-  };
   specialWorkspaces = {
     F = "code";
     C = "chat";
@@ -40,12 +34,14 @@ in
               P = dsp.window.toggleFloating;
               Tab = dsp.toggleLayout "scrolling" "master";
               E = dsp.layoutFor {
-                scrolling = "promote";
+                scrolling = dsp.smartColumnToggle;
                 master = "swapwithmaster";
               };
               # Hyprland 0.55 scrolling maximize is not reversible yet:
               # https://github.com/hyprwm/Hyprland/discussions/14380
-              A = dsp.unlessLayout [ "scrolling" ] dsp.window.maximize;
+              A = dsp.layoutFor {
+                master = dsp.window.maximize;
+              };
 
               mouse_down = dsp.exec "${switch_workspace} -p";
               mouse_up = dsp.exec "${switch_workspace}";
@@ -53,7 +49,12 @@ in
               "mouse:273" = opts { mouse = true; } dsp.window.resize;
             }
             // mapActions dsp.focus vimDirections
-            // mapActions dsp.window.move arrowDirections
+            // mapActions dsp.window.move {
+              Left = "l";
+              Right = "r";
+              Up = "u";
+              Down = "d";
+            }
             // mapActions dsp.workspace.focus workspaceKeys
             // mapActions dsp.workspace.toggleSpecial specialWorkspaces
             // mapActions (messages: opts { repeating = true; } (dsp.layoutFor messages)) {
@@ -73,6 +74,10 @@ in
               mouse_up = dsp.exec "${switch_workspace} -m";
             }
             // mapActions dsp.window.move vimDirections
+            // mapActions dsp.window.moveOrSwapScrollingColumn {
+              H = "l";
+              L = "r";
+            }
             // mapActions dsp.window.moveToWorkspace workspaceKeys
             // mapActions (workspace: dsp.window.moveToWorkspace "special:${workspace}") specialWorkspaces
           )
@@ -102,7 +107,9 @@ in
           {
             fingers = 3;
             direction = "vertical";
-            action = dsp.unlessLayout [ "scrolling" ] dsp.window.maximize;
+            action = dsp.layoutFor {
+              master = dsp.window.maximize;
+            };
           }
           {
             fingers = 4;
