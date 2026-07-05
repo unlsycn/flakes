@@ -7,8 +7,8 @@ let
   llmCfg = config.programs.llm-cli;
 in
 {
-  config = lib.mkIf config.programs.gemini-cli.enable {
-    programs.gemini-cli = {
+  config = lib.mkIf config.programs.antigravity-cli.enable {
+    programs.antigravity-cli = {
       commands =
         llmCfg.commands
         |> lib.mapAttrs (

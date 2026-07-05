@@ -11,7 +11,7 @@ let
   backendBin = {
     claude-code = getExe config.programs.claude-code.finalPackage;
     opencode = getExe config.programs.opencode.package;
-    gemini-cli = getExe config.programs.gemini-cli.package;
+    antigravity-cli = getExe config.programs.antigravity-cli.package;
     codex = getExe config.programs.codex.package;
   };
 in
@@ -147,7 +147,7 @@ in
           && (filterAttrs (_: v: v) {
             claude-code = config.programs.claude-code.enable;
             opencode = config.programs.opencode.enable;
-            gemini-cli = config.programs.gemini-cli.enable;
+            antigravity-cli = config.programs.antigravity-cli.enable;
             codex = config.programs.codex.enable;
           }) ? ${config.programs.llm-cli.defaultBackend}
         )
@@ -156,7 +156,7 @@ in
             {
               claude-code = "${backendBin.claude-code} /commit-message";
               opencode = "${backendBin.opencode} --prompt /commit-message";
-              gemini-cli = "${backendBin.gemini-cli} -i /commit-message";
+              antigravity-cli = "${backendBin.antigravity-cli} -i /commit-message";
               codex = "${backendBin.codex} ${escapeShellArg "$commit-message"}";
             }
             .${config.programs.llm-cli.defaultBackend};
