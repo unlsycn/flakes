@@ -8,7 +8,7 @@ with lib;
 let
   cfg = config.programs.telegram;
   telegram = getExe cfg.package;
-  hyprctl = "${pkgs.hyprland}/bin/hyprctl";
+  hyprctl = getExe' pkgs.hyprland "hyprctl";
 in
 {
   options.programs.telegram.enableHyprlandIntegration = mkOption {
@@ -20,7 +20,7 @@ in
   config = mkIf (cfg.enable && cfg.enableHyprlandIntegration) {
     wayland.windowManager.hyprland.startupCommands = [
       telegram
-      "sleep 5 && ${hyprctl} dispatch closewindow class:org.telegram.desktop"
+      "sleep 5 && ${hyprctl} dispatch 'hl.dsp.window.close({ window = \"class:org.telegram.desktop\" })'"
     ];
   };
 }

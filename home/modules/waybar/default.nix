@@ -6,6 +6,7 @@
 }:
 with lib;
 let
+  hyprctl = getExe' pkgs.hyprland "hyprctl";
   volume = "${pkgs.desktop-scripts}/bin/volume";
   brightnessctl = lib.getExe pkgs.brightnessctl;
   swaync-client = "${pkgs.swaynotificationcenter}/bin/swaync-client";
@@ -68,8 +69,8 @@ in
             format = "{icon}";
             show-special = false;
             on-click = "activate";
-            on-scroll-up = "hyprctl dispatch workspace -1";
-            on-scroll-down = "hyprctl dispatch workspace +1";
+            on-scroll-up = "${hyprctl} dispatch 'hl.dsp.focus({ workspace = \"e-1\" })'";
+            on-scroll-down = "${hyprctl} dispatch 'hl.dsp.focus({ workspace = \"e+1\" })'";
             persistent-workspaces = {
               "1" = [ ];
               "2" = [ ];
