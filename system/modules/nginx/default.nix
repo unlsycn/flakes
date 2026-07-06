@@ -6,6 +6,15 @@ let
 in
 {
   config = mkIf (cfg.enable && cfg.services != { }) {
+    assertions =
+      cfg.services
+      |> mapAttrsToList (
+        name: svc: {
+          assertion = (svc.internalAddress != null && svc.internalPort != null) || svc.locations != { };
+          message = "mesh.services.${name} must set either internalAddress/internalPort or custom locations";
+        }
+      );
+
     services.nginx = {
       enable = mkDefault true;
       recommendedProxySettings = mkDefault true;

@@ -37,7 +37,16 @@ let
     in
     "${toString o1}.${toString o2}.${toString o3}.${toString o4}";
 
-  calculateNodeIp = cidr: id: (cidr |> splitString "/" |> (l: elemAt l 0) |> ipToInt) + id |> intToIp;
+  calculateNodeIp =
+    cidr: id:
+    (
+      cidr
+      |> splitString "/"
+      |> (l: elemAt l 0)
+      |> ipToInt
+    )
+    + id
+    |> intToIp;
 in
 {
   options.mesh = {
@@ -126,13 +135,14 @@ in
           {
             options = {
               internalPort = mkOption {
-                type = types.port;
+                type = types.nullOr types.port;
+                default = null;
                 description = "Port where the service is listening locally";
               };
 
               internalAddress = mkOption {
-                type = types.str;
-                default = "127.0.0.1";
+                type = types.nullOr types.str;
+                default = if config.internalPort != null then "127.0.0.1" else null;
                 description = "Address where the service is listening locally";
               };
 
@@ -162,11 +172,15 @@ in
 
               locations = mkOption {
                 type = types.attrs;
-                default = {
-                  "/" = {
-                    proxyPass = "http://${config.internalAddress}:${toString config.internalPort}/";
-                  };
-                };
+                default =
+                  if config.internalAddress != null && config.internalPort != null then
+                    {
+                      "/" = {
+                        proxyPass = "http://${config.internalAddress}:${toString config.internalPort}/";
+                      };
+                    }
+                  else
+                    { };
                 description = "Nginx location configurations";
               };
 
