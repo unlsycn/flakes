@@ -9,7 +9,12 @@ let
   cfg = config.programs.codex;
   llmCfg = config.programs.llm-cli;
   maxContext = 320000;
-  codexConfigFile = "/.config/codex/config.toml";
+  mutableCodexConfig = (import ../../lib { inherit lib pkgs; }).mkMutableGeneratedFile {
+    inherit config;
+    targetPath = "${config.xdg.configHome}/codex/config.toml";
+    homeFilePath = "/.config/codex/config.toml";
+    format = "toml";
+  };
 in
 {
   config = mkIf cfg.enable {
@@ -70,32 +75,10 @@ in
       }
     ];
 
-    home.activation.codexConfigActivation = hm.dag.entryAfter [ "linkGeneration" ] ''
-      configPath=${escapeShellArg "${config.xdg.configHome}/codex/config.toml"}
-      mkdir -p "$(dirname -- "$configPath")"
-
-      if [ -e "$configPath" ] || [ -L "$configPath" ]; then
-        dynamic="$(${getExe pkgs.yj} -tj < "$configPath" 2>/dev/null | ${getExe pkgs.jq} 'del(.features.codex_hooks)' 2>/dev/null || echo '{}')"
-      else
-        dynamic='{}'
-      fi
-      static="$(${getExe pkgs.yj} -tj < ${escapeShellArg config.home.file.${codexConfigFile}.source})"
-      merged="$(${getExe pkgs.jq} -n '$dynamic * $static' --argjson dynamic "$dynamic" --argjson static "$static")"
-
-      tmp="$(mktemp)"
-      printf '%s\n' "$merged" | ${getExe pkgs.yj} -jt > "$tmp"
-      if [ -L "$configPath" ]; then
-        rm -f "$configPath"
-      fi
-      install -m 0644 "$tmp" "$configPath"
-      rm -f "$tmp"
-      unset configPath dynamic static merged tmp
-    '';
+    home.activation.codexConfigActivation = mutableCodexConfig.activation;
 
     home.file = mkMerge [
-      {
-        ${codexConfigFile}.enable = mkForce false;
-      }
+      mutableCodexConfig.homeFile
       (
         llmCfg.commands
         |> mapAttrs' (
