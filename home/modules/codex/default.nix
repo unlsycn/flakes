@@ -8,7 +8,7 @@ with lib;
 let
   cfg = config.programs.codex;
   llmCfg = config.programs.llm-cli;
-  maxContext = 320000;
+  maxContext = 640000;
   mutableCodexConfig = (import ../../lib { inherit lib pkgs; }).mkMutableGeneratedFile {
     inherit config;
     targetPath = "${config.xdg.configHome}/codex/config.toml";
@@ -20,9 +20,8 @@ in
   config = mkIf cfg.enable {
     programs.codex = {
       settings = {
-        model_provider = "OpenAI";
-        model = "gpt-5.5";
-        review_model = "gpt-5.5";
+        model = "gpt-5.6-sol";
+        review_model = "gpt-5.6-sol";
         model_reasoning_effort = "xhigh";
         plan_mode_reasoning_effort = "xhigh";
         model_context_window = maxContext;
@@ -34,12 +33,6 @@ in
         features.hooks = llmCfg.humanize.enable;
         project_doc_fallback_filenames = filter (name: name != "AGENTS.md") llmCfg.projectInstructions;
         features.multi_agent = true;
-        model_providers.OpenAI = {
-          name = "OpenAI";
-          base_url = "https://rust.cat";
-          wire_api = "responses";
-          requires_openai_auth = true;
-        };
 
         permissions.default.filesystem = {
           ":minimal" = "read";
