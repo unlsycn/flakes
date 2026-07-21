@@ -7,8 +7,7 @@
 with lib;
 with builtins;
 let
-  switch_workspace = "${pkgs.desktop-scripts}/bin/switch_workspace";
-  volume = "${pkgs.desktop-scripts}/bin/volume";
+  volumeControl = getExe pkgs.volume-control;
   workspaceKeys = genAttrs (10 |> genList (x: toString x)) (key: if key == "0" then "10" else key);
   vimDirections = {
     H = "l";
@@ -43,8 +42,6 @@ in
                 master = dsp.window.maximize;
               };
 
-              mouse_down = dsp.exec "${switch_workspace} -p";
-              mouse_up = dsp.exec "${switch_workspace}";
               "mouse:272" = opts { mouse = true; } dsp.window.drag;
               "mouse:273" = opts { mouse = true; } dsp.window.resize;
             }
@@ -69,11 +66,7 @@ in
             }
           )
           ++ mainShift (
-            {
-              mouse_down = dsp.exec "${switch_workspace} -pm";
-              mouse_up = dsp.exec "${switch_workspace} -m";
-            }
-            // mapActions dsp.window.move vimDirections
+            mapActions dsp.window.move vimDirections
             // mapActions dsp.window.moveOrSwapScrollingColumn {
               H = "l";
               L = "r";
@@ -91,10 +84,10 @@ in
                 } (dsp.exec command)
               )
               {
-                XF86AudioRaiseVolume = "${volume} --inc";
-                XF86AudioLowerVolume = "${volume} --dec";
-                XF86AudioMute = "${volume} --toggle";
-                XF86AudioMicMute = "${volume} --mic-toggle";
+                XF86AudioRaiseVolume = "${volumeControl} --inc";
+                XF86AudioLowerVolume = "${volumeControl} --dec";
+                XF86AudioMute = "${volumeControl} --toggle";
+                XF86AudioMicMute = "${volumeControl} --mic-toggle";
               }
           );
 

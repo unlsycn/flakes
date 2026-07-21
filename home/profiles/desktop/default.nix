@@ -33,7 +33,6 @@ with lib;
     };
 
     home.packages = with pkgs; [
-      desktop-scripts
       wl-clipboard
     ];
 

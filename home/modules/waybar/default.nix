@@ -7,7 +7,7 @@
 with lib;
 let
   hyprctl = getExe' pkgs.hyprland "hyprctl";
-  volume = "${pkgs.desktop-scripts}/bin/volume";
+  volumeControl = getExe pkgs.volume-control;
   brightnessctl = lib.getExe pkgs.brightnessctl;
   swaync-client = "${pkgs.swaynotificationcenter}/bin/swaync-client";
   blueman-manager = "${pkgs.blueman}/bin/blueman-manager";
@@ -176,9 +176,9 @@ in
               ];
             };
             scroll-step = 5;
-            on-click = "${volume} --toggle";
-            on-scroll-up = "${volume} --inc";
-            on-scroll-down = "${volume} --dec";
+            on-click = "${volumeControl} --toggle";
+            on-scroll-up = "${volumeControl} --inc";
+            on-scroll-down = "${volumeControl} --dec";
             tooltip-format = "{icon} {desc} | {volume}%";
             smooth-scrolling-threshold = 1;
           };
