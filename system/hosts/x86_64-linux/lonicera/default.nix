@@ -46,15 +46,5 @@
     };
   };
 
-  mesh = {
-    enable = true;
-    id = 33;
-    roles = [
-      "lighthouse"
-      "relay"
-    ];
-    endpoint = "lonicera.unlsycn.com";
-  };
-
   system.stateVersion = "23.11";
 }

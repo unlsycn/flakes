@@ -39,20 +39,17 @@
         ];
       };
     };
+  };
 
-    firewall = {
-      allowedTCPPortRanges = [
-        {
-          from = 24000;
-          to = 25000;
-        }
-      ];
-      allowedUDPPortRanges = [
-        {
-          from = 24000;
-          to = 25000;
-        }
-      ];
+  mesh = {
+    id = 49;
+    roles = [
+      "lighthouse"
+    ];
+    endpoint = "ukiyo.unlsycn.com";
+    tailnet = {
+      enable = false;
+      server.enable = true;
     };
   };
 

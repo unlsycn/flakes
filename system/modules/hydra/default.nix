@@ -14,13 +14,13 @@ with lib;
     mesh.services.hydra = mkIf config.services.nginx.enable {
       internalPort = config.services.hydra.port;
       internalAddress = "127.0.0.1";
-      expose = {
+      exposure = {
         nebula = true;
       };
       publicDomain = "hydra.unlsycn.com";
     };
 
-    networking.firewall.allowedTCPPorts = mkIf (!config.services.nginx.enable) [
+    mesh.surfaces.nebula.allowedTCPPorts = mkIf (!config.services.nginx.enable) [
       config.services.hydra.port
     ];
   };

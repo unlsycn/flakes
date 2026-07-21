@@ -1,18 +1,28 @@
-{ config, lib, ... }:
+{
+  config,
+  inputs,
+  lib,
+  ...
+}:
 {
   mesh.services = {
     webhook = {
-      expose.public = true;
+      exposure.public = true;
       publicDomain = "webhook.unlsycn.com";
       locations = lib.genAttrs [ "/change_hook/github" ] (
         path:
         let
-          host = "build.${config.mesh.nebula.domain}";
+          host = inputs.self.nixosConfigurations.lonicera.config.mesh.services.build.domain;
         in
         {
           proxyPass = "https://${host}";
 
           extraConfig = ''
+            proxy_ssl_server_name on;
+            proxy_ssl_verify on;
+            proxy_ssl_verify_depth 2;
+            proxy_ssl_trusted_certificate ${config.security.pki.caBundle};
+
             proxy_set_header Host ${host};
             proxy_set_header X-Real-IP $remote_addr;
             proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;
@@ -30,8 +40,4 @@
     };
   };
   services.nginx.recommendedProxySettings = false;
-  networking.firewall.allowedTCPPorts = [
-    80
-    443
-  ];
 }

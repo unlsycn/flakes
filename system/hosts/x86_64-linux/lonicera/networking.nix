@@ -41,21 +41,16 @@
         ];
       };
     };
+  };
 
-    firewall = {
-      allowedTCPPortRanges = [
-        {
-          from = 24000;
-          to = 25000;
-        }
-      ];
-      allowedUDPPortRanges = [
-        {
-          from = 24000;
-          to = 25000;
-        }
-      ];
-    };
+  mesh = {
+    id = 33;
+    roles = [
+      "lighthouse"
+      "relay"
+    ];
+    endpoint = "lonicera.unlsycn.com";
+    tailnet.enable = true;
   };
 
   services.udev.extraRules = ''

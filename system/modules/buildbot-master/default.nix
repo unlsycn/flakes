@@ -16,7 +16,7 @@ with lib;
     };
 
     services.buildbot-nix.master = {
-      domain = "build.${config.mesh.nebula.domain}";
+      domain = config.mesh.services.build.domain;
       workersFile = config.sops.secrets."buildbot-workers".path;
       authBackend = "github";
       github = {
@@ -33,11 +33,12 @@ with lib;
     };
 
     mesh.services.build = {
+      singleDomain = true;
       internalPort = config.services.buildbot-master.port;
       internalAddress = "127.0.0.1";
-      expose = {
+      exposure = {
         nebula = true;
-        tailscale = true;
+        tailnet = true;
       };
       extraConfig = ''
         set_real_ip_from ${config.mesh.nebula.cidr};

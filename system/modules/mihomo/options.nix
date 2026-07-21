@@ -124,6 +124,14 @@ in
                   type = listOf str;
                   default = [ ];
                 };
+                exclude-src-port = mkOption {
+                  type = listOf port;
+                  default = [ ];
+                };
+                exclude-dst-port = mkOption {
+                  type = listOf port;
+                  default = [ ];
+                };
               };
             });
             default = null;

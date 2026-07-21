@@ -38,9 +38,9 @@ in
     };
 
     mesh.services.fvtt = {
-      expose = {
+      exposure = {
         nebula = true;
-        tailscale = true;
+        tailnet = true;
       };
       locations."/" = {
         proxyPass = "http://127.0.0.1:${cfg.port |> toString}";
@@ -51,8 +51,6 @@ in
 
     users.users.${user}.extraGroups = [ "foundryvtt" ];
 
-    networking.firewall.allowedTCPPorts = mkIf (!config.services.nginx.enable) [
-      cfg.port
-    ];
+    mesh.surfaces.nebula.allowedTCPPorts = mkIf (!config.services.nginx.enable) [ cfg.port ];
   };
 }

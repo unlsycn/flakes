@@ -40,8 +40,8 @@
   services.asusd.enable = true;
 
   mesh = {
-    enable = true;
     id = 77;
+    tailnet.enable = true;
   };
 
   jovian = {
@@ -49,7 +49,7 @@
     devices.ally-z1e.enable = true;
   };
 
-  networking.firewall.enable = false;
+  networking.firewall.enable = true;
 
   system.stateVersion = "25.05"; # Dont touch it
 }

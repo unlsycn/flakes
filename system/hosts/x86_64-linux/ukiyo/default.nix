@@ -35,14 +35,5 @@
     mihomo.enable = false;
   };
 
-  mesh = {
-    enable = true;
-    id = 49;
-    roles = [
-      "lighthouse"
-    ];
-    endpoint = "ukiyo.unlsycn.com";
-  };
-
   system.stateVersion = "23.11";
 }

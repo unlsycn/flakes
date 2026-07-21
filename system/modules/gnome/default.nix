@@ -7,6 +7,10 @@
 with lib;
 {
   config = mkIf config.services.desktopManager.gnome.enable {
+    # GNOME enables Avahi; keep its firewall exposure in the surface model.
+    services.avahi.openFirewall = false;
+    mesh.surfaces.public.allowedUDPPorts = [ 5353 ];
+
     services.gnome = {
       core-apps.enable = false;
       core-developer-tools.enable = false;

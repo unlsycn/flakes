@@ -39,8 +39,8 @@
   };
 
   mesh = {
-    enable = true;
     id = 72;
+    tailnet.enable = true;
   };
 
   networking.hostId = "7715be29";

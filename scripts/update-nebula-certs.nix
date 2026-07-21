@@ -24,7 +24,18 @@ pkgs.writeShellApplication {
     LOCK_FILE="nebula-topology.lock"
 
     echo "Evaluating mesh topology..."
-    NEW_TOPOLOGY=$(nix eval .#mesh-topology --apply 't: builtins.mapAttrs (_: v: { inherit (v) ip cidr system; groups = v.roles; }) t' --json)
+    NEW_TOPOLOGY=$(nix eval .#mesh-topology --json \
+      | jq -cS '
+          with_entries(
+            select(.value | has("nebula"))
+            | .value = {
+                ip: .value.nebula.ip,
+                cidr: .value.nebula.cidr,
+                system: .value.system,
+                groups: .value.roles
+              }
+          )
+        ')
 
     if [ -f "$LOCK_FILE" ]; then
       OLD_TOPOLOGY=$(cat "$LOCK_FILE")

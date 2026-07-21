@@ -27,7 +27,8 @@
       };
     };
   };
-  networking.firewall.allowedTCPPorts = [
+
+  mesh.surfaces.nebula.allowedTCPPorts = [
     445
     139
   ];

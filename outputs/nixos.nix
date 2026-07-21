@@ -14,7 +14,10 @@ with builtins;
       |> attrNames
       |> map (
         system:
-        ../system/hosts/${system} |> readDir |> attrNames |> map (host: genNixosConfiguration system host)
+        ../system/hosts/${system}
+        |> readDir
+        |> attrNames
+        |> map (host: genNixosConfiguration system host)
       )
       |> lib.flatten
       |> listToAttrs;

@@ -33,7 +33,10 @@ let
     directions
     |> mapAttrsToList (
       dir: targets:
-      targets |> toList |> map (t: if isString t then { screen = t; } else t) |> mkLinkLine dir
+      targets
+      |> toList
+      |> map (t: if isString t then { screen = t; } else t)
+      |> mkLinkLine dir
     )
     |> concatStringsSep "\n";
 

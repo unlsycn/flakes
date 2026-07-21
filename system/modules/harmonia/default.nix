@@ -18,20 +18,18 @@ in
   };
   config = lib.mkIf cfg.cache.enable {
     services.harmonia-dev.cache.settings = {
-      bind = "${if config.services.nginx.enable then "localhost" else "[::]"}:${cfg.port |> toString}";
+      bind = "${if config.services.nginx.enable then "127.0.0.1" else "[::]"}:${cfg.port |> toString}";
       enable_compression = true;
     };
 
     mesh.services.cache = {
       internalPort = cfg.port;
       internalAddress = "127.0.0.1";
-      expose = {
+      exposure = {
         nebula = true;
       };
     };
 
-    networking.firewall.allowedTCPPorts = mkIf (!config.services.nginx.enable) [
-      cfg.port
-    ];
+    mesh.surfaces.nebula.allowedTCPPorts = mkIf (!config.services.nginx.enable) [ cfg.port ];
   };
 }

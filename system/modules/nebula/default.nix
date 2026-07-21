@@ -11,13 +11,15 @@ let
   nebulaName = "senesperejo";
   nebulaCfg = config.services.nebula.networks.${nebulaName};
 
-  nodes = inputs.self.mesh-topology |> attrValues;
+  nodes = inputs.self.mesh-topology |> attrValues |> filter (n: n ? nebula);
   generatedDir = ../../hosts/${pkgs.stdenv.hostPlatform.system}/${config.networking.hostName}/_generated;
   nebulaCert = generatedDir + "/nebula.crt";
   nebulaKey = generatedDir + "/nebula.key";
   nebulaCa = generatedDir + "/nebula_ca.crt";
 in
 {
+  imports = [ ./patch.nix ];
+
   config = mkMerge [
     (mkIf cfg.nebula.enable {
       services.nebula.networks.${nebulaName} = {
@@ -31,14 +33,14 @@ in
         listen.port = 4242;
         tun.device = nebulaName;
 
-        lighthouses = nodes |> filter (n: n.roles |> elem "lighthouse") |> map (n: n.ip);
+        lighthouses = nodes |> filter (n: n.roles |> elem "lighthouse") |> map (n: n.nebula.ip);
 
         staticHostMap =
           nodes
-          |> filter (n: n.publicEndpoint != null)
+          |> filter (n: n.nebula.publicEndpoint != null)
           |> map (n: {
-            name = n.ip;
-            value = [ n.publicEndpoint ];
+            name = n.nebula.ip;
+            value = [ n.nebula.publicEndpoint ];
           })
           |> listToAttrs;
 
@@ -63,9 +65,7 @@ in
         };
       };
 
-      networking.firewall.trustedInterfaces = [
-        nebulaCfg.tun.device
-      ];
+      mesh.surfaces.public.allowedUDPPorts = [ nebulaCfg.listen.port ];
 
       sops.secrets = {
         nebula-key = {
@@ -84,7 +84,10 @@ in
       systemd.network.networks."50-nebula" = {
         matchConfig.Name = nebulaCfg.tun.device;
         dns = nebulaCfg.lighthouses;
-        domains = [ "~${cfg.nebula.domain}" ];
+        domains = [
+          "~${cfg.nebula.domain}"
+        ]
+        ++ optional (!cfg.tailnet.enable) "~${cfg.tailnet.domain}";
         # Prevent system boot from hanging if the mesh tunnel hasn't established yet
         linkConfig.RequiredForOnline = false;
         networkConfig = {
@@ -103,19 +106,21 @@ in
             ]
             ++ (
               nodes
-              |> filter (n: n.publicEndpoint != null)
-              |> map (n: n.publicEndpoint |> splitString ":" |> head)
+              |> filter (n: n.nebula.publicEndpoint != null)
+              |> map (n: n.nebula.publicEndpoint |> splitString ":" |> head)
             );
           };
 
-          # Excluding the internal CIDR prevents Mihomo from hijacking DNS queries for internal hosts.
-          # Normal mesh traffic bypasses the Mihomo TUN interface via routing policy and never
-          # enters the proxy's routing table; this exclusion ensures DNS resolution follows suit.
-          # It creates a "hole" in Mihomo's routing table via address space decomposition,
-          # forcing excluded traffic to fall back to the main routing table for delivery.
-          tun.route-exclude-address = [
-            "${cfg.nebula.cidr}"
-          ];
+          tun = {
+            # Excluding the internal CIDR prevents Mihomo from hijacking DNS queries for internal hosts.
+            # Normal mesh traffic bypasses the Mihomo TUN interface via routing policy and never
+            # enters the proxy's routing table; this exclusion ensures DNS resolution follows suit.
+            # It creates a "hole" in Mihomo's routing table via address space decomposition,
+            # forcing excluded traffic to fall back to the main routing table for delivery.
+            route-exclude-address = [ cfg.nebula.cidr ];
+            exclude-src-port = [ nebulaCfg.listen.port ];
+            exclude-dst-port = [ nebulaCfg.listen.port ];
+          };
         };
 
         routes."Mesh" = {
@@ -124,13 +129,13 @@ in
             # by upstream gateways' proxies. Local traffic already bypasses the local Mihomo TUN
             # via kernel routing policy (suppress_prefixlength 0), so these are primarily for the WAN link.
             {
-              type = "DST-PORT";
-              rule = nebulaCfg.listen.port |> toString;
+              type = "AND";
+              rule = "((NETWORK,UDP),(DST-PORT,${toString nebulaCfg.listen.port}))";
               priority = 100;
             }
             {
-              type = "SRC-PORT";
-              rule = nebulaCfg.listen.port |> toString;
+              type = "AND";
+              rule = "((NETWORK,UDP),(SRC-PORT,${toString nebulaCfg.listen.port}))";
               priority = 100;
             }
           ];
