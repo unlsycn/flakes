@@ -35,7 +35,6 @@ in
         };
         find-process-mode = "strict";
         keep-alive-interval = 1800;
-        global-client-fingerprint = "random";
         profile = {
           store-selected = true;
           store-fake-ip = true;
@@ -89,6 +88,10 @@ in
               "https://doh.pub/dns-query"
               "https://dns.alidns.com/dns-query"
             ];
+            fallbackDns = [
+              "tls://8.8.4.4#DNS"
+              "tls://1.0.0.1#DNS"
+            ];
           in
           {
             enable = true;
@@ -105,18 +108,15 @@ in
             default-nameserver = bootstrap-ip;
             proxy-server-nameserver = bootstrap-ip ++ cn-doh;
 
-            fallback = [
-              "tls://8.8.4.4#DNS"
-              "tls://1.0.0.1#DNS"
-            ];
+            fallback = fallbackDns;
             fallback-filter = {
               geoip = true;
               geoip-code = "CN";
-              geosite = [ "gfw" ];
             };
 
             nameserver-policy = {
               "geosite:cn,private" = cn-doh;
+              "geosite:gfw" = fallbackDns;
             };
           };
       };
