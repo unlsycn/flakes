@@ -48,6 +48,12 @@ with lib;
         decky-loader = {
           enable = true;
           user = user;
+          # https://github.com/NixOS/nixpkgs/blob/753cc8a3a87467296ddd1fa93f0cc3e81120ee46/pkgs/development/tools/pnpm/default.nix#L7-L24
+          package = (pkgs.decky-loader.override { pnpm_9 = pkgs.pnpm_10; }).overridePythonAttrs (old: {
+            pnpmDeps = old.pnpmDeps.overrideAttrs (_: {
+              outputHash = "sha256-xiduOYH8kGBLRvTSyiJzRAXxGCJazrZ3+5HCKj6m2jw=";
+            });
+          });
           extraPackages = with pkgs; [
             ryzenadj
           ];
