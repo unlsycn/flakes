@@ -1,4 +1,13 @@
 final: prev: {
+  handheld-daemon = prev.handheld-daemon.overrideAttrs (oldAttrs: {
+    patches = oldAttrs.patches ++ [
+      (prev.fetchpatch {
+        url = "https://github.com/hhd-dev/hhd/commit/58f430b766be8b463a991ca70bcfd8540f937ac0.patch";
+        hash = "sha256-GKUsgp2rvHnw8yY3v9RGhiB7/NgTIq08yHbXHS0tlt4=";
+      })
+    ];
+  });
+
   waybar = prev.waybar.overrideAttrs (old: {
     src = prev.fetchFromGitHub {
       owner = "Alexays";
