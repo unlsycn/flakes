@@ -255,7 +255,7 @@ with lib;
                   # Fonts
                   fonts = {
                     "editor.fontFamily" = "Maple Mono, Maple Mono NF, Sarasa Mono SC, LXGW WenKai Mono, monospace";
-                    "editor.fontLigatures" = "discretionary-lig-values";
+                    "editor.fontLigatures" = "'calt', 'dlig'";
                     "editor.fontSize" = 17;
                     "editor.fontWeight" = "normal";
                     "editor.codeLensFontFamily" = "Maple Mono, Sarasa Mono SC, monospace";

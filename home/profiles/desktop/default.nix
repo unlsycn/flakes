@@ -13,7 +13,7 @@ with lib;
   config = mkIf config.profile.desktop.enable {
     programs = {
       vscode.enable = true;
-      alacritty.enable = true;
+      ghostty.enable = true;
       waybar.enable = true;
       zen-browser.enable = true;
       telegram.enable = true;

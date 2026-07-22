@@ -11,7 +11,7 @@ with lib;
 
   config = mkIf config.profile.handheld.enable {
     programs = {
-      alacritty.enable = true;
+      ghostty.enable = true;
       zen-browser.enable = true;
     };
 
