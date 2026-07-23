@@ -5,71 +5,66 @@
   ...
 }:
 with lib;
+let
+  cfg = config.programs.beets;
+  baseDir = config.xdg.userDirs.music;
+  enabledPlugins = [
+    "badfiles"
+    "convert"
+    "duplicates"
+    "edit"
+    "embedart"
+    "export"
+    "fetchart"
+    "filetote"
+    "filefilter"
+    "fromfilename"
+    "fuzzy"
+    "info"
+    "mbsync"
+    "missing"
+    "replaygain"
+    "smartplaylist"
+    "spotify"
+    "playlist"
+    "types"
+    "unimported"
+    "zero"
+  ];
+in
 {
-  config =
-    let
-      baseDir = "${config.programs.onedrive.settings.sync_dir}/Music";
-    in
-    mkIf config.programs.beets.enable {
-      assertions = [
+  config = mkIf cfg.enable {
+    programs.beets.package = pkgs.python3.pkgs.beets.override {
+      disableAllPlugins = true;
+      pluginOverrides = genAttrs enabledPlugins (
+        plugin:
         {
-          assertion = config.programs.onedrive.enable;
-          message = "Please enable OneDrive to sync music library";
+          enable = true;
         }
-      ];
+        // optionalAttrs (plugin == "filetote") {
+          propagatedBuildInputs = [
+            (pkgs.python3.pkgs.beets-filetote.overrideAttrs {
+              # FIXME https://github.com/astral-sh/uv/issues/15000
+              doInstallCheck = false;
+              nativeInstallCheckInputs = [ ];
+            })
+          ];
+        }
+      );
+    };
 
-      programs.beets = {
-        package =
-          with pkgs.python3.pkgs;
-          # https://github.com/beetbox/beets/commit/3eb68ef830447d91b10a928823edb3c50cf73f48
-          (beets.overrideAttrs {
-            src = pkgs.fetchFromGitHub {
-              owner = "beetbox";
-              repo = "beets";
-              rev = "3eb68ef830447d91b10a928823edb3c50cf73f48";
-              hash = "sha256-/l7/kFaCoGsUdnU2HR7KzqUt3x/d+PUYwy9iEMIg/7o=";
-            };
-          }).override
-            {
-              pluginOverrides = {
-                filetote = {
-                  enable = true;
-                  propagatedBuildInputs = [ beets-filetote ];
-                };
-              };
-            };
+    xdg.configFile."beets/config.yaml".source = mkForce (
+      config.lib.file.mkOutOfStoreSymlink config.sops.templates.beetsConfig.path
+    );
 
-        settings = config.sops.templates."beetsConfig".path;
-      };
-
-      sops.templates."beetsConfig".content =
+    sops = {
+      secrets.lastfm_key.sopsFile = ./secrets.yaml;
+      templates.beetsConfig.content =
         {
           directory = "${baseDir}/Library";
           library = "${baseDir}/library.db";
 
-          plugins = [
-            "badfiles"
-            "convert"
-            "duplicates"
-            "edit"
-            "embedart"
-            "export"
-            "fetchart"
-            "filetote"
-            "filefilter"
-            "fromfilename"
-            "fuzzy"
-            "info"
-            "mbsync"
-            "missing"
-            "replaygain"
-            "smartplaylist"
-            "spotify"
-            "playlist"
-            "types"
-            "unimported"
-            "zero"
-          ];
+          plugins = enabledPlugins;
 
           import = {
             write = true;
@@ -84,9 +79,7 @@ with lib;
           };
 
           match = {
-            max_rec = {
-              missing_tracks = "strong";
-            };
+            max_rec.missing_tracks = "strong";
             distance_weights = {
               missing_tracks = 0.0;
               tracks = 0.5;
@@ -95,14 +88,10 @@ with lib;
 
           convert = {
             format = "flac";
-            formats = {
-              flac = "ffmpeg -i $source -y -vn -acodec flac $dest";
-            };
+            formats.flac = "ffmpeg -i $source -y -vn -acodec flac $dest";
           };
 
-          duplicates = {
-            full = true;
-          };
+          duplicates.full = true;
 
           embedart = {
             auto = true;
@@ -126,9 +115,7 @@ with lib;
               enabled = true;
               extensions = ".lrc";
             };
-            paths = {
-              "paired_ext:.lrc" = "$albumpath/$medianame_new";
-            };
+            paths."paired_ext:.lrc" = "$albumpath/$medianame_new";
           };
 
           replaygain = {
@@ -147,7 +134,7 @@ with lib;
           };
 
           spotify = {
-            source_weight = 0.75;
+            data_source_mismatch_penalty = 0.75;
             show_failures = true;
           };
 
@@ -163,19 +150,13 @@ with lib;
             update_database = true;
           };
 
-          unimported = {
-            ignore_extensions = [
-              "jpg"
-              "png"
-              "lrc"
-            ];
-          };
+          unimported.ignore_extensions = [
+            "jpg"
+            "png"
+            "lrc"
+          ];
         }
         |> pkgs.lib.generators.toYAML { };
-
-      sops.secrets.lastfm_key = {
-        sopsFile = ./secrets.yaml;
-      };
-
     };
+  };
 }
