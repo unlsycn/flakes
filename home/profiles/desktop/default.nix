@@ -5,6 +5,9 @@
   ...
 }:
 with lib;
+let
+  homeDirectory = config.home.homeDirectory;
+in
 {
   options.profile.desktop = {
     enable = mkEnableOption "home-manager profile for desktop environment";
@@ -45,6 +48,26 @@ with lib;
     };
 
     wayland.windowManager.hyprland.enable = true;
+
+    xdg = {
+      userDirs = {
+        enable = true;
+        createDirectories = false;
+        setSessionVariables = false;
+
+        documents = "${homeDirectory}/Documents";
+        download = "${homeDirectory}/Downloads";
+        music = "${homeDirectory}/Music";
+        pictures = "${homeDirectory}/Pictures";
+        projects = "${homeDirectory}/Workspaces";
+        videos = "${homeDirectory}/Videos";
+        desktop = null;
+        publicShare = null;
+        templates = null;
+      };
+
+      mimeApps.enable = true;
+    };
 
     home.sessionVariables = {
       NIXOS_OZONE_WL = "1";

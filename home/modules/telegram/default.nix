@@ -20,5 +20,7 @@ with lib;
 
   config = mkIf cfg.enable {
     home.packages = [ cfg.package ];
+
+    xdg.mimeApps.defaultApplicationPackages = [ cfg.package ];
   };
 }

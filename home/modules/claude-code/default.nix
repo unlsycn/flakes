@@ -24,6 +24,7 @@ in
       settings = {
         model = "opus";
         effortLevel = "high";
+        disableDeepLinkRegistration = "disable";
         statusLine = {
           type = "command";
           command = toString (

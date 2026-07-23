@@ -16,6 +16,8 @@ with lib;
       DisableTelemetry = true;
     };
 
+    xdg.mimeApps.defaultApplicationPackages = [ cfg.finalPackage ];
+
     home.persistence."/persist" = {
       directories = [ ".zen" ];
     };

@@ -51,6 +51,7 @@ in
         config.lib.file.mkOutOfStoreSymlink "${config.home.homeDirectory}/OneDrive/Documents";
       "Pictures".source =
         config.lib.file.mkOutOfStoreSymlink "${config.home.homeDirectory}/OneDrive/Pictures";
+      "Music".source = config.lib.file.mkOutOfStoreSymlink "${config.home.homeDirectory}/OneDrive/Music";
     };
 
     systemd.user.services.onedrive-monitor = mkIf cfg.monitor.enable {
