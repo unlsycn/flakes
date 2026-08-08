@@ -9,7 +9,6 @@ with lib;
 let
   icdiff = "${pkgs.icdiff}/bin/icdiff";
   zellij = getExe config.programs.zellij.package;
-  nnn = getExe config.programs.nnn.package;
 in
 {
   imports = [ ./zinit.nix ];
@@ -44,7 +43,6 @@ in
         "lla" = "ls -Al";
         "l" = "ls -CF";
         "diff" = icdiff;
-        "n" = nnn;
         "dev" = "${zellij} a -c dev";
         "cdtmp" = "cd `mktemp -d`";
         "pastebin" = "curl -F \"c=@-\" \"http://fars.ee/\"";

@@ -30,7 +30,7 @@ with lib;
       fd.enable = true;
       btop.enable = true;
       ripgrep.enable = true;
-      nnn.enable = true;
+      yazi.enable = true;
       zellij.enable = true;
       opencode.enable = true;
       codex.enable = true;
