@@ -259,6 +259,15 @@ in
             }
           ];
         };
+        "Blizzard" = {
+          rules = [
+            {
+              type = "GEOSITE";
+              rule = "blizzard";
+              priority = 60;
+            }
+          ];
+        };
         "Telegram" = {
           rules = [
             {
