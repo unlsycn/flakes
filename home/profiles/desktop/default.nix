@@ -15,6 +15,7 @@ in
 
   config = mkIf config.profile.desktop.enable {
     programs = {
+      swayimg.enable = true;
       vscode.enable = true;
       ghostty.enable = true;
       waybar.enable = true;
