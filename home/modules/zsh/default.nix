@@ -38,9 +38,9 @@ in
 
       shellAliases = {
         "history" = "history 0";
-        "ll" = "ls -l";
+        "ll" = "ls -lh";
         "la" = "ls -A";
-        "lla" = "ls -Al";
+        "lla" = "ls -Alh";
         "l" = "ls -CF";
         "diff" = icdiff;
         "dev" = "${zellij} a -c dev";
