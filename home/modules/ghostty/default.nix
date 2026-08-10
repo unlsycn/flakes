@@ -30,6 +30,12 @@ in
       ];
       font-shaping-break = "cursor";
       font-size = 14;
+      keybind = [
+        "alt+j=scroll_page_lines:1"
+        "alt+k=scroll_page_lines:-1"
+        "alt+d=scroll_page_fractional:0.5"
+        "alt+u=scroll_page_fractional:-0.5"
+      ];
       shell-integration-features = "no-cursor";
 
       window-decoration = "none";
