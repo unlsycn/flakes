@@ -10,15 +10,19 @@
       exposure.public = true;
       publicDomain = "webhook.unlsycn.com";
       locations = lib.genAttrs [ "/change_hook/github" ] (
-        path:
+        _:
         let
           host = inputs.self.nixosConfigurations.lonicera.config.mesh.services.build.domain;
         in
         {
-          proxyPass = "https://${host}";
-
           extraConfig = ''
+            resolver 127.0.0.53 valid=30s;
+            resolver_timeout 5s;
+            set $upstream_host ${host};
+            proxy_pass https://$upstream_host;
+
             proxy_ssl_server_name on;
+            proxy_ssl_name ${host};
             proxy_ssl_verify on;
             proxy_ssl_verify_depth 2;
             proxy_ssl_trusted_certificate ${config.security.pki.caBundle};

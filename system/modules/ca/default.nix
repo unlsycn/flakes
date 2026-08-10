@@ -12,6 +12,7 @@ in
       defaults = {
         email = "unlsycn@unlsycn.com";
         dnsProvider = "cloudflare";
+        dnsResolver = "${config.networking.nameservers |> lib.head}:53";
         environmentFile = config.sops.secrets.dns-env.path;
       };
     };
