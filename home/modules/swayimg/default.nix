@@ -7,10 +7,19 @@ with lib;
     programs.swayimg.initLua = ''
       swayimg.imagelist.adjacent = true
 
-      local function bindViewerKeys(mode)
+      local function bindViewerControls(mode)
         mode.on_key("q", swayimg.exit)
         mode.on_key("j", function() mode.open("next") end)
         mode.on_key("k", function() mode.open("prev") end)
+
+        mode.on_mouse("ScrollUp", function()
+          local pos = mode.get_position()
+          mode.set_abs_position(pos.x, pos.y + 15)
+        end)
+        mode.on_mouse("ScrollDown", function()
+          local pos = mode.get_position()
+          mode.set_abs_position(pos.x, pos.y - 15)
+        end)
       end
 
       local function bindGalleryKey(key, direction)
@@ -19,8 +28,8 @@ with lib;
         end)
       end
 
-      bindViewerKeys(swayimg.viewer)
-      bindViewerKeys(swayimg.slideshow)
+      bindViewerControls(swayimg.viewer)
+      bindViewerControls(swayimg.slideshow)
 
       swayimg.gallery.on_key("q", swayimg.exit)
       bindGalleryKey("h", "left")
