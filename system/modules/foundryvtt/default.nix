@@ -29,7 +29,7 @@ in
   config = mkIf cfg.enable {
     services.foundryvtt = {
       package = mkDefault foundryvttPackage;
-      hostName = "fvtt.${config.mesh.tailnet.domain}";
+      hostName = "${config.mesh.services.fvtt.serviceName}.${config.mesh.tailnet.domain}";
       port = 1501;
       minifyStaticFiles = true;
       upnp = false;

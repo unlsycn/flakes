@@ -84,11 +84,11 @@ in
               name: tls: settings:
               nameValuePair name (tls // settings);
             mkServiceVHosts =
-              name: svc:
+              _: svc:
               let
                 e = svc.exposure;
-                tsName = "${name}.${cfg.tailnet.domain}";
-                ejoName = "${name}.${cfg.nebula.domain}";
+                tsName = "${svc.serviceName}.${cfg.tailnet.domain}";
+                ejoName = "${svc.serviceName}.${cfg.nebula.domain}";
               in
               (
                 if svc.singleDomain then

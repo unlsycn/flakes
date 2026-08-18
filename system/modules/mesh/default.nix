@@ -66,6 +66,14 @@ in
         )
         ++ [
           {
+            assertion =
+              let
+                publishedNames = cfg.services |> attrValues |> map (svc: toLower svc.serviceName);
+              in
+              length publishedNames == length (unique publishedNames);
+            message = "mesh service names must be unique on each host (case-insensitive)";
+          }
+          {
             assertion = cfg.tailnet.enable -> config.networking.firewall.enable;
             message = "mesh.tailnet.enable = true requires networking.firewall.enable = true";
           }

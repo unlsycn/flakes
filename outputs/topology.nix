@@ -6,13 +6,27 @@
 with lib;
 {
   flake.mesh-topology =
-    self.nixosConfigurations
-    |> filterAttrs (
-      _: host:
-      host.config.mesh.nebula.enable
-      || host.config.mesh.tailnet.enable
-      || host.config.mesh.tailnet.server.enable
-    )
+    let
+      meshHosts =
+        self.nixosConfigurations
+        |> filterAttrs (
+          _: host:
+          host.config.mesh.nebula.enable
+          || host.config.mesh.tailnet.enable
+          || host.config.mesh.tailnet.server.enable
+        );
+
+      publishedNames =
+        meshHosts
+        |> attrValues
+        |> concatMap (host: host.config.mesh.services |> attrValues |> map (svc: toLower svc.serviceName));
+
+      duplicatedNames =
+        publishedNames |> filter (name: count (other: other == name) publishedNames > 1) |> unique;
+    in
+    assert assertMsg (duplicatedNames == [ ])
+      "Mesh service names must be globally unique across mesh hosts (case-insensitive), duplicated: ${toString duplicatedNames}";
+    meshHosts
     |> mapAttrs (
       _: host:
       {
@@ -21,8 +35,9 @@ with lib;
 
         services =
           host.config.mesh.services
-          |> mapAttrs (
-            _: svc: {
+          |> mapAttrs' (
+            _: svc:
+            nameValuePair svc.serviceName {
               inherit (svc) singleDomain;
               exposure = { inherit (svc.exposure) nebula tailnet public; };
             }

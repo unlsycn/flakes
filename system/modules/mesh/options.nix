@@ -236,6 +236,12 @@ in
           { name, config, ... }:
           {
             options = {
+              serviceName = mkOption {
+                type = types.str;
+                default = name;
+                description = "Published DNS service name; defaults to the local service attribute name.";
+              };
+
               internalPort = mkOption {
                 type = types.nullOr types.port;
                 default = null;
@@ -281,9 +287,9 @@ in
                     e = config.exposure;
                   in
                   if config.singleDomain || (e.tailnet && !e.nebula) then
-                    "${name}.${cfg.tailnet.domain}"
+                    "${config.serviceName}.${cfg.tailnet.domain}"
                   else if e.nebula && !e.tailnet then
-                    "${name}.${cfg.nebula.domain}"
+                    "${config.serviceName}.${cfg.nebula.domain}"
                   else
                     null;
               };

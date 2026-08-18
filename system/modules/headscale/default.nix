@@ -88,14 +88,6 @@ in
         assertion = versionAtLeast hsCfg.package.version "0.29.2";
         message = "Headscale Tailnet policy grants and Peer Relay require headscale 0.29.2 or newer";
       }
-      {
-        assertion =
-          let
-            names = map (service: toLower service.name) tailnetServiceIntent;
-          in
-          length names == length (unique names);
-        message = "Tailnet service names must be globally unique across mesh hosts";
-      }
     ];
 
     services.headscale = {
