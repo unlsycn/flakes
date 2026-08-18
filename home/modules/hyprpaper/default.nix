@@ -32,6 +32,6 @@ in
       })
     ];
 
-    wayland.windowManager.hyprland.startupCommands = [ "sleep 0.5 && ${switchWallpaper}" ];
+    wayland.windowManager.hyprland.startupCommands = [ switchWallpaper ];
   };
 }
