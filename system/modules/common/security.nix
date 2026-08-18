@@ -39,13 +39,15 @@
         userAgeKeyFile = config.home-manager.users.${user}.sops.age.keyFile;
       in
       ''
-        mkdir -p "$(dirname "${userAgeKeyFile}")"
         if [ -f /etc/ssh/ssh_host_ed25519_key ]; then
+          install -d -o ${user} -g users "$(dirname "$(dirname "${userAgeKeyFile}")")"
+          install -d -m 700 -o ${user} -g users "$(dirname "${userAgeKeyFile}")"
+
           ${pkgs.ssh-to-age}/bin/ssh-to-age -private-key -i /etc/ssh/ssh_host_ed25519_key > "${userAgeKeyFile}"
-          
+
           chown ${user}:users "${userAgeKeyFile}"
           chmod 600 "${userAgeKeyFile}"
-          
+
           echo "Host SSH key has been promoted to ${userAgeKeyFile}"
         else
           echo "Host SSH key not found, skipping conversion."
