@@ -29,13 +29,11 @@
     };
   };
 
-  networking.proxy.default = "http://127.0.0.1:1970";
-
   mesh = {
     id = 34;
-    roles = [ "relay" ];
-    tailnet.enable = false;
-    surfaces.public.interface = "ens5";
+    roles = [ "node" ];
+    tailnet.enable = true;
+    surfaces.public.interface = "eth0";
   };
 
   system.stateVersion = "23.11";
