@@ -81,6 +81,7 @@
               size = "32G";
               content = {
                 type = "swap";
+                discardPolicy = "once";
               };
             };
             zfs = {
