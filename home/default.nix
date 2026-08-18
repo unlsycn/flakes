@@ -15,7 +15,7 @@ with lib;
       |> filterAttrs (name: type: type == "directory")
       |> mapAttrs (module: _: ./modules/${module});
 
-    buildConfigurationPhases = rec {
+    lib.buildConfigurationPhases = rec {
       genSharedHomeConfiguration =
         let
           profileList = ./profiles |> readDir |> attrNames;

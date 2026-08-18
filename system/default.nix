@@ -19,7 +19,7 @@ in
       |> filterAttrs (name: type: type == "directory")
       |> mapAttrs (module: _: ./modules/${module});
 
-    buildConfigurationPhases = {
+    lib.buildConfigurationPhases = {
       genNixosConfiguration = system: host: {
         name = host;
         value = withSystem system (
@@ -46,7 +46,7 @@ in
               disko.nixosModules.disko
               sops-nix.nixosModules.sops
               home-manager.nixosModules.home-manager
-              (self.buildConfigurationPhases.genHomeModuleForHost {
+              (self.lib.buildConfigurationPhases.genHomeModuleForHost {
                 inherit user;
                 extraSpecialArgs = {
                   inherit

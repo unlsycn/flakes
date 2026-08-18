@@ -37,7 +37,7 @@
           }
           |> lib.mapAttrs (
             _: profiles:
-            self.buildConfigurationPhases.genHomeConfigurationForStandalone profiles {
+            self.lib.buildConfigurationPhases.genHomeConfigurationForStandalone profiles {
               inherit user pkgs;
               extraSpecialArgs = { inherit inputs inputs'; };
             }

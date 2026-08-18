@@ -130,7 +130,7 @@
         { lib, ... }:
         with lib;
         {
-          options.buildConfigurationPhases = with types; mkOption { type = attrsOf raw; };
+          options.lib.buildConfigurationPhases = with types; mkOption { type = attrsOf raw; };
 
           config = {
             inherit overlays;
@@ -159,10 +159,12 @@
           apps.update-nebula-certs = {
             type = "app";
             program = "${pkgs.callPackage ./scripts/update-nebula-certs.nix { }}/bin/update-nebula-certs";
+            meta.description = "Regenerate Nebula certificates and the topology lock file";
           };
           apps.seed-foundryvtt-zip = {
             type = "app";
             program = "${pkgs.callPackage ./scripts/seed-foundryvtt-zip.nix { }}/bin/seed-foundryvtt-zip";
+            meta.description = "Seed a FoundryVTT release zip into the nix store";
           };
 
           pre-commit = {

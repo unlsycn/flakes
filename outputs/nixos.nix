@@ -8,7 +8,7 @@ with builtins;
 {
   flake = {
     nixosConfigurations =
-      with self.buildConfigurationPhases;
+      with self.lib.buildConfigurationPhases;
       ../system/hosts
       |> readDir
       |> attrNames
