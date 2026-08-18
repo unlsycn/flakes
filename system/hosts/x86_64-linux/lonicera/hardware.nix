@@ -1,10 +1,8 @@
-{ pkgs, modulesPath, ... }:
+{ modulesPath, ... }:
 {
   imports = [ (modulesPath + "/profiles/qemu-guest.nix") ];
 
   boot = {
-    kernelPackages = pkgs.linuxPackages_6_18;
-    zfs.package = pkgs.zfs_unstable;
     initrd = {
       systemd.enable = true;
       availableKernelModules = [

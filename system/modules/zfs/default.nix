@@ -12,6 +12,28 @@ with lib;
   };
 
   config = mkIf config.services.zfs.enable {
+    boot.zfs.package = mkDefault pkgs.zfs_unstable;
+
+    boot.kernelPackages =
+      let
+        moduleAttr = config.boot.zfs.package.kernelModuleAttribute;
+        compatible =
+          pkgs.linuxKernel.packages
+          |> filterAttrs (
+            name: lp:
+            match "linux_[0-9]+_[0-9]+" name != null
+            && (builtins.tryEval (lp ? ${moduleAttr} && !lp.${moduleAttr}.meta.broken)).value
+          )
+          |> attrValues
+          |> sortOn (lp: lp.kernel.version |> splitVersion |> map toInt);
+      in
+      mkDefault (
+        if compatible == [ ] then
+          throw "no vanilla kernel in nixpkgs has a working ${moduleAttr} module"
+        else
+          last compatible
+      );
+
     boot.zfs.forceImportRoot = true;
 
     # generate mount units from zfs-list.cache

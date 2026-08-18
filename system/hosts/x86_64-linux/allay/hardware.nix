@@ -12,8 +12,6 @@
   ];
 
   boot = {
-    kernelPackages = pkgs.linuxPackages_6_18;
-    zfs.package = pkgs.zfs_unstable;
     loader = {
       efi = {
         canTouchEfiVariables = true;

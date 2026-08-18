@@ -15,6 +15,9 @@ with lib;
 
   networking.hostName = hostName;
 
+  # repo-wide kernel baseline; 1100 sits above the option default but below the mkDefault of modules with a specific opinion
+  boot.kernelPackages = mkOverride 1100 pkgs.linuxPackages_latest;
+
   time.timeZone = mkDefault "Asia/Shanghai";
   i18n.defaultLocale = "en_US.UTF-8";
 
