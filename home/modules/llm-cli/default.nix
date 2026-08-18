@@ -50,8 +50,8 @@ in
     };
 
     claudePlugins = mkOption {
-      type = with types; listOf (either package path);
-      default = [ ];
+      type = with types; attrsOf (either package path);
+      default = { };
     };
 
     projectInstructions = mkOption {
@@ -122,7 +122,7 @@ in
         "humanize-rlcr" = pkgs.humanize."humanize-rlcr";
       };
 
-      claudePlugins = optionals hmzCfg.enable [ pkgs.humanize.claudePlugin ];
+      claudePlugins = mkIf hmzCfg.enable { humanize = pkgs.humanize.claudePlugin; };
     };
 
     home.packages = optionals hmzCfg.monitor.enable [ pkgs.humanize.humanizeWrapper ];
