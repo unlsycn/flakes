@@ -46,7 +46,7 @@ in
           todoread = "allow";
           todowrite = "allow";
           question = "ask";
-          webfetch = "ask";
+          webfetch = "allow";
           #{  TODO: https://github.com/anomalyco/opencode/issues/7445
           #   "*" = "ask";
           #   "*.github.com" = "allow";
