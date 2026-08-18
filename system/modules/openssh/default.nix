@@ -21,6 +21,9 @@ in
 
     services.openssh.settings.PasswordAuthentication = false;
     services.openssh.openFirewall = false;
+
+    # incoming sessions carry TERM values of whichever terminal connects
+    environment.enableAllTerminfo = true;
     users.users.${user}.openssh.authorizedKeys.keys = sshKeys;
 
     programs.ssh.startAgent = true;
