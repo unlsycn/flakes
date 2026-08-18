@@ -1,23 +1,17 @@
 { pkgs, modulesPath, ... }:
 {
   imports = [ (modulesPath + "/profiles/qemu-guest.nix") ];
+
   boot = {
     kernelPackages = pkgs.linuxPackages_6_18;
-    supportedFilesystems = [ "zfs" ]; # no zfs partitions in config.fileSystems so enable manually
-    zfs = {
-      package = pkgs.zfs_unstable;
-      extraPools = [ "data" ];
-    };
-    loader.grub.device = "/dev/disk/by-id/scsi-0QEMU_QEMU_HARDDISK_drive-scsi0";
+    zfs.package = pkgs.zfs_unstable;
     initrd = {
       systemd.enable = true;
       availableKernelModules = [
-        "ata_piix"
-        "uhci_hcd"
-        "xen_blkfront"
-        "vmw_pvscsi"
+        "virtio_pci"
+        "virtio_blk"
+        "virtio_scsi"
       ];
-      kernelModules = [ "nvme" ];
     };
     kernelParams = [
       # 1 GiB
@@ -26,42 +20,51 @@
   };
 
   disko.devices = {
-    disk = {
-      system-ssd = {
-        device = "/dev/disk/by-id/scsi-0QEMU_QEMU_HARDDISK_drive-scsi0";
-        content = {
-          type = "table";
-          format = "msdos";
-          partitions = [
-            {
-              name = "root";
-              start = "2M";
-              end = "100%";
-              content = {
-                type = "filesystem";
-                format = "ext4";
-                mountpoint = "/";
-              };
-            }
-          ];
-        };
-      };
-      data-ssd = {
-        device = "/dev/disk/by-id/scsi-0QEMU_QEMU_HARDDISK_drive-scsi1";
-        content = {
-          type = "gpt";
-          partitions.zfs = {
+    disk.system-ssd = {
+      device = "/dev/disk/by-id/scsi-0QEMU_QEMU_HARDDISK_drive-scsi0";
+      type = "disk";
+      content = {
+        type = "gpt";
+        partitions = {
+          bios = {
+            size = "1M";
+            type = "EF02";
+            attributes = [ 0 ];
+            priority = 1;
+          };
+
+          boot = {
+            label = "ESP";
+            size = "1G";
+            type = "EF00";
+            content = {
+              type = "filesystem";
+              format = "vfat";
+              mountpoint = "/boot";
+              mountOptions = [ "umask=0077" ];
+            };
+          };
+
+          swap = {
+            size = "16G";
+            content = {
+              type = "swap";
+              discardPolicy = "both";
+            };
+          };
+
+          zfs = {
             size = "100%";
             content = {
               type = "zfs";
-              pool = "data";
+              pool = "system";
             };
           };
         };
       };
     };
 
-    zpool.data = {
+    zpool.system = {
       type = "zpool";
       rootFsOptions = {
         mountpoint = "none";
@@ -73,34 +76,36 @@
       options.ashift = "12";
 
       datasets = {
+        "root" = {
+          type = "zfs_fs";
+          mountpoint = "/";
+          options.mountpoint = "legacy";
+        };
+        "nix" = {
+          type = "zfs_fs";
+          mountpoint = "/nix";
+          options.mountpoint = "legacy";
+        };
         "foundryvtt" = {
           type = "zfs_fs";
           options = {
             mountpoint = "/var/lib/foundryvtt";
             atime = "off";
-            "com.sun:auto-snapshot" = "false";
           };
         };
         "foundryvtt/Data/worlds" = {
           type = "zfs_fs";
           options."com.sun:auto-snapshot" = "true";
         };
-        "nix" = {
+        "headscale" = {
           type = "zfs_fs";
-          mountpoint = "/nix";
           options = {
-            mountpoint = "legacy";
-            "com.sun:auto-snapshot" = "false";
+            mountpoint = "/var/lib/headscale";
+            atime = "off";
+            "com.sun:auto-snapshot" = "true";
           };
         };
       };
     };
   };
-
-  swapDevices = [
-    {
-      device = "/var/lib/swapfile";
-      size = 16384;
-    }
-  ];
 }

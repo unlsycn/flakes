@@ -10,6 +10,7 @@
     ./networking.nix
     ./samba.nix
     ./buildbot.nix
+    ./webhook.nix
   ];
 
   isServer = true;
@@ -31,6 +32,7 @@
 
   services = {
     zfs.enable = true;
+    mihomo.enable = false;
     foundryvtt.enable = true;
     samba.enable = true;
     harmonia-dev = {
