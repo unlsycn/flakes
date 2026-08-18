@@ -5,7 +5,6 @@
 }:
 {
   imports = [
-    ./sound.nix
     ./hardware.nix
   ];
 
