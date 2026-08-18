@@ -421,7 +421,7 @@ with lib;
                   # Extensions & Tools
                   tools = {
                     # Extensions
-                    "extensions.autoUpdate" = false;
+                    "extensions.autoUpdate" = "off";
                     "extensions.ignoreRecommendations" = true;
                     "extensions.experimental.affinity" = {
                       "asvetliakov.vscode-neovim" = 1;
