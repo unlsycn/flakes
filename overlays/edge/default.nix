@@ -1,26 +1,26 @@
+# staging area for packages that need to ride ahead of nixpkgs
 final: prev: {
-  handheld-daemon = prev.handheld-daemon.overrideAttrs (oldAttrs: {
-    patches = oldAttrs.patches ++ [
-      (prev.fetchpatch {
-        url = "https://github.com/hhd-dev/hhd/commit/58f430b766be8b463a991ca70bcfd8540f937ac0.patch";
-        hash = "sha256-GKUsgp2rvHnw8yY3v9RGhiB7/NgTIq08yHbXHS0tlt4=";
-      })
-    ];
-  });
-
   waybar = prev.waybar.overrideAttrs (old: {
     src = prev.fetchFromGitHub {
       owner = "Alexays";
       repo = "Waybar";
-      rev = "e17c0d9f0a73acc370df60ec8c532b1ed2385c73";
-      hash = "sha256-p5iqMo4JPhbukRqPlYjciaU89wRPDmWSUY9NkxywI+k=";
+      rev = "09e69e0f48214a1128d62417612bc47e8dc9e36a";
+      hash = "sha256-grYWj1RHrkhM0NCIymTsZyObuQsCVf1kuzLaThwMxvc=";
     };
 
+    buildInputs = old.buildInputs ++ [ prev.modemmanager ];
+
+    # master's libcava.wrap wants cava-1.0.0; nixpkgs still injects 0.10.7-beta
     postUnpack = (prev.lib.concatStringsSep "\n" (prev.lib.toList (old.postUnpack or ""))) + ''
       pushd "$sourceRoot"
-      if [[ -e subprojects/cava-0.10.7-beta && ! -e subprojects/cava-0.10.7 ]]; then
-        ln -s cava-0.10.7-beta subprojects/cava-0.10.7
-      fi
+      cp -R --no-preserve=mode,ownership ${
+        prev.fetchFromGitHub {
+          owner = "LukashonakV";
+          repo = "cava";
+          tag = "1.0.0";
+          hash = "sha256-0r5aAmTs+FcmS501tNYKxG9H+Pq6i32BDRBEjWW6M74=";
+        }
+      } subprojects/cava-1.0.0
       popd
     '';
   });
