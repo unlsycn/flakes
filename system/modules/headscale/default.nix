@@ -120,6 +120,9 @@ in
       locations."/" = {
         proxyPass = "http://${hsCfg.address}:${toString hsCfg.port}";
         proxyWebsockets = true;
+        # this location owns its complete proxy header set; letting the
+        # recommended include add a second Host header makes Go reject with 400
+        recommendedProxySettings = false;
         extraConfig = ''
           proxy_set_header Host $host;
           proxy_set_header True-Client-IP "";

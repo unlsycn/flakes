@@ -54,7 +54,7 @@ in
       in
       {
         enable = true;
-        recommendedProxySettings = mkDefault true;
+        recommendedProxySettings = true;
         recommendedTlsSettings = mkDefault true;
 
         virtualHosts =
