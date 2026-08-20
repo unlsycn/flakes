@@ -46,7 +46,7 @@ in
 
         systemd.services.tailscaled-set.serviceConfig.RemainAfterExit = true;
 
-        mesh.surfaces.tailnet.interface = tsCfg.interfaceName;
+        mesh.surfaces.tailnet.interfaces = [ tsCfg.interfaceName ];
 
         mesh.surfaces.public.allowedUDPPorts = [ tcfg.port ] ++ optional isPeerRelay tcfg.peerRelay.port;
 

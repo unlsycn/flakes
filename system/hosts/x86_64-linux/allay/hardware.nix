@@ -168,6 +168,15 @@
 
   networking.useDHCP = lib.mkDefault true;
 
+  # must order before the NetworkManager iwd backend's 80-iwd.link, which
+  # otherwise keeps the kernel-enumerated name for every wlan device
+  systemd.network.links."10-wlan0" = {
+    matchConfig.PermanentMACAddress = "68:c6:ac:bb:69:49";
+    linkConfig.Name = "wlan0";
+  };
+
+  mesh.surfaces.public.interfaces = [ config.systemd.network.links."10-wlan0".linkConfig.Name ];
+
   nixpkgs.hostPlatform = lib.mkDefault "x86_64-linux";
 
   hardware = {

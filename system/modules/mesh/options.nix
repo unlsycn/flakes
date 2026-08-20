@@ -188,10 +188,10 @@ in
       type = types.attrsOf (
         types.submodule {
           options = {
-            interface = mkOption {
-              type = types.nullOr types.str;
-              default = null;
-              description = "Host-local interface name for this mesh surface.";
+            interfaces = mkOption {
+              type = types.listOf types.str;
+              default = [ ];
+              description = "Host-local interface names for this mesh surface; empty means unbound.";
             };
 
             trusted = mkOption {

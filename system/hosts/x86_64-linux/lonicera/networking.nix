@@ -21,6 +21,6 @@
       enable = true;
       server.enable = true;
     };
-    surfaces.public.interface = "eth0";
+    surfaces.public.interfaces = [ "eth0" ];
   };
 }

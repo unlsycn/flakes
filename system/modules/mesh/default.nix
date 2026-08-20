@@ -17,13 +17,17 @@ in
     {
       mesh.surfaces = mkMerge [
         {
-          public.interface = mkDefault (config.networking.defaultGateway.interface or null);
+          public.interfaces =
+            let
+              gatewayInterface = config.networking.defaultGateway.interface or null;
+            in
+            mkDefault (optional (gatewayInterface != null) gatewayInterface);
         }
         (mkIf cfg.nebula.enable {
-          nebula.interface = mkDefault config.services.nebula.networks.senesperejo.tun.device;
+          nebula.interfaces = mkDefault [ config.services.nebula.networks.senesperejo.tun.device ];
         })
         (mkIf cfg.tailnet.enable {
-          tailnet.interface = mkDefault "tailscale0";
+          tailnet.interfaces = mkDefault [ "tailscale0" ];
         })
       ];
 
@@ -83,7 +87,7 @@ in
     (mkIf config.networking.firewall.enable {
       networking.firewall =
         let
-          interfaceSurfaces = cfg.surfaces |> attrValues |> filter (s: s.interface != null);
+          interfaceSurfaces = cfg.surfaces |> attrValues |> filter (s: s.interfaces != [ ]);
           sortPorts = ports: ports |> unique |> sort lessThan;
           sortRanges =
             ranges: ranges |> unique |> sort (a: b: a.from < b.from || (a.from == b.from && a.to < b.to));
@@ -98,17 +102,28 @@ in
             |> mapAttrs (name: sortRule: surfaces |> concatMap (s: s.${name}) |> sortRule);
         in
         {
-          interfaces = interfaceSurfaces |> groupBy (s: s.interface) |> mapAttrs (_: mergeSurfaceRules);
+          interfaces =
+            interfaceSurfaces
+            |> concatMap (
+              s:
+              s.interfaces
+              |> map (interface: {
+                inherit interface;
+                surface = s;
+              })
+            )
+            |> groupBy (binding: binding.interface)
+            |> mapAttrs (_: bindings: bindings |> map (binding: binding.surface) |> mergeSurfaceRules);
 
           trustedInterfaces =
             interfaceSurfaces
             |> filter (s: s.trusted)
-            |> map (s: s.interface)
+            |> concatMap (s: s.interfaces)
             |> unique;
 
           inherit
             (mergeSurfaceRules (
-              optional (cfg.surfaces ? public && cfg.surfaces.public.interface == null) cfg.surfaces.public
+              optional (cfg.surfaces ? public && cfg.surfaces.public.interfaces == [ ]) cfg.surfaces.public
             ))
             allowedTCPPorts
             allowedUDPPorts
@@ -131,7 +146,7 @@ in
                 || entry.surface.allowedTCPPortRanges != [ ]
                 || entry.surface.allowedUDPPortRanges != [ ]
               )
-              && entry.surface.interface == null
+              && entry.surface.interfaces == [ ]
               && (entry.name != "public" || entry.surface.trusted)
             )
             |> map (entry: "mesh.surfaces.${entry.name}");
