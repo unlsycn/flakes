@@ -11,10 +11,7 @@
 
   isServer = true;
 
-  boot = {
-    kernelPackages = pkgs.linuxPackages_latest;
-    tmp.cleanOnBoot = true;
-  };
+  boot.tmp.cleanOnBoot = true;
 
   zramSwap.enable = true;
 
@@ -29,12 +26,16 @@
     };
   };
 
+  services.zfs.enable = true;
+
   mesh = {
     id = 34;
     roles = [ "node" ];
     tailnet.enable = true;
-    surfaces.public.interface = "eth0";
+    surfaces.public.interfaces = [ "eth0" ];
   };
+
+  networking.hostId = "e018667a";
 
   system.stateVersion = "23.11";
 }
