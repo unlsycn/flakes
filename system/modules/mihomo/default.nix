@@ -122,7 +122,7 @@ in
       };
 
       proxyProviders = {
-        "Ky".type = "http";
+        "IKUUU".type = "http";
         "Sakana".type = "http";
         "BoostNet".type = "http";
       };
