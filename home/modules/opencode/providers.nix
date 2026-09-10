@@ -12,8 +12,8 @@ let
 in
 {
   config.programs.opencode.settings = lib.mkIf cfg.enable {
-    model = "deepseek/deepseek-v4-pro-0813";
-    small_model = "deepseek/deepseek-v4-flash-0731";
+    model = "deepseek/deepseek-v4-pro";
+    small_model = "deepseek/deepseek-v4-flash";
     enabled_providers = [
       "google"
       "deepseek"
