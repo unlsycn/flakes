@@ -15,6 +15,7 @@
           core.editor = lib.getExe config.programs.nvf.finalPackage;
           merge.conflictStyle = "diff3";
           log.decorate = "auto";
+          credential.helper = "cache --timeout=86400";
 
           alias = {
             amend = "commit --amend";
