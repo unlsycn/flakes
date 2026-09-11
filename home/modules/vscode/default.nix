@@ -457,7 +457,6 @@ with lib;
                     "gitlens.defaultTimeFormat" = "H:mm";
                     "gitlens.defaultDateShortFormat" = "YYYY/MM/DD";
                     "gitlens.hovers.currentLine.over" = "line";
-                    "gitlens.ai.model" = "vscode";
                     "gitlens.ai.gitkraken.model" = "gemini:gemini-2.0-flash";
                     "gitlens.ai.vscode.model" = "copilot:gpt-4.1";
 
