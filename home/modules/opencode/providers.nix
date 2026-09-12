@@ -13,7 +13,7 @@ in
 {
   config.programs.opencode.settings = lib.mkIf cfg.enable {
     model = "deepseek/deepseek-v4-pro";
-    small_model = "deepseek/deepseek-v4-flash";
+    small_model = "deepseek/deepseek-flash";
     enabled_providers = [
       "google"
       "deepseek"
