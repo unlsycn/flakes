@@ -1,5 +1,14 @@
 # staging area for packages that need to ride ahead of nixpkgs
 final: prev: {
+  aquamarine = prev.aquamarine.overrideAttrs (old: {
+    patches = (old.patches or [ ]) ++ [
+      (final.fetchurl {
+        url = "https://github.com/klaudworks/aquamarine/commit/d6c3c8a393627e518cde7ede43edba563b225490.diff";
+        hash = "sha256-fSj+dtgc9pUIXU5oBKvQCXip097eDynnqGmA2Mxj8nA=";
+      })
+    ];
+  });
+
   waybar = prev.waybar.overrideAttrs (old: {
     src = prev.fetchFromGitHub {
       owner = "Alexays";
