@@ -127,6 +127,11 @@ in
 
     home.packages = optionals hmzCfg.monitor.enable [ pkgs.humanize.humanizeWrapper ];
 
+    sops.secrets.senesperejo-client-key = mkIf config.sops.control.deploySecrets {
+      sopsFile = ../../../system/modules/cliproxyapi/secrets.yaml;
+      key = "client-key";
+    };
+
     programs.zsh.shellAliases =
       mkIf
         (
@@ -136,7 +141,8 @@ in
             opencode = config.programs.opencode.enable;
             antigravity-cli = config.programs.antigravity-cli.enable;
             codex = config.programs.codex.enable;
-          }) ? ${config.programs.llm-cli.defaultBackend}
+          })
+            ? ${config.programs.llm-cli.defaultBackend}
         )
         {
           gcm =

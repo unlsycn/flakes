@@ -15,10 +15,21 @@ let
     homeFilePath = "/.config/codex/config.toml";
     format = "toml";
   };
+  wrappedCodex =
+    pkgs.runCommand "codex-${pkgs.codex.version}"
+      {
+        inherit (pkgs.codex) meta;
+        nativeBuildInputs = [ pkgs.makeWrapper ];
+      }
+      ''
+        makeWrapper ${getExe pkgs.codex} $out/bin/codex \
+          --run 'export SENESEPEREJO_KEY="$(cat ${config.sops.secrets.senesperejo-client-key.path})"'
+      '';
 in
 {
   config = mkIf cfg.enable {
     programs.codex = {
+      package = mkIf config.sops.control.deploySecrets wrappedCodex;
       settings = {
         model = "gpt-5.6-sol";
         review_model = "gpt-5.6-sol";
@@ -57,6 +68,15 @@ in
           mode = "full";
           allowed_domains = [ "*" ];
           allow_local_binding = false;
+        };
+      }
+      // optionalAttrs config.sops.control.deploySecrets {
+        model_provider = "senesperejo";
+        model_providers."senesperejo" = {
+          name = "senesperejo";
+          base_url = "https://llm.ts.unlsycn.com/v1";
+          env_key = "SENESEPEREJO_KEY";
+          wire_api = "responses";
         };
       };
     };
