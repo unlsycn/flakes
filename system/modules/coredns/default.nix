@@ -80,6 +80,19 @@ in
       '';
     };
 
+    systemd.services.coredns =
+      let
+        nebulaUnits =
+          config.services.nebula.networks
+          |> filterAttrs (_: network: network.enable && network.isLighthouse)
+          |> attrNames
+          |> map (name: "nebula@${name}.service");
+      in
+      {
+        wants = nebulaUnits;
+        after = nebulaUnits;
+      };
+
     mesh.surfaces.nebula = {
       allowedTCPPorts = [ 53 ];
       allowedUDPPorts = [ 53 ];
