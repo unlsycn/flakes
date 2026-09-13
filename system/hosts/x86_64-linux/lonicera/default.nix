@@ -34,6 +34,7 @@
     zfs.enable = true;
     mihomo.enable = false;
     foundryvtt.enable = true;
+    cliproxyapi.enable = true;
     samba.enable = true;
     harmonia-dev = {
       cache = {

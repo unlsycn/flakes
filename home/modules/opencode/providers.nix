@@ -17,6 +17,31 @@ in
     enabled_providers = [
       "google"
       "deepseek"
+      "senesperejo"
     ];
+    provider."senesperejo" = {
+      npm = "@ai-sdk/openai-compatible";
+      name = "senesperejo";
+      options = {
+        baseURL = "https://llm.ts.unlsycn.com/v1";
+      }
+      // lib.optionalAttrs config.sops.control.deploySecrets {
+        apiKey = "{file:${config.sops.secrets.senesperejo-client-key.path}}";
+      };
+      models = {
+        "gpt-5.6-sol" = {
+          name = "GPT-5.6 Sol";
+        };
+        "gpt-6-astra" = {
+          name = "GPT-6 Astra";
+        };
+        "deepseek-v4-pro" = {
+          name = "DeepSeek V4 Pro";
+        };
+        "deepseek-flash" = {
+          name = "DeepSeek Flash";
+        };
+      };
+    };
   };
 }

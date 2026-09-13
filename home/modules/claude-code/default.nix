@@ -22,7 +22,7 @@ in
   config = mkIf config.programs.claude-code.enable {
     programs.claude-code = {
       settings = {
-        model = "opus";
+        model = "fable";
         effortLevel = "high";
         disableDeepLinkRegistration = "disable";
         statusLine = {
@@ -87,6 +87,15 @@ in
             "Edit"
             "WebFetch"
           ];
+        };
+      }
+      // optionalAttrs config.sops.control.deploySecrets {
+        apiKeyHelper = "cat ${config.sops.secrets.senesperejo-client-key.path}";
+        env = {
+          ANTHROPIC_BASE_URL = "https://llm.ts.unlsycn.com";
+          ANTHROPIC_DEFAULT_FABLE_MODEL = "claude-fable-5-1";
+          ANTHROPIC_DEFAULT_HAIKU_MODEL = "claude-haiku-4-5";
+          ANTHROPIC_SMALL_FAST_MODEL = "claude-haiku-4-5";
         };
       };
       commands =
