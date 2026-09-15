@@ -53,6 +53,7 @@ with lib;
       tcpdump
       mtr
       doggo
+      iperf3
     ];
 
     home.persistence."/persist" = {
