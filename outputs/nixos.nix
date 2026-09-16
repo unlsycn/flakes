@@ -28,6 +28,10 @@ with builtins;
         name: cfg: {
           hostname = name;
           sshUser = if cfg.config.isServer then "root" else "unlsycn";
+          sshOpts = [
+            "-p"
+            (cfg.config.services.openssh.ports |> lib.head |> toString)
+          ];
           interactiveSudo = if cfg.config.isServer then false else true;
           profiles.system = {
             user = "root";

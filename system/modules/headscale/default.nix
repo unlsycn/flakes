@@ -49,7 +49,7 @@ let
       {
         src = [ "group:admins" ];
         dst = [ "tag:infra" ];
-        ip = [ "tcp:22" ];
+        ip = config.services.openssh.ports |> map (port: "tcp:${toString port}");
       }
       {
         src = [ "group:admins" ];
