@@ -4,7 +4,10 @@ let
   cfg = config.services.cliproxyapi;
 in
 {
-  imports = [ ./providers.nix ];
+  imports = [
+    ./options.nix
+    ./providers.nix
+  ];
 
   config = mkIf cfg.enable {
     services.cliproxyapi.settings = {
@@ -36,13 +39,13 @@ in
 
     assertions = [
       {
-        assertion = cfg.settings.openai-compatibility or [ ] != [ ];
-        message = "services.cliproxyapi.settings.openai-compatibility must contain at least one upstream provider.";
+        assertion = cfg.providers |> attrValues |> any (section: section != { });
+        message = "services.cliproxyapi.providers must contain at least one upstream provider.";
       }
     ];
 
     mesh.services.llm = {
-      internalPort = cfg.settings.port or 8317;
+      internalPort = cfg.settings.port;
       exposure = {
         nebula = true;
         tailnet = true;

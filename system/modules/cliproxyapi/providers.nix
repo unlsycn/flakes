@@ -1,54 +1,7 @@
 { config, lib, ... }:
 with lib;
 let
-  providers = [
-    {
-      name = "bigman";
-      priority = 10;
-      support-prompt-cache-key = true;
-      models = [
-        {
-          name = "gpt-5.6-sol";
-          thinking = gptThinking;
-        }
-        {
-          name = "gpt-6-astra";
-          thinking = gptThinking;
-        }
-      ];
-    }
-    {
-      name = "shaobing";
-      support-prompt-cache-key = true;
-      models = [
-        {
-          name = "gpt-5.6-sol";
-          thinking = gptThinking;
-        }
-        {
-          name = "gpt-5.6-luna";
-          thinking = gptThinking;
-        }
-        {
-          name = "gpt-6-astra";
-          thinking = gptThinking;
-        }
-      ];
-    }
-    {
-      name = "deepseek";
-      models = [
-        {
-          name = "deepseek-v4-pro";
-          input-modalities = [ "text" ];
-        }
-        {
-          name = "deepseek-flash";
-          input-modalities = [ "text" ];
-        }
-      ];
-    }
-  ];
+  cfg = config.services.cliproxyapi;
 
   gptThinking = {
     levels = [
@@ -56,35 +9,102 @@ let
       "medium"
       "high"
       "xhigh"
+      "max"
     ];
   };
 in
 {
-  config = mkIf config.services.cliproxyapi.enable {
-    services.cliproxyapi.settings.openai-compatibility =
-      providers
-      |> map (provider: {
-        inherit (provider) name;
-        priority = provider.priority or 0;
-        support-prompt-cache-key = provider.support-prompt-cache-key or false;
-        base-url = {
-          _secret = config.sops.secrets."cliproxyapi-${provider.name}-base-url".path;
+  config = mkIf cfg.enable {
+    services.cliproxyapi.providers = {
+      codex-api-key = {
+        bigman = {
+          priority = 10;
+          models = [
+            {
+              name = "gpt-5.6-sol";
+              thinking = gptThinking;
+            }
+            {
+              name = "gpt-6-astra";
+              thinking = gptThinking;
+            }
+          ];
         };
-        api-key-entries = [
-          {
-            api-key = {
-              _secret = config.sops.secrets."cliproxyapi-${provider.name}-api-key".path;
-            };
+        shaobing = {
+          models = [
+            {
+              name = "gpt-5.6-sol";
+              thinking = gptThinking;
+            }
+            {
+              name = "gpt-5.6-luna";
+              thinking = gptThinking;
+            }
+            {
+              name = "gpt-6-astra";
+              thinking = gptThinking;
+            }
+          ];
+        };
+      };
+
+      openai-compatibility = {
+        deepseek = {
+          models = [
+            {
+              name = "deepseek-v4-pro";
+              input-modalities = [ "text" ];
+            }
+            {
+              name = "deepseek-flash";
+              input-modalities = [ "text" ];
+            }
+          ];
+        };
+      };
+    };
+
+    services.cliproxyapi.settings = {
+      codex-api-key =
+        cfg.providers.codex-api-key
+        |> mapAttrsToList (
+          name: provider: {
+            inherit (provider) models priority;
+            base-url._secret = config.sops.secrets."cliproxyapi-${name}-base-url".path;
+            api-key._secret = config.sops.secrets."cliproxyapi-${name}-api-key".path;
           }
-        ];
-        models = provider.models |> map (model: if isAttrs model then model else { name = model; });
-      });
+        );
+
+      openai-compatibility =
+        cfg.providers.openai-compatibility
+        |> mapAttrsToList (
+          name: provider: {
+            inherit (provider) models priority support-prompt-cache-key;
+            inherit name;
+            headers = {
+              "User-Agent" = "$User-Agent";
+              Originator = "$originator";
+              X-Codex-Window-Id = "$x-codex-window-id";
+              X-Codex-Turn-Metadata = "$x-codex-turn-metadata";
+              X-Codex-Installation-Id = "$x-codex-installation-id";
+            };
+            base-url._secret = config.sops.secrets."cliproxyapi-${name}-base-url".path;
+            api-key-entries = [
+              {
+                api-key._secret = config.sops.secrets."cliproxyapi-${name}-api-key".path;
+              }
+            ];
+          }
+        );
+    };
 
     sops.secrets =
-      providers
-      |> concatMap (provider: [
-        "${provider.name}-api-key"
-        "${provider.name}-base-url"
+      cfg.providers
+      |> attrValues
+      |> concatMap attrNames
+      |> concatMap (name: [
+        "${name}-api-key"
+        "${name}-base-url"
       ])
       |> map (
         key:
