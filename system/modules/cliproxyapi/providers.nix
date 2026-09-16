@@ -49,6 +49,20 @@ in
       };
 
       openai-compatibility = {
+        bigman = {
+          models = [
+            {
+              name = "kimi-k3";
+            }
+          ];
+        };
+        shaobing = {
+          models = [
+            {
+              name = "grok-4.6";
+            }
+          ];
+        };
         deepseek = {
           models = [
             {
@@ -57,7 +71,6 @@ in
             }
             {
               name = "deepseek-flash";
-              input-modalities = [ "text" ];
             }
           ];
         };
@@ -106,6 +119,7 @@ in
         "${name}-api-key"
         "${name}-base-url"
       ])
+      |> unique
       |> map (
         key:
         nameValuePair "cliproxyapi-${key}" {
