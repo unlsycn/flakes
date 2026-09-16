@@ -8,6 +8,7 @@ with lib;
 with builtins;
 let
   volumeControl = getExe pkgs.volume-control;
+  brightnessctl = getExe pkgs.brightnessctl;
   workspaceKeys = genAttrs (10 |> genList (x: toString x)) (key: if key == "0" then "10" else key);
   vimDirections = {
     H = "l";
@@ -84,6 +85,8 @@ in
                 } (dsp.exec command)
               )
               {
+                XF86MonBrightnessUp = "${brightnessctl} set +5%";
+                XF86MonBrightnessDown = "${brightnessctl} set 5%-";
                 XF86AudioRaiseVolume = "${volumeControl} --inc";
                 XF86AudioLowerVolume = "${volumeControl} --dec";
                 XF86AudioMute = "${volumeControl} --toggle";
