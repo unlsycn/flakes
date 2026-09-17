@@ -54,6 +54,7 @@ in
     services.cliproxyapi.providers = {
       codex-api-key = {
         bigman = {
+          priority = 40;
           models = [
             {
               name = "gpt-5.6-sol";
@@ -66,7 +67,6 @@ in
           ];
         };
         shaobing = {
-          priority = 40;
           models = [
             {
               name = "gpt-5.6-sol";
@@ -90,6 +90,7 @@ in
 
       openai-compatibility = {
         bigman = {
+          priority = 40;
           models = [
             {
               name = "k3";
@@ -99,7 +100,6 @@ in
           ];
         };
         shaobing = {
-          priority = 40;
           models = [
             {
               name = "deepseek-flash";
