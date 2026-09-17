@@ -12,13 +12,48 @@ let
       "max"
     ];
   };
+
+  kimiThinking = {
+    levels = [
+      "low"
+      "high"
+      "max"
+    ];
+  };
+
+  grokThinking = {
+    levels = [
+      "low"
+      "medium"
+      "high"
+      "xhigh"
+    ];
+  };
+
+  deepseekThinking = {
+    levels = [
+      "none"
+      "low"
+      "high"
+      "max"
+    ];
+    zero-allowed = true;
+  };
+
+  # DeepSeek V4 Pro is routed to Flash until Pro comes back; clients
+  # keep asking for `deepseek-v4-pro` and only this mapping changes.
+  dsV4Pro = {
+    name = "deepseek-flash";
+    alias = "deepseek-v4-pro";
+    input-modalities = [ "text" ];
+    thinking = deepseekThinking;
+  };
 in
 {
   config = mkIf cfg.enable {
     services.cliproxyapi.providers = {
       codex-api-key = {
         bigman = {
-          priority = 10;
           models = [
             {
               name = "gpt-5.6-sol";
@@ -31,6 +66,7 @@ in
           ];
         };
         shaobing = {
+          priority = 40;
           models = [
             {
               name = "gpt-5.6-sol";
@@ -44,6 +80,10 @@ in
               name = "gpt-6-astra";
               thinking = gptThinking;
             }
+            {
+              name = "grok-4.6";
+              thinking = grokThinking;
+            }
           ];
         };
       };
@@ -52,25 +92,28 @@ in
         bigman = {
           models = [
             {
-              name = "kimi-k3";
+              name = "k3";
+              alias = "kimi-k3";
+              thinking = kimiThinking;
             }
           ];
         };
         shaobing = {
+          priority = 40;
           models = [
             {
-              name = "grok-4.6";
+              name = "deepseek-flash";
+              thinking = deepseekThinking;
             }
+            dsV4Pro
           ];
         };
         deepseek = {
           models = [
-            {
-              name = "deepseek-v4-pro";
-              input-modalities = [ "text" ];
-            }
+            dsV4Pro
             {
               name = "deepseek-flash";
+              thinking = deepseekThinking;
             }
           ];
         };

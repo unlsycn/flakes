@@ -16,7 +16,7 @@ let
 
       priority = mkOption {
         type = types.int;
-        default = 0;
+        default = 50;
       };
 
       support-prompt-cache-key = mkOption {
