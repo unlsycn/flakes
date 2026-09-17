@@ -24,6 +24,7 @@ in
       telegram.enable = true;
       hyprshot.enable = true;
       zotero.enable = true;
+      sioyek.enable = true;
       obsidian.enable = true;
       thunderbird.enable = true;
     };
