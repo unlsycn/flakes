@@ -165,6 +165,14 @@ in
         advisor = "senesperejo-codex/gpt-6-astra";
       };
 
+      retry.fallbackChains = {
+        default = [ "senesperejo/deepseek-v4-pro:max" ];
+        task = [
+          "senesperejo-codex/gpt-5.6-luna:xhigh"
+          "senesperejo/deepseek-v4-pro:max"
+        ];
+      };
+
       tools.approvalMode = "write";
 
       # Exa's public MCP and Firecrawl's keyless mode answer without any
