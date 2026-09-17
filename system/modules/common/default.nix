@@ -35,10 +35,16 @@ with lib;
         "root"
         "@wheel"
       ];
-      substituters = mkIf config.mesh.nebula.enable [
+      substituters = [
+        "https://cache.numtide.com"
+      ]
+      ++ optionals config.mesh.nebula.enable [
         "https://cache.esper.ejo"
       ];
-      trusted-public-keys = mkIf config.mesh.nebula.enable [
+      trusted-public-keys = [
+        "niks3.numtide.com-1:DTx8wZduET09hRmMtKdQDxNNthLQETkc/yaX7M4qK0g="
+      ]
+      ++ optionals config.mesh.nebula.enable [
         "cache.unlsycn.com-1:beAofQCYfkbHnku0lL7kKzAc1ZCMA4NC3GWqcp5lsio="
       ];
     };

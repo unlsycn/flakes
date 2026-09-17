@@ -12,8 +12,7 @@ in
 
   config = lib.mkIf config.programs.opencode.enable {
     programs.opencode = {
-      # FIXME: https://github.com/anomalyco/opencode/issues/23256
-      # package = inputs'.opencode.packages.opencode;
+      package = inputs'.llm-agents.packages.opencode;
       tui.keybinds = {
         leader = "ctrl+o";
         app_exit = "ctrl+q";

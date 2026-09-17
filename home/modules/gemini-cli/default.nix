@@ -1,6 +1,7 @@
 {
   config,
   lib,
+  inputs',
   ...
 }:
 let
@@ -9,6 +10,7 @@ in
 {
   config = lib.mkIf config.programs.antigravity-cli.enable {
     programs.antigravity-cli = {
+      package = inputs'.llm-agents.packages.antigravity-cli;
       commands =
         llmCfg.commands
         |> lib.mapAttrs (

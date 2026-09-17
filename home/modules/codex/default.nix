@@ -2,6 +2,7 @@
   config,
   lib,
   pkgs,
+  inputs',
   ...
 }:
 with lib;
@@ -16,13 +17,16 @@ let
     format = "toml";
   };
   wrappedCodex =
-    pkgs.runCommand "codex-${pkgs.codex.version}"
+    let
+      codex = inputs'.llm-agents.packages.codex;
+    in
+    pkgs.runCommand "codex-${codex.version}"
       {
-        inherit (pkgs.codex) meta;
+        inherit (codex) meta;
         nativeBuildInputs = [ pkgs.makeWrapper ];
       }
       ''
-        makeWrapper ${getExe pkgs.codex} $out/bin/codex \
+        makeWrapper ${getExe codex} $out/bin/codex \
           --run 'export SENESEPEREJO_KEY="$(cat ${config.sops.secrets.senesperejo-client-key.path})"'
       '';
 in

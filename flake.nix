@@ -50,9 +50,9 @@
       url = "github:catppuccin/nix";
       inputs.nixpkgs.follows = "nixpkgs";
     };
-    opencode = {
-      url = "github:unlsycn/opencode";
-      inputs.nixpkgs.follows = "nixpkgs";
+    llm-agents = {
+      url = "github:numtide/llm-agents.nix";
+      # No nixpkgs follows: stay on upstream's pin so cache hits.
     };
     disko = {
       url = "github:nix-community/disko/latest";

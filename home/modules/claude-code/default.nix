@@ -2,6 +2,7 @@
   config,
   lib,
   pkgs,
+  inputs',
   ...
 }:
 with lib;
@@ -21,6 +22,7 @@ in
   # See: github.com/anthropics/claude-code/issues/12070
   config = mkIf config.programs.claude-code.enable {
     programs.claude-code = {
+      package = inputs'.llm-agents.packages.claude-code;
       settings = {
         model = "fable";
         effortLevel = "high";
