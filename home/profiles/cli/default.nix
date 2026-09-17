@@ -32,9 +32,8 @@ with lib;
       ripgrep.enable = true;
       yazi.enable = true;
       zellij.enable = true;
-      opencode.enable = true;
+      omp.enable = true;
       codex.enable = true;
-      claude-code.enable = true;
       gh.enable = true;
     };
 

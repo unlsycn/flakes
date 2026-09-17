@@ -13,13 +13,14 @@ let
     opencode = getExe config.programs.opencode.package;
     antigravity-cli = getExe config.programs.antigravity-cli.package;
     codex = getExe config.programs.codex.package;
+    omp = getExe config.programs.omp.finalPackage;
   };
 in
 {
   options.programs.llm-cli = {
     defaultBackend = mkOption {
       type = types.enum (attrNames backendBin);
-      default = "codex";
+      default = "omp";
     };
 
     commands = mkOption {
@@ -66,7 +67,7 @@ in
 
     humanize = {
       enable = mkEnableOption "humanize" // {
-        default = true;
+        default = false;
       };
       monitor.enable = mkEnableOption "humanize CLI wrapper" // {
         default = hmzCfg.enable;
@@ -141,6 +142,7 @@ in
             opencode = config.programs.opencode.enable;
             antigravity-cli = config.programs.antigravity-cli.enable;
             codex = config.programs.codex.enable;
+            omp = config.programs.omp.enable;
           })
             ? ${config.programs.llm-cli.defaultBackend}
         )
@@ -151,6 +153,7 @@ in
               opencode = "${backendBin.opencode} --prompt /commit-message";
               antigravity-cli = "${backendBin.antigravity-cli} -i /commit-message";
               codex = "${backendBin.codex} ${escapeShellArg "$commit-message"}";
+              omp = "${backendBin.omp} /commit-message";
             }
             .${config.programs.llm-cli.defaultBackend};
         };

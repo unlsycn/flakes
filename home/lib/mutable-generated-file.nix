@@ -16,6 +16,12 @@ let
       readStatic = "${yj} -tj < \"$sourcePath\"";
       write = "${yj} -jt";
     };
+
+    yaml = {
+      readExisting = "${yj} -yj < \"$targetPath\" 2>/dev/null";
+      readStatic = "${yj} -yj < \"$sourcePath\"";
+      write = "${yj} -jy";
+    };
   };
 in
 {
