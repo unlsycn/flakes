@@ -501,5 +501,10 @@ in
         }
       ];
     };
+
+    # networkd purges foreign policy rules on resume, killing TUN auto-route (lookup 2022)
+    systemd.network = mkIf (config.systemd.network.enable && cfg.tunMode) {
+      config.networkConfig.ManageForeignRoutingPolicyRules = false;
+    };
   };
 }
