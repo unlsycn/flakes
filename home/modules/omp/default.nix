@@ -229,7 +229,7 @@ in
       tui = {
         mouse = false;
         resizeScrollback = "rebuild";
-        vimMode = true;
+        vimMode = false;
       };
 
       defaultThinkingLevel = "xhigh";
