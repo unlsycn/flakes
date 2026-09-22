@@ -40,6 +40,7 @@
   mesh = {
     id = 72;
     tailnet.enable = true;
+    nebula.mimic.enable = true;
   };
 
   networking.hostId = "7715be29";

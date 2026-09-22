@@ -28,9 +28,7 @@ in
         key = config.sops.secrets.nebula-key.path;
         ca = nebulaCa;
 
-        # manually set port and device to let nixos module generate correct firewall rules
-        # and we can reference it in other places
-        listen.port = 4242;
+        listen.port = mkDefault 4242;
         tun.device = nebulaName;
 
         lighthouses = nodes |> filter (n: n.roles |> elem "lighthouse") |> map (n: n.nebula.ip);
