@@ -35,13 +35,20 @@ in
     };
 
     xdg.configFile = {
+      # NOTE: sync_list is a hard contract with the remote folder layout.
+      # Anything not listed here is skipped, so a top-level rename done on another
+      # client makes this client's database path diverge from its local disk. The
+      # client's database-consistency pass then reads "path missing locally" as
+      # "user deleted the file" and pushes that deletion to OneDrive.
+      # Whenever a top-level entry changes, update this list AND restart the
+      # service with --resync.
       "onedrive/sync_list".text =
         [
           "/Documents"
-          "/Pictures"
+          "/Library"
           "/Music"
-          "/文档"
-          "/应用"
+          "/Personal"
+          "/Pictures"
         ]
         |> lib.concatStringsSep "\n";
     };
