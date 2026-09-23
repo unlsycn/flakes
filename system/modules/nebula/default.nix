@@ -33,6 +33,9 @@ in
 
         listen.port = mkDefault 4242;
         tun.device = nebulaName;
+        # Tailscale may ride inside Nebula, and its 1280-byte MTU plus WireGuard/UDP/IP
+        # overhead (1340) exceeds the 1300 default, which fragments every packet.
+        settings.tun.mtu = 1400;
 
         lighthouses = nodes |> filter (n: n.roles |> elem "lighthouse") |> map (n: n.nebula.ip);
 
