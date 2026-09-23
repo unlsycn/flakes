@@ -24,7 +24,9 @@ in
             mkDefault (optional (gatewayInterface != null) gatewayInterface);
         }
         (mkIf cfg.nebula.enable {
-          nebula.interfaces = mkDefault [ config.services.nebula.networks.senesperejo.tun.device ];
+          nebula.interfaces = mkDefault [
+            config.services.nebula.networks.${cfg.nebula.networkName}.tun.device
+          ];
         })
         (mkIf cfg.tailnet.enable {
           tailnet.interfaces = mkDefault [ "tailscale0" ];

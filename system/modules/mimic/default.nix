@@ -8,7 +8,7 @@
 with lib;
 let
   cfg = config.mesh.nebula.mimic;
-  nebulaName = "senesperejo";
+  nebulaName = config.mesh.nebula.networkName;
   nebulaUnit = "nebula@${nebulaName}";
   port = config.services.nebula.networks.${nebulaName}.listen.port;
   configPath = "/etc/mimic/nebula.conf";

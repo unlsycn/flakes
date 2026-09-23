@@ -40,7 +40,16 @@
   mesh = {
     id = 72;
     tailnet.enable = true;
-    nebula.mimic.enable = true;
+    nebula = {
+      mimic.enable = false;
+      portRotation = {
+        enable = true;
+        pool = {
+          from = 38000;
+          to = 38999;
+        };
+      };
+    };
   };
 
   networking.hostId = "7715be29";

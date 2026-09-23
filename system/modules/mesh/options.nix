@@ -6,8 +6,7 @@
 with lib;
 let
   cfg = config.mesh;
-  nebulaName = "senesperejo";
-  nebulaCfg = config.services.nebula.networks.${nebulaName};
+  nebulaCfg = config.services.nebula.networks.${cfg.nebula.networkName};
 
   ipToInt =
     ipStr:
@@ -81,6 +80,13 @@ in
         readOnly = true;
         default = cfg.id != null;
         description = "Whether this host participates in the Nebula mesh.";
+      };
+
+      networkName = mkOption {
+        type = types.str;
+        readOnly = true;
+        default = "senesperejo";
+        description = "Name of the mesh Nebula network";
       };
 
       domain = mkOption {

@@ -8,7 +8,7 @@
 with lib;
 let
   cfg = config.mesh;
-  nebulaName = "senesperejo";
+  nebulaName = cfg.nebula.networkName;
   nebulaCfg = config.services.nebula.networks.${nebulaName};
 
   nodes = inputs.self.mesh-topology |> attrValues |> filter (n: n ? nebula);
@@ -18,7 +18,10 @@ let
   nebulaCa = generatedDir + "/nebula_ca.crt";
 in
 {
-  imports = [ ./patch.nix ];
+  imports = [
+    ./patch.nix
+    ./source-port-rotation.nix
+  ];
 
   config = mkMerge [
     (mkIf cfg.nebula.enable {
