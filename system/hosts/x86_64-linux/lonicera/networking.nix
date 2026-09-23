@@ -22,6 +22,6 @@
       server.enable = true;
     };
     surfaces.public.interfaces = [ "eth0" ];
-    nebula.mimic.enable = false;
+    nebula.mimic.enable = true;
   };
 }

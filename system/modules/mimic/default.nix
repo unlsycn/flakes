@@ -9,6 +9,7 @@ with lib;
 let
   cfg = config.mesh.nebula.mimic;
   nebulaName = config.mesh.nebula.networkName;
+  rotation = config.mesh.nebula.portRotation;
   nebulaUnit = "nebula@${nebulaName}";
   port = config.services.nebula.networks.${nebulaName}.listen.port;
   configPath = "/etc/mimic/nebula.conf";
@@ -67,12 +68,21 @@ in
 
       # Allow Mimic's raw TCP control packets alongside restored UDP.
       mesh.surfaces.public.allowedTCPPorts = [ port ];
+      mesh.surfaces.public.allowedTCPPortRanges = optional rotation.enable rotation.pool;
+
+      # Reserve the pool so the kernel never hands those ports out as ephemeral ones.
+      boot.kernel.sysctl."net.ipv4.ip_local_reserved_ports" =
+        mkIf rotation.enable "${toString rotation.pool.from}-${toString rotation.pool.to}";
 
       environment.etc."mimic/nebula.conf".text = ''
         # allay's iwlwifi reports NETDEV_XDP_ACT_BASIC=no
         xdp_mode = skb
-        filter = local=0.0.0.0:${toString port}
-        filter = local=[::]:${toString port}
+        ${
+          (if rotation.enable then range rotation.pool.from rotation.pool.to else [ port ])
+          |> map (p: "filter = local=0.0.0.0:${toString p}")
+          |> concatStringsSep "\n"
+        }
+        ${optionalString (!rotation.enable) "filter = local=[::]:${toString port}"}
       '';
 
       users = {
@@ -99,8 +109,10 @@ in
         after = [
           "systemd-modules-load.service"
           "sys-subsystem-net-devices-${utils.escapeSystemdPath cfg.interface}.device"
-        ];
-        wants = [ "${nebulaUnit}.service" ];
+        ]
+        ++ optional rotation.enable "nebula-source-port-rotate.service";
+        # Retire the flow first so a restarted Mimic leaves from a pool port the peer does not hold.
+        wants = [ "${nebulaUnit}.service" ] ++ optional rotation.enable "nebula-source-port-rotate.service";
 
         serviceConfig = {
           Type = "notify";

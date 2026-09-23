@@ -41,7 +41,7 @@
     id = 72;
     tailnet.enable = true;
     nebula = {
-      mimic.enable = false;
+      mimic.enable = true;
       portRotation = {
         enable = true;
         pool = {
