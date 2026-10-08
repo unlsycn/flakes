@@ -102,6 +102,7 @@ in
             fake-ip-filter = [
               "+.lan"
               "+.local"
+              "+.shanghaitech.edu.cn"
             ];
 
             nameserver = cn-doh;
@@ -115,6 +116,7 @@ in
             };
 
             nameserver-policy = {
+              "+.shanghaitech.edu.cn" = [ "dhcp://system" ];
               "geosite:cn,private" = cn-doh;
               "geosite:gfw" = fallbackDns;
             };
