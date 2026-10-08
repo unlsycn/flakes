@@ -16,7 +16,9 @@ let
     "embedart"
     "export"
     "fetchart"
-    "filetote"
+    # FIXME re-enable once beets-filetote supports beets >= 2.14:
+    # https://github.com/gtronset/beets-filetote/issues/402
+    # "filetote"
     "filefilter"
     "fromfilename"
     "fuzzy"
