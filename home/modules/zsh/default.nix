@@ -45,6 +45,7 @@ in
         "diff" = icdiff;
         "dev" = "${zellij} a -c dev";
         "cdtmp" = "cd `mktemp -d`";
+        "batfzf" = "fzf --preview \"bat --color=always {1}\"";
         "pastebin" = "curl -F \"c=@-\" \"http://fars.ee/\"";
       };
 
