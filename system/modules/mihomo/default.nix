@@ -10,7 +10,10 @@ let
   cfg = config.services.mihomo;
 in
 {
-  imports = [ ./options.nix ];
+  imports = [
+    ./campus.nix
+    ./options.nix
+  ];
 
   config = mkIf cfg.enable {
     services.mihomo = {
@@ -102,7 +105,6 @@ in
             fake-ip-filter = [
               "+.lan"
               "+.local"
-              "+.shanghaitech.edu.cn"
             ];
 
             nameserver = cn-doh;
@@ -116,7 +118,6 @@ in
             };
 
             nameserver-policy = {
-              "+.shanghaitech.edu.cn" = [ "dhcp://system" ];
               "geosite:cn,private" = cn-doh;
               "geosite:gfw" = fallbackDns;
             };
