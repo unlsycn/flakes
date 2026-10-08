@@ -10,7 +10,10 @@ let
   cfg = config.services.mihomo;
 in
 {
-  imports = [ ./options.nix ];
+  imports = [
+    ./campus.nix
+    ./options.nix
+  ];
 
   config = mkIf cfg.enable {
     services.mihomo = {
