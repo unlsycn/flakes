@@ -93,6 +93,32 @@ with lib;
             };
           };
         };
+        augroups = [ { name = "NvimTreeClose"; } ];
+        autocmds = [
+          {
+            event = [ "QuitPre" ];
+            group = "NvimTreeClose";
+            desc = "Close nvim-tree when quitting the last file window";
+            callback = generators.mkLuaInline ''
+              function()
+                if vim.bo.filetype == "NvimTree" then return end
+                local tree, others = {}, 0
+                for _, w in ipairs(vim.api.nvim_tabpage_list_wins(0)) do
+                  if vim.api.nvim_win_get_config(w).relative == "" then
+                    if vim.bo[vim.api.nvim_win_get_buf(w)].filetype == "NvimTree" then
+                      table.insert(tree, w)
+                    else
+                      others = others + 1
+                    end
+                  end
+                end
+                if others == 1 then
+                  for _, w in ipairs(tree) do vim.api.nvim_win_close(w, true) end
+                end
+              end
+            '';
+          }
+        ];
         ui.illuminate.enable = true;
         utility = {
           direnv.enable = true;
