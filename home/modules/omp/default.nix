@@ -25,7 +25,8 @@ let
     nativeBuildInputs = [ pkgs.makeWrapper ];
     postBuild = ''
       wrapProgram $out/bin/${cfg.package.meta.mainProgram} \
-        --set-default PUPPETEER_EXECUTABLE_PATH ${getExe' pkgs.chromium "chromium"}
+        --set-default PUPPETEER_EXECUTABLE_PATH ${getExe' pkgs.chromium "chromium"} \
+        --suffix PATH : ${makeBinPath [ pkgs.python3 ]}
     '';
     inherit (cfg.package) meta;
   };
