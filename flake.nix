@@ -151,6 +151,11 @@
             overlays = overlaysList;
             config = {
               allowUnfree = true;
+              # beets-filetote 1.3.7 is flagged broken for beets >= 2.14 because its
+              # test harness still calls the pre-2.14 `move_items`/`modify_items`
+              # signatures. The plugin itself does not:
+              # https://github.com/gtronset/beets-filetote/issues/402
+              problems.handlers."beets-filetote".broken = "warn";
             };
           };
 
