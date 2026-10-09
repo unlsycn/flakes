@@ -1,0 +1,25 @@
+--- a/src/vtbackend/Image.cpp	2026-10-09 10:39:25.874182545 +0800
++++ b/src/vtbackend/Image.cpp	2026-10-09 10:39:32.732608509 +0800
+@@ -10,14 +10,17 @@
+ #include <utility>
+ 
+ // clang-format off
+-#if __has_include(<simd>)
+-    #include <simd>
+-    namespace simd = std;
+-    #define VTBACKEND_SIMD_FOUND 1
+-#elif __has_include(<experimental/simd>) && !defined(__APPLE__) && !defined(__FreeBSD__)
++// <simd> only defines std::simd when libstdc++'s __glibcxx_simd feature macro is
++// enabled (C++26); under the C++23 this package builds with the header is empty,
++// while std::experimental::simd provides every name used below.
++#if __has_include(<experimental/simd>) && !defined(__APPLE__) && !defined(__FreeBSD__)
+     #include <experimental/simd>
+     namespace simd = std::experimental;
+     #define VTBACKEND_SIMD_FOUND 1
++#elif __has_include(<simd>)
++    #include <simd>
++    namespace simd = std;
++    #define VTBACKEND_SIMD_FOUND 1
+ #endif
+ // clang-format on
+ 

@@ -9,6 +9,13 @@ final: prev: {
     ];
   });
 
+  # contour's <simd> detection picks up GCC's C++26 <simd> header, which is empty
+  # under the C++23 the package builds with, so the vtbackend fails to compile;
+  # prefer std::experimental::simd, which provides every name it uses.
+  contour = prev.contour.overrideAttrs (old: {
+    patches = (old.patches or [ ]) ++ [ ./contour-simd.patch ];
+  });
+
   waybar = prev.waybar.overrideAttrs (old: {
     src = prev.fetchFromGitHub {
       owner = "Alexays";
