@@ -3,6 +3,8 @@
 
   inputs = {
     nixpkgs.url = "nixpkgs/nixos-unstable";
+    # contour and zotero are broken until nixpkgs PRs #569719 and #569006 land
+    nixpkgs-pin.url = "github:NixOS/nixpkgs/ef34387ddd751e1ab8857adf4676492d32eb24ec";
     flake-parts.url = "github:hercules-ci/flake-parts";
     impermanence = {
       url = "github:nix-community/impermanence";
@@ -111,6 +113,12 @@
       overlaysList = builtins.attrValues overlays ++ [
         inputs.nix-dram.overlay
         inputs.vscode-extensions.overlays.default
+        (_: prev: {
+          inherit (inputs.nixpkgs-pin.legacyPackages.${prev.stdenv.hostPlatform.system})
+            contour
+            zotero
+            ;
+        })
       ];
     in
     flake-parts.lib.mkFlake { inherit inputs; } {
