@@ -36,9 +36,8 @@ with lib;
 
     boot.zfs.forceImportRoot = true;
 
-    # generate mount units from zfs-list.cache
-    systemd.generators."zfs-mount-generator" =
-      "${config.boot.zfs.package}/lib/systemd/system-generator/zfs-mount-generator";
+    # zfs ships its mount generator in lib/systemd/system-generators, so the systemd
+    # module picks it up from systemd.packages on its own.
     # keep metadatas of datasets in zfs-list.cache up to date
     environment.etc."zfs/zed.d/history_event-zfs-list-cacher.sh".source =
       "${config.boot.zfs.package}/etc/zfs/zed.d/history_event-zfs-list-cacher.sh";
