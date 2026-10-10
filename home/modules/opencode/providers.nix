@@ -32,8 +32,23 @@ in
         "gpt-5.6-sol" = {
           name = "GPT-5.6 Sol";
         };
+        "gpt-5.6-luna" = {
+          name = "GPT-5.6 Luna";
+        };
+        "gpt-5.6-terra" = {
+          name = "GPT-5.6 Terra";
+        };
         "gpt-6-astra" = {
           name = "GPT-6 Astra";
+        };
+        "gpt-6-luna" = {
+          name = "GPT-6 Luna";
+        };
+        "gpt-6.1-sol" = {
+          name = "GPT-6.1 Sol";
+        };
+        "grok-4.7" = {
+          name = "Grok 4.7";
         };
         "deepseek-v4-pro" = {
           name = "DeepSeek V4 Pro";

@@ -63,8 +63,8 @@ let
           )
           (
             {
-              id = "grok-4.6";
-              name = "Grok 4.6";
+              id = "grok-4.7";
+              name = "Grok 4.7";
             }
             // reasoningModel [ "low" "medium" "high" "xhigh" ] "high"
           )
@@ -106,8 +106,29 @@ let
           )
           (
             {
+              id = "gpt-5.6-terra";
+              name = "GPT-5.6 Terra";
+            }
+            // gptEfforts
+          )
+          (
+            {
               id = "gpt-6-astra";
               name = "GPT-6 Astra";
+            }
+            // gptEfforts
+          )
+          (
+            {
+              id = "gpt-6-luna";
+              name = "GPT-6 Luna";
+            }
+            // gptEfforts
+          )
+          (
+            {
+              id = "gpt-6.1-sol";
+              name = "GPT-6.1 Sol";
             }
             // gptEfforts
           )
@@ -166,7 +187,7 @@ in
         smol = "senesperejo/deepseek-v4-pro:high";
         tiny = "senesperejo/deepseek-flash:high";
         commit = "senesperejo/deepseek-flash:high";
-        task = "senesperejo/grok-4.6";
+        task = "senesperejo/grok-4.7:high";
         vision = "senesperejo-codex/gpt-5.6-sol";
         advisor = "senesperejo-codex/gpt-6-astra";
       };
