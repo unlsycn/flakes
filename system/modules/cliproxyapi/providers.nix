@@ -61,12 +61,40 @@ in
               thinking = gptThinking;
             }
             {
+              name = "gpt-5.6-luna";
+              thinking = gptThinking;
+            }
+            {
+              name = "gpt-5.6-terra";
+              thinking = gptThinking;
+            }
+            {
               name = "gpt-6-astra";
               thinking = gptThinking;
+            }
+            {
+              name = "gpt-6-luna";
+              thinking = gptThinking;
+            }
+            {
+              name = "gpt-6.1-sol";
+              thinking = gptThinking;
+            }
+            {
+              name = "grok-4.7";
+              thinking = grokThinking;
+            }
+            {
+              name = "deepseek-flash";
+              thinking = deepseekThinking;
             }
           ];
         };
         shaobing = {
+          # Upstream answers 401 `user_disabled` for this key, so every request
+          # that fell back to it burned a retry round and a cooldown wait.
+          # Kept configured (models + secrets) so it is a one-line flip back.
+          enable = false;
           models = [
             {
               name = "gpt-5.6-sol";
@@ -124,17 +152,22 @@ in
       codex-api-key =
         cfg.providers.codex-api-key
         |> mapAttrsToList (
-          name: provider: {
+          name: provider:
+          {
             inherit (provider) models priority;
             base-url._secret = config.sops.secrets."cliproxyapi-${name}-base-url".path;
             api-key._secret = config.sops.secrets."cliproxyapi-${name}-api-key".path;
+          }
+          // optionalAttrs (!provider.enable) {
+            excluded-models = [ "*" ];
           }
         );
 
       openai-compatibility =
         cfg.providers.openai-compatibility
         |> mapAttrsToList (
-          name: provider: {
+          name: provider:
+          {
             inherit (provider) models priority support-prompt-cache-key;
             inherit name;
             headers = {
@@ -150,6 +183,9 @@ in
                 api-key._secret = config.sops.secrets."cliproxyapi-${name}-api-key".path;
               }
             ];
+          }
+          // optionalAttrs (!provider.enable) {
+            disabled = true;
           }
         );
     };
