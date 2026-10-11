@@ -54,6 +54,8 @@ with lib;
             mutableExtensionsDir = false;
 
             profiles.default = {
+              mutableUserSettings = true;
+
               extensions =
                 with pkgs.nix-vscode-extensions.vscode-marketplace-release;
                 [
