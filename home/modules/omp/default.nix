@@ -47,95 +47,80 @@ let
 
   standardEfforts = reasoningModel [ "low" "high" "max" ] "max";
   gptEfforts = reasoningModel [ "low" "medium" "high" "xhigh" "max" ] "xhigh";
+  claudeEfforts = reasoningModel [ "low" "medium" "high" "xhigh" "max" ] "high";
+
+  gptModel =
+    id: name:
+    {
+      inherit id name;
+      api = "openai-responses";
+    }
+    // gptEfforts;
 
   modelsFile = yaml.generate "omp-models.yml" {
-    providers = {
-      senesperejo = {
-        baseUrl = "https://llm.ts.unlsycn.com/v1";
-        api = "openai-completions";
-        models = [
-          (
-            {
-              id = "kimi-k3";
-              name = "Kimi K3";
-            }
-            // standardEfforts
-          )
-          (
-            {
-              id = "grok-4.7";
-              name = "Grok 4.7";
-            }
-            // reasoningModel [ "low" "medium" "high" "xhigh" ] "high"
-          )
-          (
-            {
-              id = "deepseek-v4-pro";
-              name = "DeepSeek V4 Pro";
-            }
-            // standardEfforts
-          )
-          (
-            {
-              id = "deepseek-flash";
-              name = "DeepSeek Flash";
-            }
-            // standardEfforts
-          )
-        ];
-      }
-      // apiKey;
-
-      "senesperejo-codex" = {
-        baseUrl = "https://llm.ts.unlsycn.com/v1";
-        api = "openai-responses";
-        models = [
-          (
-            {
-              id = "gpt-5.6-sol";
-              name = "GPT-5.6 Sol";
-            }
-            // gptEfforts
-          )
-          (
-            {
-              id = "gpt-5.6-luna";
-              name = "GPT-5.6 Luna";
-            }
-            // gptEfforts
-          )
-          (
-            {
-              id = "gpt-5.6-terra";
-              name = "GPT-5.6 Terra";
-            }
-            // gptEfforts
-          )
-          (
-            {
-              id = "gpt-6-astra";
-              name = "GPT-6 Astra";
-            }
-            // gptEfforts
-          )
-          (
-            {
-              id = "gpt-6-luna";
-              name = "GPT-6 Luna";
-            }
-            // gptEfforts
-          )
-          (
-            {
-              id = "gpt-6.1-sol";
-              name = "GPT-6.1 Sol";
-            }
-            // gptEfforts
-          )
-        ];
-      }
-      // apiKey;
-    };
+    providers.senesperejo = {
+      baseUrl = "https://llm.ts.unlsycn.com/v1";
+      api = "openai-completions";
+      models = [
+        (
+          {
+            id = "kimi-k3";
+            name = "Kimi K3";
+          }
+          // standardEfforts
+        )
+        (
+          {
+            id = "grok-4.7";
+            name = "Grok 4.7";
+          }
+          // reasoningModel [ "low" "medium" "high" "xhigh" ] "high"
+        )
+        (
+          {
+            id = "deepseek-v4-pro";
+            name = "DeepSeek V4 Pro";
+          }
+          // standardEfforts
+        )
+        (
+          {
+            id = "deepseek-flash";
+            name = "DeepSeek Flash";
+          }
+          // standardEfforts
+        )
+        (
+          {
+            id = "claude-opus-5-5";
+            name = "Claude Opus 5.5";
+          }
+          // claudeEfforts
+        )
+        (
+          {
+            id = "claude-sonnet-5-5";
+            name = "Claude Sonnet 5.5";
+          }
+          // claudeEfforts
+        )
+        (
+          {
+            id = "claude-haiku-5-5";
+            name = "Claude Haiku 5.5";
+          }
+          // claudeEfforts
+        )
+        (gptModel "gpt-5.6-sol" "GPT-5.6 Sol")
+        (gptModel "gpt-5.6-luna" "GPT-5.6 Luna")
+        (gptModel "gpt-5.6-terra" "GPT-5.6 Terra")
+        (gptModel "gpt-6-astra" "GPT-6 Astra")
+        (gptModel "gpt-6-luna" "GPT-6 Luna")
+        (gptModel "gpt-6.1-sol" "GPT-6.1 Sol")
+        (gptModel "gpt-6-sol" "GPT-6 Sol")
+      ];
+    }
+    // apiKey;
   };
 
   mutableOmpConfig = mutableFile.mkMutableGeneratedFile {
@@ -182,20 +167,20 @@ in
     programs.omp.settings = {
       modelRoles = {
         default = "senesperejo/kimi-k3";
-        slow = "senesperejo-codex/gpt-6-astra";
-        plan = "senesperejo-codex/gpt-5.6-sol";
+        slow = "senesperejo/gpt-6-astra";
+        plan = "senesperejo/gpt-5.6-sol";
         smol = "senesperejo/deepseek-v4-pro:high";
         tiny = "senesperejo/deepseek-flash:high";
         commit = "senesperejo/deepseek-flash:high";
         task = "senesperejo/grok-4.7:high";
-        vision = "senesperejo-codex/gpt-5.6-sol";
-        advisor = "senesperejo-codex/gpt-6-astra";
+        vision = "senesperejo/gpt-5.6-sol";
+        advisor = "senesperejo/gpt-6-astra";
       };
 
       retry.fallbackChains = {
         default = [ "senesperejo/deepseek-v4-pro:max" ];
         task = [
-          "senesperejo-codex/gpt-5.6-luna:xhigh"
+          "senesperejo/gpt-5.6-luna:xhigh"
           "senesperejo/deepseek-v4-pro:max"
         ];
       };
