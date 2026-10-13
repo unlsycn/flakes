@@ -13,6 +13,16 @@ let
     ];
   };
 
+  claudeThinking = {
+    levels = [
+      "low"
+      "medium"
+      "high"
+      "xhigh"
+      "max"
+    ];
+  };
+
   kimiThinking = {
     levels = [
       "low"
@@ -129,6 +139,47 @@ in
             }
           ];
         };
+        eba = {
+          priority = 10;
+          models = [
+            {
+              name = "gpt-5.6-sol";
+              thinking = gptThinking;
+            }
+            {
+              name = "gpt-5.6-luna";
+              thinking = gptThinking;
+            }
+            {
+              name = "gpt-5.6-terra";
+              thinking = gptThinking;
+            }
+            {
+              name = "gpt-6-astra";
+              thinking = gptThinking;
+            }
+            {
+              name = "gpt-6-sol";
+              thinking = gptThinking;
+            }
+            {
+              name = "gpt-6-luna";
+              thinking = gptThinking;
+            }
+            {
+              name = "gpt-6.1-sol";
+              thinking = gptThinking;
+            }
+            {
+              name = "grok-4.7";
+              thinking = grokThinking;
+            }
+            {
+              name = "kimi-k3";
+              thinking = kimiThinking;
+            }
+          ];
+        };
         deepseek = {
           models = [
             dsV4Pro
@@ -139,9 +190,43 @@ in
           ];
         };
       };
+
+      claude-api-key = {
+        eba = {
+          priority = 10;
+          models = [
+            {
+              name = "claude-opus-5-5";
+              thinking = claudeThinking;
+            }
+            {
+              name = "claude-sonnet-5-5";
+              thinking = claudeThinking;
+            }
+            {
+              name = "claude-haiku-5-5";
+              thinking = claudeThinking;
+            }
+          ];
+        };
+      };
     };
 
     services.cliproxyapi.settings = {
+      claude-api-key =
+        cfg.providers.claude-api-key
+        |> mapAttrsToList (
+          name: provider:
+          {
+            inherit (provider) models priority;
+            base-url._secret = config.sops.secrets."cliproxyapi-${name}-base-url".path;
+            api-key._secret = config.sops.secrets."cliproxyapi-${name}-api-key".path;
+          }
+          // optionalAttrs (!provider.enable) {
+            excluded-models = [ "*" ];
+          }
+        );
+
       codex-api-key =
         cfg.providers.codex-api-key
         |> mapAttrsToList (
