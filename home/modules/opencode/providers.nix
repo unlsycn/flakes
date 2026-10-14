@@ -5,6 +5,7 @@
 }:
 let
   cfg = config.programs.opencode;
+  gateway = config.programs.llm-cli.gateway;
 
   # Cap context window to avoid performance degradation at very long contexts.
   maxContext = 256000;
@@ -23,10 +24,10 @@ in
       npm = "@ai-sdk/openai-compatible";
       name = "senesperejo";
       options = {
-        baseURL = "https://llm.ts.unlsycn.com/v1";
+        baseURL = "${gateway.url}/v1";
       }
-      // lib.optionalAttrs config.sops.control.deploySecrets {
-        apiKey = "{file:${config.sops.secrets.senesperejo-client-key.path}}";
+      // lib.optionalAttrs (gateway.apiKeyFile != null) {
+        apiKey = "{file:${gateway.apiKeyFile}}";
       };
       models = {
         "gpt-5.6-sol" = {

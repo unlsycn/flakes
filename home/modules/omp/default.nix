@@ -10,134 +10,10 @@ let
   cfg = config.programs.omp;
   llmCfg = config.programs.llm-cli;
   yaml = pkgs.formats.yaml { };
-
-  mutableFile = import ../../lib { inherit lib pkgs; };
-
-  configFile = yaml.generate "omp-config.yml" cfg.settings;
-
-  apiKey = optionalAttrs config.sops.control.deploySecrets {
-    apiKey = "!${getExe' pkgs.coreutils "cat"} ${config.sops.secrets.senesperejo-client-key.path}";
-  };
-
-  wrappedOmp = pkgs.symlinkJoin {
-    name = "omp-${cfg.package.version}-browser";
-    paths = [ cfg.package ];
-    nativeBuildInputs = [ pkgs.makeWrapper ];
-    postBuild = ''
-      wrapProgram $out/bin/${cfg.package.meta.mainProgram} \
-        --set-default PUPPETEER_EXECUTABLE_PATH ${getExe' pkgs.chromium "chromium"} \
-        --suffix PATH : ${
-          makeBinPath [
-            pkgs.python3
-            pkgs.ffmpeg-headless
-          ]
-        }
-    '';
-    inherit (cfg.package) meta;
-  };
-
-  reasoningModel = efforts: defaultLevel: {
-    reasoning = true;
-    thinking = {
-      mode = "effort";
-      inherit efforts defaultLevel;
-      requiresEffort = true;
-    };
-  };
-
-  standardEfforts = reasoningModel [ "low" "high" "max" ] "max";
-  gptEfforts = reasoningModel [ "low" "medium" "high" "xhigh" "max" ] "xhigh";
-  claudeEfforts = reasoningModel [ "low" "medium" "high" "xhigh" "max" ] "high";
-
-  gptModel =
-    id: name:
-    {
-      inherit id name;
-      api = "openai-responses";
-    }
-    // gptEfforts;
-
-  modelsFile = yaml.generate "omp-models.yml" {
-    providers.senesperejo = {
-      baseUrl = "https://llm.ts.unlsycn.com/v1";
-      api = "openai-completions";
-      models = [
-        (
-          {
-            id = "kimi-k3";
-            name = "Kimi K3";
-          }
-          // standardEfforts
-        )
-        (
-          {
-            id = "grok-4.7";
-            name = "Grok 4.7";
-          }
-          // reasoningModel [ "low" "medium" "high" "xhigh" ] "high"
-        )
-        (
-          {
-            id = "deepseek-v4-pro";
-            name = "DeepSeek V4 Pro";
-          }
-          // standardEfforts
-        )
-        (
-          {
-            id = "deepseek-flash";
-            name = "DeepSeek Flash";
-          }
-          // standardEfforts
-        )
-        (
-          {
-            id = "claude-opus-5-5";
-            name = "Claude Opus 5.5";
-          }
-          // claudeEfforts
-        )
-        (
-          {
-            id = "claude-sonnet-5-5";
-            name = "Claude Sonnet 5.5";
-          }
-          // claudeEfforts
-        )
-        (
-          {
-            id = "claude-haiku-5-5";
-            name = "Claude Haiku 5.5";
-          }
-          // claudeEfforts
-        )
-        (gptModel "gpt-5.6-sol" "GPT-5.6 Sol")
-        (gptModel "gpt-5.6-luna" "GPT-5.6 Luna")
-        (gptModel "gpt-5.6-terra" "GPT-5.6 Terra")
-        (gptModel "gpt-6-astra" "GPT-6 Astra")
-        (gptModel "gpt-6-luna" "GPT-6 Luna")
-        (gptModel "gpt-6.1-sol" "GPT-6.1 Sol")
-        (gptModel "gpt-6-sol" "GPT-6 Sol")
-      ];
-    }
-    // apiKey;
-  };
-
-  mutableOmpConfig = mutableFile.mkMutableGeneratedFile {
-    inherit config;
-    targetPath = "${config.home.homeDirectory}/.omp/agent/config.yml";
-    homeFilePath = ".omp/agent/config.yml";
-    format = "yaml";
-  };
-
-  mutableOmpModels = mutableFile.mkMutableGeneratedFile {
-    inherit config;
-    targetPath = "${config.home.homeDirectory}/.omp/agent/models.yml";
-    homeFilePath = ".omp/agent/models.yml";
-    format = "yaml";
-  };
 in
 {
+  imports = [ ./models.nix ];
+
   options.programs.omp = {
     enable = mkEnableOption "OMP coding agent";
 
@@ -156,43 +32,39 @@ in
     settings = mkOption {
       type = yaml.type;
       default = { };
-      description = "Settings rendered to ~/.omp/agent/config.yml.";
+      description = "Settings merged into ~/.omp/agent/config.yml.";
+    };
+
+    models = mkOption {
+      type = yaml.type;
+      default = { };
+      description = "Model configuration merged into ~/.omp/agent/models.yml.";
     };
   };
 
   config = mkIf cfg.enable {
-    programs.omp.finalPackage = wrappedOmp;
+    programs.omp.finalPackage = pkgs.symlinkJoin {
+      name = "omp-${cfg.package.version}-browser";
+      paths = [ cfg.package ];
+      nativeBuildInputs = [ pkgs.makeWrapper ];
+      postBuild = ''
+        wrapProgram $out/bin/${cfg.package.meta.mainProgram} \
+          --set-default PUPPETEER_EXECUTABLE_PATH ${getExe' pkgs.chromium "chromium"} \
+          --suffix PATH : ${
+            makeBinPath [
+              pkgs.python3
+              pkgs.ffmpeg-headless
+            ]
+          }
+      '';
+      inherit (cfg.package) meta;
+    };
+
     home.packages = [ cfg.finalPackage ];
 
     programs.omp.settings = {
-      modelRoles = {
-        default = "senesperejo/kimi-k3";
-        slow = "senesperejo/gpt-6-astra";
-        plan = "senesperejo/gpt-5.6-sol";
-        smol = "senesperejo/deepseek-v4-pro:high";
-        tiny = "senesperejo/deepseek-flash:high";
-        commit = "senesperejo/deepseek-flash:high";
-        task = "senesperejo/grok-4.7:high";
-        vision = "senesperejo/gpt-5.6-sol";
-        advisor = "senesperejo/gpt-6-astra";
-      };
-
-      retry.fallbackChains = {
-        default = [ "senesperejo/deepseek-v4-pro:max" ];
-        task = [
-          "senesperejo/gpt-5.6-luna:xhigh"
-          "senesperejo/deepseek-v4-pro:max"
-        ];
-      };
-
       tools.approvalMode = "write";
 
-      # Exa's public MCP and Firecrawl's keyless mode answer without any
-      # credential, but only when explicitly listed; every credential-free
-      # scraper behind them is gated on the egress IP (DuckDuckGo and Google
-      # detect the datacenter range, Ecosia sits behind Cloudflare, Mojeek
-      # refuses the connection at all), and each one costs a full provider
-      # timeout before the chain gives up.
       providers.webSearchOrder = [
         "exa"
         "firecrawl"
@@ -251,10 +123,6 @@ in
     };
 
     home.file = mkMerge [
-      {
-        ".omp/agent/config.yml".source = configFile;
-        ".omp/agent/models.yml".source = modelsFile;
-      }
       (
         llmCfg.skills
         |> mapAttrs' (
@@ -269,13 +137,7 @@ in
         |> mapAttrs' (
           name: cmd:
           nameValuePair ".omp/agent/prompts/${name}.md" {
-            text = ''
-              ---
-              description: ${cmd.description}
-              ---
-
-              ${cmd.prompt}
-            '';
+            text = cmd.markdown;
           }
         )
       )
@@ -284,14 +146,26 @@ in
       (optionalAttrs (llmCfg.skills ? commit-message) {
         ".omp/agent/prompts/commit-message.md".source = "${llmCfg.skills.commit-message}/SKILL.md";
       })
-      mutableOmpConfig.homeFile
-      mutableOmpModels.homeFile
     ];
 
-    home.activation = {
-      ompConfigActivation = mutableOmpConfig.activation;
-      ompModelsActivation = mutableOmpModels.activation;
-    };
+    home.activation.ompSettings = hm.dag.entryAfter [ "linkGeneration" ] (
+      {
+        "config.yml" = cfg.settings;
+        "models.yml" = cfg.models;
+      }
+      |> mapAttrsToList (
+        file: settings:
+        hm.generators.mkImpureConfigMerger {
+          inherit pkgs;
+          format = "yaml";
+          empty = "{}";
+          jqOperation = "$dynamic * $static";
+          path = "${config.home.homeDirectory}/.omp/agent/${file}";
+          staticSettings = yaml.generate "omp-${file}" settings;
+        }
+      )
+      |> concatStringsSep "\n"
+    );
 
     home.persistence."/persist".directories = [ ".omp" ];
   };

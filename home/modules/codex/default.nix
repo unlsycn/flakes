@@ -10,30 +10,26 @@ let
   cfg = config.programs.codex;
   llmCfg = config.programs.llm-cli;
   maxContext = 640000;
-  mutableCodexConfig = (import ../../lib { inherit lib pkgs; }).mkMutableGeneratedFile {
-    inherit config;
-    targetPath = "${config.xdg.configHome}/codex/config.toml";
-    homeFilePath = "/.config/codex/config.toml";
-    format = "toml";
-  };
-  wrappedCodex =
-    let
-      codex = inputs'.llm-agents.packages.codex;
-    in
-    pkgs.runCommand "codex-${codex.version}"
-      {
-        inherit (codex) meta;
-        nativeBuildInputs = [ pkgs.makeWrapper ];
-      }
-      ''
-        makeWrapper ${getExe codex} $out/bin/codex \
-          --run 'export SENESEPEREJO_KEY="$(cat ${config.sops.secrets.senesperejo-client-key.path})"'
-      '';
 in
 {
   config = mkIf cfg.enable {
     programs.codex = {
-      package = mkIf config.sops.control.deploySecrets wrappedCodex;
+      package =
+        let
+          codex = inputs'.llm-agents.packages.codex;
+        in
+        mkIf (llmCfg.gateway.apiKeyFile != null) (
+          pkgs.runCommand "codex-${codex.version}"
+            {
+              inherit (codex) meta;
+              nativeBuildInputs = [ pkgs.makeWrapper ];
+            }
+            ''
+              makeWrapper ${getExe codex} $out/bin/codex \
+                --run 'export SENESEPEREJO_KEY="$(cat ${llmCfg.gateway.apiKeyFile})"'
+            ''
+        );
+      mutableSettings = true;
       settings = {
         model = "gpt-5.6-sol";
         review_model = "gpt-5.6-sol";
@@ -74,40 +70,24 @@ in
           allow_local_binding = false;
         };
       }
-      // optionalAttrs config.sops.control.deploySecrets {
+      // optionalAttrs (llmCfg.gateway.apiKeyFile != null) {
         model_provider = "senesperejo";
         model_providers."senesperejo" = {
           name = "senesperejo";
-          base_url = "https://llm.ts.unlsycn.com/v1";
+          base_url = "${llmCfg.gateway.url}/v1";
           env_key = "SENESEPEREJO_KEY";
           wire_api = "responses";
         };
       };
     };
 
-    assertions = [
-      {
-        assertion = config.home.preferXdgDirectories;
-        message = "The local Codex mutable config workaround assumes home.preferXdgDirectories = true.";
-      }
-    ];
-
-    home.activation.codexConfigActivation = mutableCodexConfig.activation;
-
     home.file = mkMerge [
-      mutableCodexConfig.homeFile
       (
         llmCfg.commands
         |> mapAttrs' (
           name: cmd:
           nameValuePair ".config/codex/prompts/${name}.md" {
-            text = ''
-              ---
-              description: ${cmd.description}
-              ---
-
-              ${cmd.prompt}
-            '';
+            text = cmd.markdown;
           }
         )
       )

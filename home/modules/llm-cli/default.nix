@@ -6,31 +6,58 @@
 }:
 with lib;
 let
-  hmzCfg = config.programs.llm-cli.humanize;
+  cfg = config.programs.llm-cli;
   humanizeRuntime = pkgs.humanize.runtime;
-  backendBin = {
-    claude-code = getExe config.programs.claude-code.finalPackage;
-    opencode = getExe config.programs.opencode.package;
-    antigravity-cli = getExe config.programs.antigravity-cli.package;
-    codex = getExe config.programs.codex.package;
-    omp = getExe config.programs.omp.finalPackage;
+  commitMessageCommand = {
+    claude-code = "${getExe config.programs.claude-code.finalPackage} /commit-message";
+    opencode = "${getExe config.programs.opencode.package} --prompt /commit-message";
+    antigravity-cli = "${getExe config.programs.antigravity-cli.package} -i /commit-message";
+    codex = "${getExe config.programs.codex.package} ${escapeShellArg "$commit-message"}";
+    omp = "${getExe config.programs.omp.finalPackage} /commit-message";
   };
 in
 {
   options.programs.llm-cli = {
     defaultBackend = mkOption {
-      type = types.enum (attrNames backendBin);
+      type = types.enum (attrNames commitMessageCommand);
       default = "omp";
+    };
+
+    gateway = {
+      url = mkOption {
+        type = types.str;
+        default = "https://llm.ts.unlsycn.com";
+      };
+
+      apiKeyFile = mkOption {
+        type = types.nullOr types.str;
+        default =
+          if config.sops.control.deploySecrets then config.sops.secrets.senesperejo-client-key.path else null;
+      };
     };
 
     commands = mkOption {
       type = types.attrsOf (
-        types.submodule {
-          options = {
-            description = mkOption { type = types.str; };
-            prompt = mkOption { type = types.lines; };
-          };
-        }
+        types.submodule (
+          { config, ... }:
+          {
+            options = {
+              description = mkOption { type = types.str; };
+              prompt = mkOption { type = types.lines; };
+              markdown = mkOption {
+                type = types.str;
+                readOnly = true;
+                default = ''
+                  ---
+                  description: ${config.description}
+                  ---
+
+                  ${config.prompt}
+                '';
+              };
+            };
+          }
+        )
       );
       default = { };
     };
@@ -70,7 +97,7 @@ in
         default = false;
       };
       monitor.enable = mkEnableOption "humanize CLI wrapper" // {
-        default = hmzCfg.enable;
+        default = cfg.humanize.enable;
       };
     };
   };
@@ -105,7 +132,7 @@ in
         "nix flake metadata *"
         "nix flake check *"
       ]
-      ++ optionals hmzCfg.enable [
+      ++ optionals cfg.humanize.enable [
         (unsafeDiscardStringContext "${humanizeRuntime}/scripts/*")
         (unsafeDiscardStringContext "${humanizeRuntime}/scripts/* *")
         (unsafeDiscardStringContext "${humanizeRuntime}/hooks/*")
@@ -116,17 +143,17 @@ in
         typst = pkgs."claude-skill-typst";
       };
 
-      codexSkills = optionalAttrs hmzCfg.enable {
+      codexSkills = optionalAttrs cfg.humanize.enable {
         humanize = pkgs.humanize.humanize;
         "humanize-gen-plan" = pkgs.humanize."humanize-gen-plan";
         "humanize-refine-plan" = pkgs.humanize."humanize-refine-plan";
         "humanize-rlcr" = pkgs.humanize."humanize-rlcr";
       };
 
-      claudePlugins = mkIf hmzCfg.enable { humanize = pkgs.humanize.claudePlugin; };
+      claudePlugins = mkIf cfg.humanize.enable { humanize = pkgs.humanize.claudePlugin; };
     };
 
-    home.packages = optionals hmzCfg.monitor.enable [ pkgs.humanize.humanizeWrapper ];
+    home.packages = optionals cfg.humanize.monitor.enable [ pkgs.humanize.humanizeWrapper ];
 
     sops.secrets.senesperejo-client-key = mkIf config.sops.control.deploySecrets {
       sopsFile = ../../../system/modules/cliproxyapi/secrets.yaml;
@@ -134,28 +161,9 @@ in
     };
 
     programs.zsh.shellAliases =
-      mkIf
-        (
-          config.programs.zsh.enable
-          && (filterAttrs (_: v: v) {
-            claude-code = config.programs.claude-code.enable;
-            opencode = config.programs.opencode.enable;
-            antigravity-cli = config.programs.antigravity-cli.enable;
-            codex = config.programs.codex.enable;
-            omp = config.programs.omp.enable;
-          })
-            ? ${config.programs.llm-cli.defaultBackend}
-        )
+      mkIf (config.programs.zsh.enable && config.programs.${cfg.defaultBackend}.enable)
         {
-          gcm =
-            {
-              claude-code = "${backendBin.claude-code} /commit-message";
-              opencode = "${backendBin.opencode} --prompt /commit-message";
-              antigravity-cli = "${backendBin.antigravity-cli} -i /commit-message";
-              codex = "${backendBin.codex} ${escapeShellArg "$commit-message"}";
-              omp = "${backendBin.omp} /commit-message";
-            }
-            .${config.programs.llm-cli.defaultBackend};
+          gcm = commitMessageCommand.${cfg.defaultBackend};
         };
   };
 }

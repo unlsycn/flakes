@@ -8,13 +8,6 @@
 with lib;
 let
   llmCfg = config.programs.llm-cli;
-  claudeSettingsFile = "${config.home.homeDirectory}/.claude/settings.json";
-  mutableClaudeSettings = (import ../../lib { inherit lib pkgs; }).mkMutableGeneratedFile {
-    inherit config;
-    targetPath = claudeSettingsFile;
-    homeFilePath = claudeSettingsFile;
-    format = "json";
-  };
 in
 {
   # "accept edits on" / bypass permissions mode is broken and does not
@@ -23,6 +16,7 @@ in
   config = mkIf config.programs.claude-code.enable {
     programs.claude-code = {
       package = inputs'.llm-agents.packages.claude-code;
+      mutableSettings = true;
       settings = {
         model = "fable";
         effortLevel = "high";
@@ -91,32 +85,19 @@ in
           ];
         };
       }
-      // optionalAttrs config.sops.control.deploySecrets {
-        apiKeyHelper = "cat ${config.sops.secrets.senesperejo-client-key.path}";
+      // optionalAttrs (llmCfg.gateway.apiKeyFile != null) {
+        apiKeyHelper = "cat ${llmCfg.gateway.apiKeyFile}";
         env = {
-          ANTHROPIC_BASE_URL = "https://llm.ts.unlsycn.com";
+          ANTHROPIC_BASE_URL = llmCfg.gateway.url;
           ANTHROPIC_DEFAULT_FABLE_MODEL = "claude-fable-5-1";
           ANTHROPIC_DEFAULT_HAIKU_MODEL = "claude-haiku-4-5";
           ANTHROPIC_SMALL_FAST_MODEL = "claude-haiku-4-5";
         };
       };
-      commands =
-        llmCfg.commands
-        |> mapAttrs (
-          _: cmd: ''
-            ---
-            description: ${cmd.description}
-            ---
-
-            ${cmd.prompt}
-          ''
-        );
+      commands = llmCfg.commands |> mapAttrs (_: cmd: cmd.markdown);
       skills = llmCfg.skills;
       plugins = llmCfg.claudePlugins;
     };
-
-    home.activation.claudeCodeSettingsActivation = mutableClaudeSettings.activation;
-    home.file = mutableClaudeSettings.homeFile;
 
     home.persistence."/persist" = {
       directories = [ ".claude" ];

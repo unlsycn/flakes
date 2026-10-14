@@ -63,17 +63,7 @@ in
         instructions = llmCfg.projectInstructions;
       };
       skills = llmCfg.skills |> lib.mapAttrs (_: content: toString content);
-      commands =
-        llmCfg.commands
-        |> lib.mapAttrs (
-          _: cmd: ''
-            ---
-            description: ${cmd.description}
-            ---
-
-            ${cmd.prompt}
-          ''
-        );
+      commands = llmCfg.commands |> lib.mapAttrs (_: cmd: cmd.markdown);
     };
 
     home.persistence."/persist".directories = [
