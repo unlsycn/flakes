@@ -271,6 +271,14 @@ in
             }
           ];
         };
+        "Nexus" = {
+          rules = [
+            {
+              type = "GEOSITE";
+              rule = "nexusmods";
+            }
+          ];
+        };
         "Telegram" = {
           rules = [
             {
