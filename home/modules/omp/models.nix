@@ -18,7 +18,33 @@ let
         "max"
       ];
       defaultLevel = "max";
-      models.kimi-k3 = "Kimi K3";
+      models."kimi-k3.1-pro" = "Kimi K3.1 Pro";
+    };
+
+    glm = {
+      efforts = [
+        "low"
+        "high"
+        "max"
+      ];
+      defaultLevel = "max";
+      models = {
+        "glm-5.3" = "GLM-5.3";
+        "glm-5.3-flash" = "GLM-5.3 Flash";
+      };
+    };
+
+    qwen = {
+      efforts = [
+        "low"
+        "medium"
+        "xhigh"
+      ];
+      defaultLevel = "xhigh";
+      models = {
+        "qwen-3.8-flash" = "Qwen3.8 Flash";
+        "qwen-3.8-max" = "Qwen3.8 Max";
+      };
     };
 
     grok = {
@@ -119,7 +145,7 @@ in
       in
       {
         modelRoles = mapAttrs (_: qualify) {
-          default = "kimi-k3";
+          default = "kimi-k3.1-pro";
           slow = "gpt-6-astra";
           plan = "gpt-5.6-sol";
           smol = "deepseek-v4-pro:high";

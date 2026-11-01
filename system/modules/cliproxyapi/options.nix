@@ -29,6 +29,15 @@ with lib;
             default = 50;
           };
 
+          headers = mkOption {
+            type = (pkgs.formats.yaml { }).type;
+            default = { };
+            description = ''
+              Extra request headers sent upstream. A `{ _secret = path; }` value is
+              replaced by the file's contents when the service starts.
+            '';
+          };
+
           enable = mkOption {
             type = types.bool;
             default = true;

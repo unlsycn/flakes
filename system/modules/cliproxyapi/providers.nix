@@ -23,6 +23,16 @@ let
       "high"
       "max"
     ];
+    glm.levels = [
+      "low"
+      "high"
+      "max"
+    ];
+    qwen.levels = [
+      "low"
+      "medium"
+      "xhigh"
+    ];
     grok.levels = [
       "low"
       "medium"
@@ -52,7 +62,6 @@ let
     "claude-sonnet-5-5".thinking = thinking.claude;
     "claude-haiku-5-5".thinking = thinking.claude;
     "grok-4.7".thinking = thinking.grok;
-    "kimi-k3".thinking = thinking.kimi;
     "deepseek-flash".thinking = thinking.deepseek;
     # DeepSeek V4 Pro is routed to Flash until Pro comes back; clients
     # keep asking for `deepseek-v4-pro` and only this mapping changes.
@@ -96,10 +105,53 @@ in
       };
 
       openai-compatibility = {
-        bigman = {
-          priority = 40;
-          models.kimi-k3 = catalog.kimi-k3 // {
-            upstream = "k3";
+        cat = {
+          headers = {
+            CF-Access-Client-Id = {
+              _secret = config.sops.secrets."cliproxyapi-cat-cf-access-client-id".path;
+            };
+            CF-Access-Client-Secret = {
+              _secret = config.sops.secrets."cliproxyapi-cat-cf-access-client-secret".path;
+            };
+          };
+          models = {
+            "kimi-k3.1-pro" = {
+              upstream = "kimi-code-cn/k3.1-pro";
+              input-modalities = [
+                "text"
+                "image"
+                "video"
+              ];
+              thinking = thinking.kimi;
+            };
+            "glm-5.3" = {
+              upstream = "zcode/GLM-5.3";
+              thinking = thinking.glm;
+            };
+            "glm-5.3-flash" = {
+              upstream = "zcode/GLM-5.3-Flash";
+              input-modalities = [
+                "text"
+                "image"
+              ];
+              thinking = thinking.glm;
+            };
+            "qwen-3.8-flash" = {
+              upstream = "qoder-cn/qfmodel";
+              input-modalities = [
+                "text"
+                "image"
+              ];
+              thinking = thinking.qwen;
+            };
+            "qwen-3.8-max" = {
+              upstream = "qoder-cn/qmodel_38max";
+              input-modalities = [
+                "text"
+                "image"
+              ];
+              thinking = thinking.qwen;
+            };
           };
         };
         eba = {
@@ -113,7 +165,6 @@ in
             "gpt-6-luna"
             "gpt-6.1-sol"
             "grok-4.7"
-            "kimi-k3"
           ];
         };
         deepseek.models = serve [

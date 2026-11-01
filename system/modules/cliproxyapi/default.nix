@@ -6,18 +6,20 @@ let
   sections =
     let
       apiKey = name: { api-key._secret = config.sops.secrets."cliproxyapi-${name}-api-key".path; };
+
+      withHeaders = provider: optionalAttrs (provider.headers != { }) { inherit (provider) headers; };
     in
     {
       claude-api-key = {
         baseUrlPath = null;
         disable.excluded-models = [ "*" ];
-        render = name: _: apiKey name;
+        render = name: provider: apiKey name // withHeaders provider;
       };
 
       codex-api-key = {
         baseUrlPath = "v1";
         disable.excluded-models = [ "*" ];
-        render = name: _: apiKey name;
+        render = name: provider: apiKey name // withHeaders provider;
       };
 
       openai-compatibility = {
@@ -32,7 +34,8 @@ let
             X-Codex-Window-Id = "$x-codex-window-id";
             X-Codex-Turn-Metadata = "$x-codex-turn-metadata";
             X-Codex-Installation-Id = "$x-codex-installation-id";
-          };
+          }
+          // provider.headers;
           api-key-entries = [ (apiKey name) ];
         };
       };
@@ -106,6 +109,16 @@ in
         cliproxyapi-client-key = {
           sopsFile = ./secrets.yaml;
           key = "client-key";
+          restartUnits = [ "cliproxyapi.service" ];
+        };
+        cliproxyapi-cat-cf-access-client-id = {
+          sopsFile = ./secrets.yaml;
+          key = "cat-cf-access-client-id";
+          restartUnits = [ "cliproxyapi.service" ];
+        };
+        cliproxyapi-cat-cf-access-client-secret = {
+          sopsFile = ./secrets.yaml;
+          key = "cat-cf-access-client-secret";
           restartUnits = [ "cliproxyapi.service" ];
         };
       }
