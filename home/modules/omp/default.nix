@@ -146,6 +146,19 @@ in
       (optionalAttrs (llmCfg.skills ? commit-message) {
         ".omp/agent/prompts/commit-message.md".source = "${llmCfg.skills.commit-message}/SKILL.md";
       })
+      {
+        ".omp/agent/APPEND_SYSTEM.md".text = ''
+          ## Change Authorization
+
+          Treat an explicit request to implement, modify, fix, or otherwise change something as authorization for the requested scope. Do not ask for confirmation on every implementation detail; make reasonable decisions and report them.
+
+          A request to investigate, diagnose, explain, or review is not permission to change the user's files, configuration, persistent state, or external systems. Report findings and proposed changes first, then wait for explicit authorization.
+
+          If it is unclear whether the user wants investigation or modification, assume investigation only and ask before making changes.
+
+          After an authorized change, local and non-destructive verification is allowed. Do not perform consequential actions—such as deploying, applying configuration, restarting services, deleting data, or committing or pushing changes—without explicit authorization. Report the proposed action and wait for approval.
+        '';
+      }
     ];
 
     home.activation.ompSettings = hm.dag.entryAfter [ "linkGeneration" ] (
