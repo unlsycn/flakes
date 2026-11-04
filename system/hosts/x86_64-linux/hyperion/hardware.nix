@@ -168,11 +168,27 @@
 
   networking.useDHCP = lib.mkDefault true;
 
-  systemd.network.links."80-iwd".linkConfig.NamePolicy = lib.mkForce "onboard slot path";
+  systemd.network.links = {
+    "10-lan0" = {
+      matchConfig.PermanentMACAddress = "fc:9d:05:c1:e5:0f";
+      linkConfig = {
+        Name = "lan0";
+        NamePolicy = "";
+      };
+    };
+
+    "10-wlan0" = {
+      matchConfig.PermanentMACAddress = "fc:9e:53:8d:37:e0";
+      linkConfig = {
+        Name = "wlan0";
+        NamePolicy = "";
+      };
+    };
+  };
 
   mesh.surfaces.public.interfaces = [
-    "enp129s0"
-    "wlp130s0f0"
+    config.systemd.network.links."10-lan0".linkConfig.Name
+    config.systemd.network.links."10-wlan0".linkConfig.Name
   ];
 
   nixpkgs.hostPlatform = lib.mkDefault "x86_64-linux";
