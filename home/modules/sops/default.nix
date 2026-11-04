@@ -5,6 +5,7 @@
 }:
 with lib;
 {
+  imports = [ ./admin.nix ];
   options.sops.control = {
     deploySecrets = mkOption {
       type = types.bool;
