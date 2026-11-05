@@ -2,6 +2,7 @@
 with lib;
 {
   boot.kernelModules = [ "tcp_bbr" ];
+  boot.kernelParams = [ "cfg80211.ieee80211_regdom=CN" ];
   boot.kernel.sysctl = {
     "net.ipv4.ip_forward" = 1;
     "net.core.default_qdisc" = "fq";
