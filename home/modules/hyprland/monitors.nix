@@ -23,19 +23,11 @@ in
         position = "0x0";
         scale = 1.8;
       }
-      ++ optionals (enabled "philips") [
-        {
-          output = "DP-1";
-          mode = "2560x1440@165";
-          position = "0x-1152";
-          scale = 1.25;
-        }
-        {
-          output = "HDMI-A-1";
-          mode = "2560x1440@144";
-          position = "0x-1152";
-          scale = 1.25;
-        }
-      ];
+      ++ optional (enabled "philips") {
+        output = "desc:Philips Consumer Electronics Company PHL24M1N5500Z";
+        mode = "highrr";
+        position = "0x-1152";
+        scale = 1.25;
+      };
   };
 }
