@@ -25,7 +25,6 @@
       timeout = 1;
     };
     initrd = {
-      systemd.enable = true;
       availableKernelModules = [
         "xhci_pci"
         "thunderbolt"

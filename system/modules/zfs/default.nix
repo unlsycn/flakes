@@ -59,12 +59,6 @@ with lib;
       }
     ];
     systemd.services.zfs-mount.enable = false;
-    assertions = [
-      {
-        assertion = config.boot.initrd.systemd.enable;
-        message = "zfs mount generator requires systemd in initrd";
-      }
-    ];
 
     services.zfs = {
       zed.settings.PATH = mkForce (
