@@ -28,6 +28,29 @@ with lib;
         };
       };
       configFile = {
+        "fcitx5/config" = {
+          force = true;
+          text = generators.toINI { } {
+            "Hotkey/TriggerKeys"."0" = "Alt+Shift+Shift_L";
+          };
+        };
+
+        "fcitx5/profile" = {
+          force = true;
+          text = generators.toINI { } {
+            GroupOrder."0" = "Default";
+
+            "Groups/0" = {
+              Name = "Default";
+              "Default Layout" = "us";
+              DefaultIM = "rime";
+            };
+
+            "Groups/0/Items/0".Name = "keyboard-us";
+            "Groups/0/Items/1".Name = "rime";
+          };
+        };
+
         "fcitx5/conf/classicui.conf".text =
           {
             "Vertical Candidate List" = "True";
