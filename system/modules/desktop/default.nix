@@ -30,6 +30,8 @@ with lib;
     })
     (mkIf config.desktop.enable {
       programs.hyprland.enable = mkDefault true;
+      # FIXME: https://github.com/NixOS/nixpkgs/issues/581197
+      programs.hyprland.withUWSM = true;
     })
   ];
 }
