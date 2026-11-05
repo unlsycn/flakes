@@ -4,6 +4,7 @@
   kernel,
   kernelModuleMakeFlags,
   mimic,
+  kmodigest,
 }:
 
 # Repairs skb checksum metadata after Mimic's UDP-to-TCP rewrite.
@@ -16,7 +17,7 @@ stdenv.mkDerivation {
   inherit (mimic) version;
   inherit (mimic.passthru) src;
 
-  nativeBuildInputs = kernel.moduleBuildDependencies;
+  nativeBuildInputs = kernel.moduleBuildDependencies ++ [ kmodigest ];
 
   hardeningDisable = [ "all" ];
 
@@ -31,10 +32,16 @@ stdenv.mkDerivation {
     make -C kmod build $makeFlags
     runHook postBuild
   '';
+  postBuild = ''
+    if [ ! -e kmod/mimic.ko.cer ]; then
+      ${lib.getExe kmodigest} kmod/mimic.ko
+    fi
+  '';
 
   installPhase = ''
     runHook preInstall
     install -Dm644 kmod/mimic.ko $out/lib/modules/${kernelVersion}/misc/mimic.ko
+    install -Dm644 kmod/mimic.ko.cer $out/lib/modules/${kernelVersion}/misc/mimic.ko.cer
     runHook postInstall
   '';
 
