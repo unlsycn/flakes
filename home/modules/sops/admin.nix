@@ -136,6 +136,8 @@ in
           Unit = {
             Description = "sops-nix admin secrets (${name})";
             After = [ "sops-nix.service" ];
+            StartLimitIntervalSec = 300;
+            StartLimitBurst = 5;
           };
           Service = {
             Type = "oneshot";

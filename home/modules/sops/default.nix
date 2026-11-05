@@ -26,10 +26,15 @@ with lib;
     {
       sops.age.keyFile = "${config.xdg.configHome}/age/key";
 
-      # sops require gnupg passphrase
-      systemd.user.services.sops-nix.Service = {
-        Restart = "on-failure";
-        RestartSec = "5s";
+      systemd.user.services.sops-nix = {
+        Unit = {
+          StartLimitIntervalSec = 300;
+          StartLimitBurst = 5;
+        };
+        Service = {
+          Restart = "on-failure";
+          RestartSec = "5s";
+        };
       };
     }
     (mkIf config.services.gpg-agent.enable {
