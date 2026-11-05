@@ -64,6 +64,7 @@ in
 
     programs.omp.settings = {
       tools.approvalMode = "write";
+      task.perCallModel = "on";
 
       providers.webSearchOrder = [
         "exa"
