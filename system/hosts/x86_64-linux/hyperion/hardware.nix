@@ -20,7 +20,31 @@
       systemd-boot = {
         enable = true;
         xbootldrMountPoint = config.disko.devices.disk.main.content.partitions.boot.content.mountpoint;
-        extraInstallCommands = "${pkgs.coreutils}/bin/install -D -m0755 ${pkgs.refind}/share/refind/drivers_x64/* -t ${config.boot.loader.efi.efiSysMountPoint}/EFI/systemd/drivers";
+        extraInstallCommands = lib.getExe (
+          pkgs.writeShellApplication {
+            name = "install-systemd-boot";
+            runtimeInputs = with pkgs; [
+              coreutils
+              sbctl
+            ];
+            text = ''
+              install -D -m0755 ${pkgs.refind}/share/refind/drivers_x64/* -t ${config.boot.loader.efi.efiSysMountPoint}/EFI/systemd/drivers
+
+              efi=${lib.escapeShellArg config.boot.loader.efi.efiSysMountPoint}
+              boot=${lib.escapeShellArg config.boot.loader.systemd-boot.xbootldrMountPoint}
+              for image in \
+                "$efi/EFI/systemd/systemd-bootx64.efi" \
+                "$efi/EFI/BOOT/BOOTX64.EFI" \
+                "$efi"/EFI/systemd/drivers/*.efi \
+                "$boot"/EFI/nixos/*-${config.system.boot.loader.kernelFile}.efi
+              do
+                [ -e "$image" ] || continue
+                sbctl --disable-landlock sign -s "$image"
+              done
+            '';
+          }
+        );
+        editor = false;
       };
       timeout = 1;
     };
@@ -44,6 +68,26 @@
     ];
     kernel.sysctl."kernel.sysrq" = 246;
   };
+
+  sops.secrets =
+    lib.mapAttrs'
+      (
+        key: path:
+        lib.nameValuePair "sbctl-${lib.replaceStrings [ "/" ] [ "-" ] key}" {
+          sopsFile = ./secureboot.yaml;
+          inherit key;
+          path = "/var/lib/sbctl/${path}";
+        }
+      )
+      {
+        GUID = "GUID";
+        "keys/PK/key" = "keys/PK/PK.key";
+        "keys/PK/pem" = "keys/PK/PK.pem";
+        "keys/KEK/key" = "keys/KEK/KEK.key";
+        "keys/KEK/pem" = "keys/KEK/KEK.pem";
+        "keys/db/key" = "keys/db/db.key";
+        "keys/db/pem" = "keys/db/db.pem";
+      };
 
   disko.devices = {
     disk = {
