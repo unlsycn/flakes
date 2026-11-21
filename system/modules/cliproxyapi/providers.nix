@@ -51,13 +51,9 @@ let
   };
 
   catalog = {
-    "gpt-5.6-sol".thinking = thinking.gpt;
-    "gpt-5.6-luna".thinking = thinking.gpt;
-    "gpt-5.6-terra".thinking = thinking.gpt;
     "gpt-6-astra".thinking = thinking.gpt;
-    "gpt-6-sol".thinking = thinking.gpt;
-    "gpt-6-luna".thinking = thinking.gpt;
-    "gpt-6.1-sol".thinking = thinking.gpt;
+    "gpt-6.2-sol".thinking = thinking.gpt;
+    "gpt-6.2-astra".thinking = thinking.gpt;
     "claude-opus-5-5".thinking = thinking.claude;
     "claude-sonnet-5-5".thinking = thinking.claude;
     "claude-haiku-5-5".thinking = thinking.claude;
@@ -81,21 +77,15 @@ in
         bigman = {
           priority = 40;
           models = serve [
-            "gpt-5.6-sol"
-            "gpt-5.6-luna"
-            "gpt-5.6-terra"
             "gpt-6-astra"
-            "gpt-6-luna"
-            "gpt-6.1-sol"
-            "grok-4.7"
+            "gpt-6.2-sol"
+            "gpt-6.2-astra"
             "deepseek-flash"
           ];
         };
         shaobing = {
           enable = false;
           models = serve [
-            "gpt-5.6-sol"
-            "gpt-5.6-luna"
             "gpt-6-astra"
             "grok-4.7"
             "deepseek-flash"
@@ -157,13 +147,9 @@ in
         eba = {
           priority = 10;
           models = serve [
-            "gpt-5.6-sol"
-            "gpt-5.6-luna"
-            "gpt-5.6-terra"
             "gpt-6-astra"
-            "gpt-6-sol"
-            "gpt-6-luna"
-            "gpt-6.1-sol"
+            "gpt-6.2-sol"
+            "gpt-6.2-astra"
             "grok-4.7"
           ];
         };
