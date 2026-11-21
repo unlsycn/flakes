@@ -7,7 +7,7 @@
 with lib;
 {
   imports = [
-    inputs.nvf.homeManagerModules.default
+    inputs.nvf.homeModules.default
     ./cli.nix
     ./vscode.nix
   ];
