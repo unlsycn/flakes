@@ -35,7 +35,9 @@ in
         tun.device = nebulaName;
         # Tailscale may ride inside Nebula, and its 1280-byte MTU plus WireGuard/UDP/IP
         # overhead (1340) exceeds the 1300 default, which fragments every packet.
-        settings.tun.mtu = 1400;
+        # Larger values (inner > 1378) exceed the 1450-byte path to the lighthouse,
+        # where the encapsulated packet (72 B overhead) is silently dropped.
+        settings.tun.mtu = 1340;
 
         lighthouses = nodes |> filter (n: n.roles |> elem "lighthouse") |> map (n: n.nebula.ip);
 
