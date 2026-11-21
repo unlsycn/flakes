@@ -66,8 +66,8 @@
         nixpkgs.follows = "nixpkgs";
       };
     };
-    buildbot-nix = {
-      url = "github:nix-community/buildbot-nix";
+    nixbot = {
+      url = "github:Mic92/nixbot";
       inputs = {
         nixpkgs.follows = "nixpkgs";
       };
