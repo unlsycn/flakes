@@ -9,7 +9,6 @@
     ./hardware.nix
     ./networking.nix
     ./samba.nix
-    ./buildbot.nix
     ./webhook.nix
   ];
 
@@ -43,10 +42,7 @@
       };
       daemon.enable = true;
     };
-    buildbot-nix = {
-      master.enable = true;
-      worker.enable = true;
-    };
+    nixbot.enable = true;
   };
 
   system.stateVersion = "23.11";

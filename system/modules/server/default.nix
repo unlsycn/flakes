@@ -15,7 +15,7 @@ with lib;
   };
 
   config = mkIf (config.isServer && !config.isBuildServer) {
-    systemd.services.buildbot-worker.serviceConfig = {
+    systemd.services.nixbot.serviceConfig = mkIf config.services.nixbot.enable {
       Nice = 19;
       CPUSchedulingPolicy = "batch";
       IOSchedulingClass = "idle";
