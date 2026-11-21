@@ -43,6 +43,7 @@
       "zfs.zfs_arc_min=1073741824"
     ];
     kernel.sysctl."kernel.sysrq" = 246;
+    extraModprobeConfig = "options iwlwifi uapsd_disable=15";
   };
 
   disko.devices = {
