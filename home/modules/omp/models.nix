@@ -47,17 +47,6 @@ let
       };
     };
 
-    grok = {
-      efforts = [
-        "low"
-        "medium"
-        "high"
-        "xhigh"
-      ];
-      defaultLevel = "high";
-      models."grok-4.7" = "Grok 4.7";
-    };
-
     deepseek = {
       efforts = [
         "low"
@@ -98,13 +87,9 @@ let
       ];
       defaultLevel = "xhigh";
       models = {
-        "gpt-5.6-sol" = "GPT-5.6 Sol";
-        "gpt-5.6-luna" = "GPT-5.6 Luna";
-        "gpt-5.6-terra" = "GPT-5.6 Terra";
         "gpt-6-astra" = "GPT-6 Astra";
-        "gpt-6-luna" = "GPT-6 Luna";
-        "gpt-6.1-sol" = "GPT-6.1 Sol";
-        "gpt-6-sol" = "GPT-6 Sol";
+        "gpt-6.2-sol" = "GPT-6.2 Sol";
+        "gpt-6.2-astra" = "GPT-6.2 Astra";
       };
     };
   };
@@ -146,20 +131,20 @@ in
       {
         modelRoles = mapAttrs (_: qualify) {
           default = "kimi-k3.1-pro";
-          slow = "gpt-6-astra";
-          plan = "gpt-5.6-sol";
+          slow = "gpt-6.2-astra";
+          plan = "gpt-6.2-sol";
           smol = "deepseek-v4-pro:high";
           tiny = "deepseek-flash:high";
           commit = "deepseek-flash:high";
-          task = "grok-4.7:high";
-          vision = "gpt-5.6-sol";
-          advisor = "gpt-6-astra";
+          task = "deepseek-v4-pro:high";
+          vision = "gpt-6.2-sol";
+          advisor = "gpt-6.2-astra";
         };
 
         retry.fallbackChains = mapAttrs (_: map qualify) {
           default = [ "deepseek-v4-pro:max" ];
           task = [
-            "gpt-5.6-luna:xhigh"
+            "gpt-6.2-sol:xhigh"
             "deepseek-v4-pro:max"
           ];
         };
